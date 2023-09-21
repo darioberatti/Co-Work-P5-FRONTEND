@@ -5,9 +5,7 @@ import Link from "next/link";
 export default function RegisterView() {
   return (
     <div>
-      
-        <Register />
-      
+      <Register />
     </div>
   );
 }

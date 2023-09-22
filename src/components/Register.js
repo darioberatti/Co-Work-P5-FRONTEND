@@ -5,13 +5,15 @@ import { useState } from "react";
 import { Card, Text } from "@radix-ui/themes";
 import { useFormik } from "formik";
 import * as Yup from "yup";
+import axios from "axios";
+import { useRouter } from 'next/navigation'
 
 export default function Register() {
   // const [name, setName] = useState("");
   // const [lastName, setLastName] = useState("");
   // const [email, setEmail] = useState("");
   // const [dni, setDni] = useState("");
-  // const [birth, setBirth] = useState("");
+  // const [age, setage] = useState("");
   // const [course, setCourse] = useState();
 
   // const handleSubmit = () => {
@@ -19,36 +21,47 @@ export default function Register() {
   //   console.log("lastName-->", lastName);
   //   console.log("email-->", email);
   //   console.log("dni-->", dni);
-  //   console.log("birth-->", birth);
+  //   console.log("age-->", age);
   //   console.log("course-->", course);
   // };
+
+  const router = useRouter();
 
   const formik = useFormik({
     initialValues: {
       name: "",
       lastName: "",
       email: "",
-      dni: "",
-      birth: "",
+      DNI: "",
+      age: "",
       course: "",
     },
     validationSchema: Yup.object({
       name: Yup.string().required(),
       lastName: Yup.string().required(),
       email: Yup.string().email().required(),
-      dni: Yup.string().required().matches(/^[0-9]+$/, "Must be only digits")
-      .min(8, 'Must be exactly 5 digits')
-      .max(8, 'Must be exactly 5 digits'),
-      
-      birth: Yup.date().required(),
+      DNI: Yup.string()
+        .required()
+        .matches(/^[0-9]+$/, "Must be only digits")
+        .min(8, "Must be exactly 5 digits")
+        .max(8, "Must be exactly 5 digits"),
+
+      age: Yup.number().required(),
       course: Yup.string().required(),
     }),
-    onSubmit: (formData) => {
-      console.log(formData);
+    onSubmit: async (formData) => {
+      // console.log(formData);
+      try {
+        const response = await axios.post(
+          "http://localhost:3001/staff/users/add",
+          formData
+        );
+        console.log("response axios ---> ", response);
+      } catch (error) {
+        console.error("Error axios register --> ", error);
+      }
     },
   });
-
-
 
   return (
     <Card>
@@ -155,7 +168,7 @@ export default function Register() {
           </Form.Control>
         </Form.Field>
 
-        <Form.Field className="FormField" name="dni">
+        <Form.Field className="FormField" name="DNI">
           <div
             style={{
               display: "flex",
@@ -170,7 +183,7 @@ export default function Register() {
             <Form.Message className="FormMessage" match="typeMismatch">
               Ingrese un DNI válido
             </Form.Message>
-            {formik.errors.dni && formik.values.dni ? (
+            {formik.errors.DNI && formik.values.DNI ? (
               <Form.Message className="FormMessage">
                 Ingrese un DNI válido
               </Form.Message>
@@ -188,7 +201,7 @@ export default function Register() {
           </Form.Control>
         </Form.Field>
 
-        <Form.Field className="FormField" name="birth">
+        <Form.Field className="FormField" name="age">
           <div
             style={{
               display: "flex",
@@ -196,16 +209,16 @@ export default function Register() {
               justifyContent: "space-between",
             }}
           >
-            <Form.Label className="FormLabel">Fecha de nacimiento</Form.Label>
+            <Form.Label className="FormLabel">Edad</Form.Label>
             <Form.Message className="FormMessage" match="valueMissing">
-              Ingrese una fecha
+              Ingrese un valor
             </Form.Message>
             <Form.Message className="FormMessage" match="typeMismatch">
-              Ingrese una fecha válida
+              Ingrese un valor
             </Form.Message>
-            {formik.errors.birth && formik.values.birth ? (
+            {formik.errors.age && formik.values.age ? (
               <Form.Message className="FormMessage">
-                Ingrese una fecha válida
+                Ingrese un valor
               </Form.Message>
             ) : (
               ""
@@ -214,7 +227,7 @@ export default function Register() {
           <Form.Control asChild>
             <input
               className="Input"
-              type="date"
+              type="number"
               required
               onChange={formik.handleChange}
             />
@@ -255,7 +268,7 @@ export default function Register() {
         </Form.Field>
 
         <Form.Submit asChild>
-          <button className="Button" style={{ marginTop: 10 }}>
+          <button className="Button" style={{ marginTop: 10 }} onClick={() => {router.push("/")}}>
             Registrar
           </button>
         </Form.Submit>

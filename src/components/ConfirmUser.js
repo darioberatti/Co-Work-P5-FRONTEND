@@ -1,11 +1,14 @@
 "use client";
+
 import Link from "next/link";
 import * as Form from "@radix-ui/react-form";
 import { useState } from "react";
 import { useFormik } from "formik";
 import * as Yup from "yup";
+import axios from "axios"
+import { useRouter } from "next/navigation";
 
-export default function ConfirmUser() {
+export default function ConfirmUser({registerToken}) {
   // const [password, setPassword] = useState("");
   // const [secondPassword, setSecondPassword] = useState("");
 
@@ -13,6 +16,9 @@ export default function ConfirmUser() {
   //   console.log("password-->", password);
   //   console.log("secondPassword-->", secondPassword);
   // };
+  console.log("registerToken ---> ", registerToken)
+  const router = useRouter()
+  
 
   const formik = useFormik({
     initialValues: {
@@ -27,8 +33,23 @@ export default function ConfirmUser() {
         .required()
         .oneOf([Yup.ref("password")], "Las contraseñas no son iguales"),
     }),
-    onSubmit: (formData) => {
-      console.log(formData);
+    onSubmit: async (formData) => {
+      // console.log(formData);
+    
+      const password = formData.password     
+      const newFormData = { password, registerToken}
+
+      console.log("newFormData ---> ", newFormData)
+
+      try {
+        const response = await axios.post(
+          "http://localhost:3001/staff/users/set-password",
+          newFormData
+        );
+        console.log("response axios ---> ", response);
+      } catch (error) {
+        console.error("Error axios setPassword --> ", error);
+      }
     },
   });
 
@@ -98,7 +119,7 @@ export default function ConfirmUser() {
         </Form.Field>
 
         <Form.Submit asChild>
-          <button className="Button" style={{ marginTop: 10 }}>
+          <button className="Button" style={{ marginTop: 10 }} onClick={() => {router.push("/")}}>
             Ingresar
           </button>
         </Form.Submit>

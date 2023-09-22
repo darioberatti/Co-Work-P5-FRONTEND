@@ -1,9 +1,5 @@
-import ConfirmUser from "@/components/ConfirmUser";
-
-export default function ConfirmUserView() {
+export default function page () {
   return (
-    <div>
-      <ConfirmUser/>
-    </div>
-  );
+    <div>page</div>
+  )
 }

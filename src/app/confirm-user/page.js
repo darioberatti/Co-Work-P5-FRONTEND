@@ -1,9 +1,7 @@
-import ConfirmUser from "@/components/ConfirmUser";
+import React from 'react'
 
-export default function ConfirmUserView() {
+export const page = () => {
   return (
-    <div>
-      <ConfirmUser/>
-    </div>
-  );
+    <div>page</div>
+  )
 }

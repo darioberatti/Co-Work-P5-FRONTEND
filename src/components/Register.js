@@ -6,6 +6,7 @@ import { Card, Text } from "@radix-ui/themes";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import axios from "axios";
+import { useRouter } from 'next/navigation'
 
 export default function Register() {
   // const [name, setName] = useState("");
@@ -23,6 +24,8 @@ export default function Register() {
   //   console.log("age-->", age);
   //   console.log("course-->", course);
   // };
+
+  const router = useRouter();
 
   const formik = useFormik({
     initialValues: {
@@ -43,7 +46,7 @@ export default function Register() {
         .min(8, "Must be exactly 5 digits")
         .max(8, "Must be exactly 5 digits"),
 
-      age: Yup.date().required(),
+      age: Yup.number().required(),
       course: Yup.string().required(),
     }),
     onSubmit: async (formData) => {
@@ -51,7 +54,7 @@ export default function Register() {
       try {
         const response = await axios.post(
           "http://localhost:3001/staff/users/add",
-          formData,
+          formData
         );
         console.log("response axios ---> ", response);
       } catch (error) {
@@ -206,16 +209,16 @@ export default function Register() {
               justifyContent: "space-between",
             }}
           >
-            <Form.Label className="FormLabel">Fecha de nacimiento</Form.Label>
+            <Form.Label className="FormLabel">Edad</Form.Label>
             <Form.Message className="FormMessage" match="valueMissing">
-              Ingrese una fecha
+              Ingrese un valor
             </Form.Message>
             <Form.Message className="FormMessage" match="typeMismatch">
-              Ingrese una fecha válida
+              Ingrese un valor
             </Form.Message>
             {formik.errors.age && formik.values.age ? (
               <Form.Message className="FormMessage">
-                Ingrese una fecha válida
+                Ingrese un valor
               </Form.Message>
             ) : (
               ""
@@ -265,7 +268,7 @@ export default function Register() {
         </Form.Field>
 
         <Form.Submit asChild>
-          <button className="Button" style={{ marginTop: 10 }}>
+          <button className="Button" style={{ marginTop: 10 }} onClick={() => {router.push("/")}}>
             Registrar
           </button>
         </Form.Submit>

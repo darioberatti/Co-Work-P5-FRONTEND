@@ -2,6 +2,7 @@ import "@radix-ui/themes/styles.css";
 import "./globals.css";
 import { Inter } from "next/font/google";
 import { Flex, Theme } from "@radix-ui/themes";
+import Menu from "@/components/Menubar";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -21,7 +22,14 @@ export default function RootLayout({ children }) {
           scaling="100%"
           radius="full"
         >
-          <Flex justify={"center"}>{children}</Flex>
+          <Flex justify={"center"} width={"90%"}>
+            <header>
+              <Menu />
+            </header>
+          </Flex>
+          <Flex justify={"center"} style={{ marginTop: "2%" }}>
+            {children}
+          </Flex>
         </Theme>
       </body>
     </html>

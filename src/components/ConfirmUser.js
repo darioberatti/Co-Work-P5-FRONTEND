@@ -1,22 +1,13 @@
 "use client";
 
-import Link from "next/link";
 import * as Form from "@radix-ui/react-form";
-import { useState } from "react";
 import { useFormik } from "formik";
 import * as Yup from "yup";
-import axios from "axios";
 import { useRouter } from "next/navigation";
+import axiosInstance from "../../axiosConfig";
 
 export default function ConfirmUser({ registerToken }) {
-  // const [password, setPassword] = useState("");
-  // const [secondPassword, setSecondPassword] = useState("");
 
-  // const handleSubmit = () => {
-  //   console.log("password-->", password);
-  //   console.log("secondPassword-->", secondPassword);
-  // };
-  console.log("registerToken ---> ", registerToken);
   const router = useRouter();
 
   const formik = useFormik({
@@ -35,19 +26,17 @@ export default function ConfirmUser({ registerToken }) {
         .oneOf([Yup.ref("password")], "Las contraseñas no son iguales"),
     }),
     onSubmit: async (formData) => {
-      // console.log(formData);
 
       const password = formData.password;
       const newFormData = { password, registerToken };
 
-      console.log("newFormData ---> ", newFormData);
-
       try {
-        const response = await axios.post(
-          "http://localhost:3001/staff/users/set-password",
+        const response = await axiosInstance.post(
+          "/staff/users/set-password",
           newFormData
         );
         console.log("response axios ---> ", response);
+        window.alert("Contraseña establecida correctamente");
       } catch (error) {
         console.error("Error axios setPassword --> ", error);
       }

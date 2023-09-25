@@ -1,12 +1,11 @@
 "use client";
-import Link from "next/link";
 import * as Form from "@radix-ui/react-form";
-import { useState } from "react";
 import { Card, Text } from "@radix-ui/themes";
 import { useFormik } from "formik";
 import * as Yup from "yup";
-import axios from "axios";
 import { useRouter } from "next/navigation";
+import axiosInstance from "../../axiosConfig";
+
 
 export default function Register() {
   const router = useRouter();
@@ -39,12 +38,11 @@ export default function Register() {
     }),
     onSubmit: async (formData) => {
       try {
-        const response = await axios.post(
-          "http://localhost:3001/staff/users",
-          formData
-        );
-        console.log("response axios ---> ", formData);
+
+        const response = await axiosInstance.post("/staff/users", formData);
+        console.log("response axios ---> ", response);
         router.push("/");
+
       } catch (error) {
         console.error("Error axios register --> ", error);
       }

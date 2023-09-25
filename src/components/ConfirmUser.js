@@ -5,10 +5,10 @@ import * as Form from "@radix-ui/react-form";
 import { useState } from "react";
 import { useFormik } from "formik";
 import * as Yup from "yup";
-import axios from "axios"
+import axios from "axios";
 import { useRouter } from "next/navigation";
 
-export default function ConfirmUser({registerToken}) {
+export default function ConfirmUser({ registerToken }) {
   // const [password, setPassword] = useState("");
   // const [secondPassword, setSecondPassword] = useState("");
 
@@ -16,9 +16,8 @@ export default function ConfirmUser({registerToken}) {
   //   console.log("password-->", password);
   //   console.log("secondPassword-->", secondPassword);
   // };
-  console.log("registerToken ---> ", registerToken)
-  const router = useRouter()
-  
+  console.log("registerToken ---> ", registerToken);
+  const router = useRouter();
 
   const formik = useFormik({
     initialValues: {
@@ -26,20 +25,22 @@ export default function ConfirmUser({registerToken}) {
       repeatPassword: "",
     },
     validationSchema: Yup.object({
+      // .matches(/^[0-9]+$/, "Must be only digits")
       password: Yup.string()
-        .required()
-        .oneOf([Yup.ref("repeatPassword")], "Las contraseñas no son iguales"),
+        .min(6)
+        
+        .required(),
       repeatPassword: Yup.string()
         .required()
         .oneOf([Yup.ref("password")], "Las contraseñas no son iguales"),
     }),
     onSubmit: async (formData) => {
       // console.log(formData);
-    
-      const password = formData.password     
-      const newFormData = { password, registerToken}
 
-      console.log("newFormData ---> ", newFormData)
+      const password = formData.password;
+      const newFormData = { password, registerToken };
+
+      console.log("newFormData ---> ", newFormData);
 
       try {
         const response = await axios.post(
@@ -74,11 +75,19 @@ export default function ConfirmUser({registerToken}) {
             <Form.Message className="FormMessage" match="typeMismatch">
               Ingrese una contraseña válida
             </Form.Message>
+            {formik.errors.password && formik.values.password ? (
+              <Form.Message className="FormMessage">
+                Ingrese una contraseña válida
+              </Form.Message>
+            ) : (
+              ""
+            )}
           </div>
           <Form.Control asChild>
             <input
               className="Input"
               type="password"
+              placeholder="Al menos 6 caracteres"
               required
               onChange={formik.handleChange}
             />
@@ -119,7 +128,13 @@ export default function ConfirmUser({registerToken}) {
         </Form.Field>
 
         <Form.Submit asChild>
-          <button className="Button" style={{ marginTop: 10 }} onClick={() => {router.push("/")}}>
+          <button
+            className="Button"
+            style={{ marginTop: 10 }}
+            onClick={() => {
+              router.push("/");
+            }}
+          >
             Ingresar
           </button>
         </Form.Submit>

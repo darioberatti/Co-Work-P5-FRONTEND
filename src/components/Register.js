@@ -6,25 +6,9 @@ import { Card, Text } from "@radix-ui/themes";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import axios from "axios";
-import { useRouter } from 'next/navigation'
+import { useRouter } from "next/navigation";
 
 export default function Register() {
-  // const [name, setName] = useState("");
-  // const [lastName, setLastName] = useState("");
-  // const [email, setEmail] = useState("");
-  // const [dni, setDni] = useState("");
-  // const [age, setage] = useState("");
-  // const [course, setCourse] = useState();
-
-  // const handleSubmit = () => {
-  //   console.log("name-->", name);
-  //   console.log("lastName-->", lastName);
-  //   console.log("email-->", email);
-  //   console.log("dni-->", dni);
-  //   console.log("age-->", age);
-  //   console.log("course-->", course);
-  // };
-
   const router = useRouter();
 
   const formik = useFormik({
@@ -37,26 +21,30 @@ export default function Register() {
       course: "",
     },
     validationSchema: Yup.object({
-      name: Yup.string().required(),
-      lastName: Yup.string().required(),
+      name: Yup.string()
+        .matches(/^[aA-zZ\s]+$/)
+        .required(),
+      lastName: Yup.string()
+        .matches(/^[aA-zZ\s]+$/)
+        .required(),
       email: Yup.string().email().required(),
-      DNI: Yup.string()
+      DNI: Yup.number()
         .required()
-        .matches(/^[0-9]+$/, "Must be only digits")
-        .min(8, "Must be exactly 5 digits")
-        .max(8, "Must be exactly 5 digits"),
+
+        .min(1000000)
+        .max(99999999),
 
       age: Yup.number().required(),
       course: Yup.string().required(),
     }),
     onSubmit: async (formData) => {
-      // console.log(formData);
       try {
         const response = await axios.post(
           "http://localhost:3001/staff/users",
           formData
         );
-        console.log("response axios ---> ", response);
+        console.log("response axios ---> ", formData);
+        router.push("/");
       } catch (error) {
         console.error("Error axios register --> ", error);
       }
@@ -214,11 +202,11 @@ export default function Register() {
               Ingrese un valor
             </Form.Message>
             <Form.Message className="FormMessage" match="typeMismatch">
-              Ingrese un valor
+              Ingrese un valor numérico
             </Form.Message>
             {formik.errors.age && formik.values.age ? (
               <Form.Message className="FormMessage">
-                Ingrese un valor
+                Ingrese un valor númerico
               </Form.Message>
             ) : (
               ""
@@ -268,7 +256,7 @@ export default function Register() {
         </Form.Field>
 
         <Form.Submit asChild>
-          <button className="Button" style={{ marginTop: 10 }} onClick={() => {router.push("/")}}>
+          <button className="Button" style={{ marginTop: 10 }}>
             Registrar
           </button>
         </Form.Submit>

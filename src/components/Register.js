@@ -6,6 +6,7 @@ import * as Yup from "yup";
 import { useRouter } from "next/navigation";
 import axiosInstance from "../../axiosConfig";
 
+
 export default function Register() {
   const router = useRouter();
 
@@ -19,22 +20,29 @@ export default function Register() {
       course: "",
     },
     validationSchema: Yup.object({
-      name: Yup.string().required(),
-      lastName: Yup.string().required(),
+      name: Yup.string()
+        .matches(/^[aA-zZ\s]+$/)
+        .required(),
+      lastName: Yup.string()
+        .matches(/^[aA-zZ\s]+$/)
+        .required(),
       email: Yup.string().email().required(),
-      DNI: Yup.string()
+      DNI: Yup.number()
         .required()
-        .matches(/^[0-9]+$/, "Must be only digits")
-        .min(8, "Must be exactly 5 digits")
-        .max(8, "Must be exactly 5 digits"),
+
+        .min(1000000)
+        .max(99999999),
 
       age: Yup.number().required(),
       course: Yup.string().required(),
     }),
     onSubmit: async (formData) => {
       try {
+
         const response = await axiosInstance.post("/staff/users", formData);
         console.log("response axios ---> ", response);
+        router.push("/");
+
       } catch (error) {
         console.error("Error axios register --> ", error);
       }
@@ -192,11 +200,11 @@ export default function Register() {
               Ingrese un valor
             </Form.Message>
             <Form.Message className="FormMessage" match="typeMismatch">
-              Ingrese un valor
+              Ingrese un valor numérico
             </Form.Message>
             {formik.errors.age && formik.values.age ? (
               <Form.Message className="FormMessage">
-                Ingrese un valor
+                Ingrese un valor númerico
               </Form.Message>
             ) : (
               ""
@@ -246,13 +254,7 @@ export default function Register() {
         </Form.Field>
 
         <Form.Submit asChild>
-          <button
-            className="Button"
-            style={{ marginTop: 10 }}
-            onClick={() => {
-              router.push("/");
-            }}
-          >
+          <button className="Button" style={{ marginTop: 10 }}>
             Registrar
           </button>
         </Form.Submit>

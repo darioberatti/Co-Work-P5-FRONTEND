@@ -7,6 +7,7 @@ import { useRouter } from "next/navigation";
 import axiosInstance from "../../axiosConfig";
 
 export default function ConfirmUser({ registerToken }) {
+
   const router = useRouter();
 
   const formik = useFormik({
@@ -15,14 +16,17 @@ export default function ConfirmUser({ registerToken }) {
       repeatPassword: "",
     },
     validationSchema: Yup.object({
+      // .matches(/^[0-9]+$/, "Must be only digits")
       password: Yup.string()
-        .required()
-        .oneOf([Yup.ref("repeatPassword")], "Las contraseñas no son iguales"),
+        .min(6)
+        
+        .required(),
       repeatPassword: Yup.string()
         .required()
         .oneOf([Yup.ref("password")], "Las contraseñas no son iguales"),
     }),
     onSubmit: async (formData) => {
+
       const password = formData.password;
       const newFormData = { password, registerToken };
 
@@ -60,11 +64,19 @@ export default function ConfirmUser({ registerToken }) {
             <Form.Message className="FormMessage" match="typeMismatch">
               Ingrese una contraseña válida
             </Form.Message>
+            {formik.errors.password && formik.values.password ? (
+              <Form.Message className="FormMessage">
+                Ingrese una contraseña válida
+              </Form.Message>
+            ) : (
+              ""
+            )}
           </div>
           <Form.Control asChild>
             <input
               className="Input"
               type="password"
+              placeholder="Al menos 6 caracteres"
               required
               onChange={formik.handleChange}
             />

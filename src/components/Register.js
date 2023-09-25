@@ -53,7 +53,7 @@ export default function Register() {
       // console.log(formData);
       try {
         const response = await axios.post(
-          "http://localhost:3001/staff/users/add",
+          "http://localhost:3001/staff/users",
           formData
         );
         console.log("response axios ---> ", response);

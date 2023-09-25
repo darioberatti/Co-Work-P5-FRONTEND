@@ -1,30 +1,12 @@
 "use client";
-import Link from "next/link";
 import * as Form from "@radix-ui/react-form";
-import { useState } from "react";
 import { Card, Text } from "@radix-ui/themes";
 import { useFormik } from "formik";
 import * as Yup from "yup";
-import axios from "axios";
-import { useRouter } from 'next/navigation'
+import { useRouter } from "next/navigation";
+import axiosInstance from "../../axiosConfig";
 
 export default function Register() {
-  // const [name, setName] = useState("");
-  // const [lastName, setLastName] = useState("");
-  // const [email, setEmail] = useState("");
-  // const [dni, setDni] = useState("");
-  // const [age, setage] = useState("");
-  // const [course, setCourse] = useState();
-
-  // const handleSubmit = () => {
-  //   console.log("name-->", name);
-  //   console.log("lastName-->", lastName);
-  //   console.log("email-->", email);
-  //   console.log("dni-->", dni);
-  //   console.log("age-->", age);
-  //   console.log("course-->", course);
-  // };
-
   const router = useRouter();
 
   const formik = useFormik({
@@ -50,12 +32,8 @@ export default function Register() {
       course: Yup.string().required(),
     }),
     onSubmit: async (formData) => {
-      // console.log(formData);
       try {
-        const response = await axios.post(
-          "http://localhost:3001/staff/users",
-          formData
-        );
+        const response = await axiosInstance.post("/staff/users", formData);
         console.log("response axios ---> ", response);
       } catch (error) {
         console.error("Error axios register --> ", error);
@@ -268,7 +246,13 @@ export default function Register() {
         </Form.Field>
 
         <Form.Submit asChild>
-          <button className="Button" style={{ marginTop: 10 }} onClick={() => {router.push("/")}}>
+          <button
+            className="Button"
+            style={{ marginTop: 10 }}
+            onClick={() => {
+              router.push("/");
+            }}
+          >
             Registrar
           </button>
         </Form.Submit>

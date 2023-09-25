@@ -16,10 +16,14 @@ export default function Menu() {
           <Menubar.Trigger className="MenubarTrigger">Register</Menubar.Trigger>
         </Menubar.Menu>
       </Link>
-
       <Link href={"/users"}>
         <Menubar.Menu>
           <Menubar.Trigger className="MenubarTrigger">Users</Menubar.Trigger>
+        </Menubar.Menu>
+      </Link>
+      <Link href={"/offices"}>
+        <Menubar.Menu>
+          <Menubar.Trigger className="MenubarTrigger">Offices</Menubar.Trigger>
         </Menubar.Menu>
       </Link>
     </Menubar.Root>

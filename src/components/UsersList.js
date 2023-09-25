@@ -1,7 +1,27 @@
+"use client";
+
 import { Table, Text } from "@radix-ui/themes";
+import axios from "axios";
 import Link from "next/link";
+import { useEffect, useState } from "react";
 
 export default function UsersList() {
+  const [users, setUsers] = useState([]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const users = await axios.get("http://localhost:3001/staff/users");
+        setUsers(users.data);
+      } catch(error) {
+        console.error(error);
+      }
+    };
+    fetchData()
+  }, []);
+
+  console.log("users-->", users);
+
   return (
     <div>
       <Text size={"8"} align="center" as="div">
@@ -18,35 +38,21 @@ export default function UsersList() {
         </Table.Header>
 
         <Table.Body>
-          <Table.Row>
-            <Table.RowHeaderCell>Mateo Navarro</Table.RowHeaderCell>
-            <Table.Cell>mateo@gmail.com</Table.Cell>
-            <Table.Cell>estudiante</Table.Cell>
+          {users?.map((user) => {
+            return (
+              <Table.Row key={user.id}>
+                <Table.RowHeaderCell>
+                  {user.name} {user.lastName}
+                </Table.RowHeaderCell>
+                <Table.Cell>{user.email}</Table.Cell>
+                <Table.Cell>{user.role.name}</Table.Cell>
 
-            <Table.Cell>
-              <Link href={"/users/1"}>+</Link>
-            </Table.Cell>
-          </Table.Row>
-
-          <Table.Row>
-            <Table.RowHeaderCell>German Cuevas</Table.RowHeaderCell>
-            <Table.Cell>german@gmail.com</Table.Cell>
-            <Table.Cell>staff</Table.Cell>
-
-            <Table.Cell>
-              <Link href={"/users/2"}>+</Link>
-            </Table.Cell>
-          </Table.Row>
-
-          <Table.Row>
-            <Table.RowHeaderCell>Juan Manuel Tierno</Table.RowHeaderCell>
-            <Table.Cell>juan@gmail.com</Table.Cell>
-            <Table.Cell>admin</Table.Cell>
-
-            <Table.Cell>
-              <Link href={"/users/3"}>+</Link>
-            </Table.Cell>
-          </Table.Row>
+                <Table.Cell>
+                  <Link href={`/users/${user.id}`}>+</Link>
+                </Table.Cell>
+              </Table.Row>
+            );
+          })}
         </Table.Body>
       </Table.Root>
     </div>

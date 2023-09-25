@@ -5,7 +5,7 @@ export default function UserView({params}) {
   return (
     <div>
       <h1>Usuario particular con id: {id}</h1>
-      <User/>
+      <User id={id}/>
     </div>
   );
 }

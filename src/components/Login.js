@@ -6,15 +6,11 @@ import { Card, Text } from "@radix-ui/themes";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import { Field, ErrorMessage } from "formik";
+import axiosInstance from "../../axiosConfig";
+import { useRouter } from "next/navigation";
 
 export default function Login() {
-  // const [email, setEmail] = useState("");
-  // const [password, setPassword] = useState("");
-
-  // const handleSubmit = () => {
-  //   console.log("email-->", email);
-  //   console.log("password-->", password);
-  // };
+  const router = useRouter();
 
   const formik = useFormik({
     initialValues: {
@@ -26,11 +22,14 @@ export default function Login() {
       password: Yup.string().required(),
     }),
     onSubmit: async (formData) => {
-      console.log(formData);
       try {
-        console.log("formData ---> ", formData);
+        const response = await axiosInstance.post("/user/login", formData, {
+          withCredentials: true,
+        });
+        alert("Has iniciado sesion");
+        router.push("/home");
       } catch (error) {
-        console.error("Error axios login --> ", error);
+        console.error("Credenciales inválidas");
       }
     },
   });

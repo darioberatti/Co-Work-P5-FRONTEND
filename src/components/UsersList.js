@@ -32,7 +32,7 @@ export default function UsersList() {
           <Table.Row>
             <Table.ColumnHeaderCell>Nombre</Table.ColumnHeaderCell>
             <Table.ColumnHeaderCell>Email</Table.ColumnHeaderCell>
-            <Table.ColumnHeaderCell>Rol</Table.ColumnHeaderCell>
+            {/* <Table.ColumnHeaderCell>Rol</Table.ColumnHeaderCell> */}
             <Table.ColumnHeaderCell>Ver</Table.ColumnHeaderCell>
           </Table.Row>
         </Table.Header>
@@ -45,7 +45,7 @@ export default function UsersList() {
                   {user.name} {user.lastName}
                 </Table.RowHeaderCell>
                 <Table.Cell>{user.email}</Table.Cell>
-                <Table.Cell>{user.role.name}</Table.Cell>
+                {/* <Table.Cell>{user.role.name}</Table.Cell> */}
 
                 <Table.Cell>
                   <Link href={`/users/${user.id}`}>+</Link>

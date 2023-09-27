@@ -5,6 +5,7 @@ import { Flex, Theme } from "@radix-ui/themes";
 import Menu from "@/components/Menubar";
 import { Providers } from "@/redux/provider";
 
+
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata = {
@@ -13,25 +14,23 @@ export const metadata = {
 };
 
 export default function RootLayout({ children }) {
+  
+
   return (
     <html lang="en">
       <body className={inter.className}>
-        <Theme
-          accentColor="cyan"
-          grayColor="gray"
-          panelBackground="solid"
-          scaling="100%"
-          radius="full"
-        >
-          <Flex justify={"center"} width={"90%"}>
-            <header>
-              <Menu />
-            </header>
-          </Flex>
-          <Flex justify={"center"} style={{ marginTop: "2%" }}>
-            <Providers>{children}</Providers>
-          </Flex>
-        </Theme>
+        <Providers>
+          <Theme>
+            <Flex justify={"center"} width={"90%"}>
+              <header>
+                <Menu />
+              </header>
+            </Flex>
+            <Flex justify={"center"} style={{ marginTop: "2%" }}>
+              {children}
+            </Flex>
+          </Theme>
+        </Providers>
       </body>
     </html>
   );

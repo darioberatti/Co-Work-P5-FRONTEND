@@ -1,25 +1,13 @@
-"use client"
 
 import Login from "../components/Login";
 
 
-export default function Home() {
-  // useEffect(() => {
-  //   axios
-  //     .get("/api/users/me", { withCredentials: true })
-  //     .then((user) => {
-  //       dispatch(loginUser(user.data.payload));
-  //     })
-  //     .catch((err) => console.error(err));
+export default function App() {
 
-  
-  // }, []);
 
   return (
-    
-      <main>
-        <Login />
-      </main>
- 
+    <main>
+      <Login />
+    </main>
   );
 }

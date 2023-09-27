@@ -5,9 +5,11 @@ import { useFormik } from "formik";
 import * as Yup from "yup";
 import { useRouter } from "next/navigation";
 import axiosInstance from "../../axiosConfig";
+import { useSelector } from "react-redux";
 
 
 export default function Register() {
+  const user = useSelector((state) => state.user.value);
   const router = useRouter();
 
   const formik = useFormik({

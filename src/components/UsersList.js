@@ -1,17 +1,19 @@
 "use client";
 
 import { Table, Text } from "@radix-ui/themes";
-import axios from "axios";
 import Link from "next/link";
 import { useEffect, useState } from "react";
+import axiosInstance from "../../axiosConfig";
+import { useSelector } from "react-redux";
 
 export default function UsersList() {
   const [users, setUsers] = useState([]);
+ 
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const users = await axios.get("http://localhost:3001/staff/users");
+        const users = await axiosInstance.get("/staff/users");
         setUsers(users.data);
       } catch(error) {
         console.error(error);
@@ -19,8 +21,6 @@ export default function UsersList() {
     };
     fetchData()
   }, []);
-
-  console.log("users-->", users);
 
   return (
     <div>

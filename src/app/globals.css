@@ -213,3 +213,11 @@ button {
 [data-disabled] > .RightSlot {
   color: var(--mauve-8);
 }
+
+.userData {
+  width: 90%;
+}
+
+.userDataText {
+  line-height: 3;
+}

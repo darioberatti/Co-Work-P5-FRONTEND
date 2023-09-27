@@ -32,7 +32,7 @@ export default function Register() {
       DNI: Yup.number()
         .required()
 
-        .min(1000000)
+        .min(10000000)
         .max(99999999),
 
       age: Yup.number().required(),
@@ -43,7 +43,7 @@ export default function Register() {
 
         const response = await axiosInstance.post("/staff/users", formData);
         console.log("response axios ---> ", response);
-        router.push("/");
+        router.push("/home");
 
       } catch (error) {
         console.error("Error axios register --> ", error);
@@ -135,9 +135,7 @@ export default function Register() {
             <Form.Message className="FormMessage" match="valueMissing">
               Ingrese un email
             </Form.Message>
-            <Form.Message className="FormMessage" match="typeMismatch">
-              Ingrese un email válido
-            </Form.Message>
+            
             {formik.errors.email && formik.values.email ? (
               <Form.Message className="FormMessage">
                 Ingrese un email válido
@@ -199,7 +197,7 @@ export default function Register() {
           >
             <Form.Label className="FormLabel">Edad</Form.Label>
             <Form.Message className="FormMessage" match="valueMissing">
-              Ingrese un valor
+              Ingrese un valor numérico
             </Form.Message>
             <Form.Message className="FormMessage" match="typeMismatch">
               Ingrese un valor numérico

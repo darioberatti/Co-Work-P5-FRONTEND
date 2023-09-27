@@ -6,6 +6,7 @@ import { useEffect, useState } from "react";
 import axiosInstance from "../../axiosConfig";
 import { useSelector } from "react-redux";
 
+
 export default function User({ id }) {
   const logedUser = useSelector((state) => state.user.value);
   const [user, setUser] = useState({});
@@ -20,20 +21,22 @@ export default function User({ id }) {
       }
     };
     fetchData();
-  }, []);
+  }, [user.roleId, user.status]);
 
   const handleDisableUser = async () => {
     try {
       if (confirm("¿Estas seguro que deseas deshabilitar este usuario?")) {
-        const disableUser = await axiosInstance.put(`/staff/users/${id}`, {
+        const response = await axiosInstance.put(`/staff/users/${id}`, {
           status: "disabled",
         });
+        setUser((prevUser) => ({
+          ...prevUser,
+          status: response.data.status,
+        }));
         alert("Usuario deshabilitado");
-        window.location.reload();
       }
     } catch (error) {
-      console.error();
-      error;
+      console.error(error);
     }
   };
 
@@ -42,41 +45,46 @@ export default function User({ id }) {
       if (logedUser.roleId >= user.roleId)
         return alert("No tiene permisos para realizar la acción");
       if (confirm("¿Estas seguro que desea cambiar el rol de este usuario?")) {
-        const editedUser = await axiosInstance.put(`/staff/users/${id}`, {
+        const response = await axiosInstance.put(`/staff/users/${id}`, {
           roleId: user.roleId - 1,
         });
+        setUser((prevUser) => ({
+          ...prevUser,
+          roleId: response.data.roleId,
+        }));
         alert("Usuario actualizado");
-        window.location.reload();
       }
     } catch (error) {
       console.error(error);
     }
   };
 
+  console.log("user estado -->", user);
+
   console.log(logedUser);
 
   return (
     <Card>
       <Flex direction={"column"}>
-        <Text size={"7"}>
+        <Text size={"8"} className="userDataText">
           {user.name} {user.lastName}
         </Text>
-        <Text size={"4"}>{user.email}</Text>
-        <Text size={"4"}>DNI: {user.DNI}</Text>
-        <Text size={"4"}>Edad: {user.age}</Text>
-        <Text size={"4"}>Curso: {user.course}</Text>
-        <hr></hr>
-        <Flex justify={"between"}>
-          <Text size={"4"}>Rol: {user.roleId}</Text>{" "}
+        <Text size={"4"} className="userDataText">{user.email}</Text>
+        <Text size={"4"} className="userDataText">DNI: {user.DNI}</Text>
+        <Text size={"4"} className="userDataText">Edad: {user.age}</Text>
+        <Text size={"4"} className="userDataText">Curso: {user.course}</Text>
+        <Flex justify={"between"} className="userDataText">
+          {user.role ? <Text size={"4"} className="userDataText">Rol: {user.role.name}</Text> : ""}
           <Button
             color="orange"
             variant="soft"
+            className="userDataText"
             onClick={() => handleEditRole()}
           >
             Subir rol
           </Button>
         </Flex>
-        <Text size={"4"}>Estado: {user.status}</Text>
+        <Text size={"4"} className="userDataText">Estado: {user.status}</Text>
         <br></br>
         <Button
           color="crimson"

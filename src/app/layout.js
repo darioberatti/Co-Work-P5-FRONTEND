@@ -26,7 +26,7 @@ export default function RootLayout({ children }) {
                 <Menu />
               </header>
             </Flex>
-            <Flex justify={"center"} style={{ marginTop: "2%" }}>
+            <Flex justify={"center"} style={{ margin: "2%" }}>
               {children}
             </Flex>
           </Theme>

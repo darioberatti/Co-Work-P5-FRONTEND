@@ -5,7 +5,7 @@ import Link from "next/link";
 
 export default function Menu() {
   return (
-    <Menubar.Root className="MenubarRoot">
+    <Menubar.Root className="MenubarRoot" color="indigo">
       <Link href={"/"}>
         <Menubar.Menu>
           <Menubar.Trigger className="MenubarTrigger">Home</Menubar.Trigger>

@@ -5,13 +5,13 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import axiosInstance from "../../axiosConfig";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchUser } from "@/hooks/hooks";
+import { fetchUser } from "@/hooks/fetchUser";
 
 export default function User({ id }) {
   const logedUser = useSelector((state) => state.user.value);
   const [user, setUser] = useState({});
 
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
 
   useEffect(() => {
     fetchUser(dispatch);
@@ -67,7 +67,7 @@ export default function User({ id }) {
 
   console.log("user estado -->", user);
 
-  console.log(logedUser);
+  console.log("loged user-->", logedUser);
 
   return (
     <Flex direction={"column"} className="userData">
@@ -96,27 +96,40 @@ export default function User({ id }) {
             ) : (
               ""
             )}
-            <Button
-              color="orange"
-              variant="soft"
-              className="userDataText userButton"
-              onClick={() => handleEditRole()}
-            >
-              Subir rol
-            </Button>
+            {user.role &&
+            user.status !== "disabled" &&
+            user.role.name !== "admin" ? (
+              <Button
+                color="orange"
+                variant="soft"
+                className="userDataText userButton"
+                onClick={() => handleEditRole()}
+              >
+                Subir rol
+              </Button>
+            ) : (
+              ""
+            )}
           </Flex>
           <Text size={"4"} className="userDataText">
             Estado: {user.status}
           </Text>
           <br></br>
-          <Button
-            color="crimson"
-            variant="soft"
-            className="userButton"
-            onClick={() => handleDisableUser()}
-          >
-            Deshabilitar usuario
-          </Button>
+
+          {user.status !== "disabled" &&
+          logedUser.userId !== user.id &&
+          logedUser.roleId <= user.roleId ? (
+            <Button
+              color="crimson"
+              variant="soft"
+              className="userButton"
+              onClick={() => handleDisableUser()}
+            >
+              Deshabilitar usuario
+            </Button>
+          ) : (
+            ""
+          )}
         </Flex>
       </Card>
     </Flex>

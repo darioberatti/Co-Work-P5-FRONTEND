@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import axiosInstance from "../../axiosConfig";
 import { useDispatch } from "react-redux";
-import { fetchUser } from "@/hooks/hooks";
+import { fetchUser } from "@/hooks/fetchUser";
 import OfficeCard from "@/commons/OfficeCard";
 
 export default function User({ id }) {

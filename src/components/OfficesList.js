@@ -5,7 +5,7 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import axiosInstance from "../../axiosConfig";
 import { useDispatch } from "react-redux";
-import { fetchUser } from "@/hooks/hooks";
+import { fetchUser } from "@/hooks/fetchUser";
 
 export default function OfficesList() {
   const [offices, setOffices] = useState([]);

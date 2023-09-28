@@ -4,7 +4,7 @@ import { Inter } from "next/font/google";
 import { Flex, Theme } from "@radix-ui/themes";
 import Menu from "@/components/Menubar";
 import { Providers } from "@/redux/provider";
-
+import MyFooter from "@/components/MyFooter";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -14,8 +14,6 @@ export const metadata = {
 };
 
 export default function RootLayout({ children }) {
-  
-
   return (
     <html lang="en">
       <body className="bodyMain">
@@ -30,6 +28,7 @@ export default function RootLayout({ children }) {
               {children}
             </Flex>
           </Theme>
+          <MyFooter />
         </Providers>
       </body>
     </html>

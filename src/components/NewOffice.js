@@ -1,6 +1,6 @@
 "use client";
 import * as Form from "@radix-ui/react-form";
-import { Card, Text } from "@radix-ui/themes";
+import { Button, Card, Text } from "@radix-ui/themes";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import { useRouter } from "next/navigation";
@@ -8,6 +8,8 @@ import axiosInstance from "../../axiosConfig";
 import { fetchUser } from "@/hooks/hooks";
 import { useDispatch } from "react-redux";
 import { useEffect } from "react";
+import Link from "next/link";
+
 
 export default function NewOffice() {
   const router = useRouter();
@@ -23,11 +25,13 @@ export default function NewOffice() {
       name: "",
       address: "",
       city: "",
+      province: "",
       country: "",
       openingTime: "",
       closingTime: "",
       floors: "",
       phoneNumber: "",
+      urlImg: [],
     },
     validationSchema: Yup.object({
       name: Yup.string()
@@ -35,6 +39,9 @@ export default function NewOffice() {
         .required(),
       address: Yup.string().required(),
       city: Yup.string()
+        .matches(/^[aA-zZ\s]+$/)
+        .required(),
+      province: Yup.string()
         .matches(/^[aA-zZ\s]+$/)
         .required(),
       country: Yup.string()
@@ -52,7 +59,9 @@ export default function NewOffice() {
     onSubmit: async (formData) => {
       try {
         console.log(formData);
-        const response = await axiosInstance.post("/admin/offices", formData, {withCredentials: true});
+        const response = await axiosInstance.post("/admin/offices", formData, {
+          withCredentials: true,
+        });
         console.log("response axios ---> ", response);
         router.push("/offices");
       } catch (error) {
@@ -95,6 +104,7 @@ export default function NewOffice() {
               className="Input"
               type="text"
               required
+              placeholder="Nueva Oficina"
               onChange={formik.handleChange}
             />
           </Form.Control>
@@ -128,6 +138,7 @@ export default function NewOffice() {
               className="Input"
               type="text"
               required
+              placeholder="Mi direccion 1234"
               pattern="^[a-zA-Z0-9\s]+$"
               onChange={formik.handleChange}
             />
@@ -162,6 +173,41 @@ export default function NewOffice() {
               className="Input"
               type="text"
               required
+              placeholder="CABA"
+              onChange={formik.handleChange}
+            />
+          </Form.Control>
+        </Form.Field>
+
+        <Form.Field className="FormField" name="province">
+          <div
+            style={{
+              display: "flex",
+              alignItems: "baseline",
+              justifyContent: "space-between",
+            }}
+          >
+            <Form.Label className="FormLabel">Provincia</Form.Label>
+            <Form.Message className="FormMessage" match="valueMissing">
+              Ingrese una provincia
+            </Form.Message>
+            <Form.Message className="FormMessage" match="typeMismatch">
+              Ingrese una provincia válida
+            </Form.Message>
+            {formik.errors.city && formik.values.email ? (
+              <Form.Message className="FormMessage">
+                Ingrese una provincia válida
+              </Form.Message>
+            ) : (
+              ""
+            )}
+          </div>
+          <Form.Control asChild>
+            <input
+              className="Input"
+              type="text"
+              required
+              placeholder="Buenos Aires"
               onChange={formik.handleChange}
             />
           </Form.Control>
@@ -195,6 +241,7 @@ export default function NewOffice() {
               className="Input"
               type="text"
               required
+              placeholder="Argentina"
               onChange={formik.handleChange}
             />
           </Form.Control>
@@ -228,6 +275,7 @@ export default function NewOffice() {
               className="Input"
               type="text"
               required
+              placeholder="9 hs"
               onChange={formik.handleChange}
             />
           </Form.Control>
@@ -261,6 +309,7 @@ export default function NewOffice() {
               className="Input"
               type="text"
               required
+              placeholder="18 hs"
               onChange={formik.handleChange}
             />
           </Form.Control>
@@ -327,9 +376,30 @@ export default function NewOffice() {
               className="Input"
               type="number"
               required
+              placeholder="1112345678"
               onChange={formik.handleChange}
             />
           </Form.Control>
+        </Form.Field>
+
+        <Form.Field className="FormField" name="urlImg">
+          <div style={{ display: "flex", flexDirection: "column" }}>
+            <Form.Label className="FormLabel">URL de Imágenes</Form.Label>
+            <Form.Control asChild>
+              <input
+                className="Input"
+                type="text"
+                required
+                placeholder="Separadas por comas"
+                onChange={(e) => {
+                  const urls = e.target.value
+                    .split(",")
+                    .map((url) => url.trim());
+                  formik.setFieldValue("urlImg", urls);
+                }}
+              />
+            </Form.Control>
+          </div>
         </Form.Field>
 
         <Form.Submit asChild>
@@ -338,6 +408,19 @@ export default function NewOffice() {
           </button>
         </Form.Submit>
       </Form.Root>
+      <div
+        style={{
+          marginTop: "20px",
+          display: "flex",
+          justifyContent: "center",
+        }}
+      >
+        <Link href={"/offices"}>
+          <Button color="green" variant="soft">
+            Volver a Oficinas
+          </Button>
+        </Link>
+      </div>
     </Card>
   );
 }

@@ -5,12 +5,20 @@ import { useFormik } from "formik";
 import * as Yup from "yup";
 import { useRouter } from "next/navigation";
 import axiosInstance from "../../axiosConfig";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { useEffect } from "react";
+import { fetchUser } from "@/hooks/fetchUser";
 
 
 export default function Register() {
   const user = useSelector((state) => state.user.value);
   const router = useRouter();
+
+  const dispatch = useDispatch()
+
+  useEffect(() => {
+    fetchUser(dispatch);
+  }, []);
 
   const formik = useFormik({
     initialValues: {

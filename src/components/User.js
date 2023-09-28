@@ -1,20 +1,25 @@
 "use client";
 
 import { Button, Card, Flex, Text } from "@radix-ui/themes";
-import axios from "axios";
 import { useEffect, useState } from "react";
 import axiosInstance from "../../axiosConfig";
-import { useSelector } from "react-redux";
-
+import { useDispatch, useSelector } from "react-redux";
+import { fetchUser } from "@/hooks/fetchUser";
 
 export default function User({ id }) {
   const logedUser = useSelector((state) => state.user.value);
   const [user, setUser] = useState({});
 
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    fetchUser(dispatch);
+  }, []);
+
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const user = await axios.get(`http://localhost:3001/staff/users/${id}`);
+        const user = await axiosInstance.get(`/staff/users/${id}`);
         setUser(user.data);
       } catch (error) {
         console.error(error);
@@ -59,41 +64,72 @@ export default function User({ id }) {
     }
   };
 
-  console.log("user estado -->", user);
-
-  console.log(logedUser);
-
   return (
-    <Card>
-      <Flex direction={"column"}>
-        <Text size={"8"} className="userDataText">
-          {user.name} {user.lastName}
-        </Text>
-        <Text size={"4"} className="userDataText">{user.email}</Text>
-        <Text size={"4"} className="userDataText">DNI: {user.DNI}</Text>
-        <Text size={"4"} className="userDataText">Edad: {user.age}</Text>
-        <Text size={"4"} className="userDataText">Curso: {user.course}</Text>
-        <Flex justify={"between"} className="userDataText">
-          {user.role ? <Text size={"4"} className="userDataText">Rol: {user.role.name}</Text> : ""}
-          <Button
-            color="orange"
-            variant="soft"
-            className="userDataText"
-            onClick={() => handleEditRole()}
-          >
-            Subir rol
-          </Button>
+    <Flex direction={"column"} className="userData">
+      <Text size={"8"} className="userDataText">
+        {user.name} {user.lastName}
+      </Text>
+      <Card className="userCard">
+        <Flex direction={"column"}>
+          <Text size={"4"} className="userDataText">
+            {user.email}
+          </Text>
+          <Text size={"4"} className="userDataText">
+            ID usuario: {user.id}
+          </Text>
+          <Text size={"4"} className="userDataText">
+            DNI: {user.DNI}
+          </Text>
+          <Text size={"4"} className="userDataText">
+            Edad: {user.age}
+          </Text>
+          <Text size={"4"} className="userDataText">
+            Curso: {user.course}
+          </Text>
+          <Flex justify={"between"} className="userDataText">
+            {user.role ? (
+              <Text size={"4"} className="userDataText">
+                Rol: {user.role.name}
+              </Text>
+            ) : (
+              ""
+            )}
+            {user.role &&
+            user.status !== "disabled" &&
+            user.role.name !== "admin" ? (
+              <Button
+                color="orange"
+                variant="soft"
+                className="userDataText userButton"
+                onClick={() => handleEditRole()}
+              >
+                Subir rol
+              </Button>
+            ) : (
+              ""
+            )}
+          </Flex>
+          <Text size={"4"} className="userDataText">
+            Estado: {user.status}
+          </Text>
+          <br></br>
+
+          {user.status !== "disabled" &&
+          logedUser.userId !== user.id &&
+          logedUser.roleId <= user.roleId ? (
+            <Button
+              color="crimson"
+              variant="soft"
+              className="userButton"
+              onClick={() => handleDisableUser()}
+            >
+              Deshabilitar usuario
+            </Button>
+          ) : (
+            ""
+          )}
         </Flex>
-        <Text size={"4"} className="userDataText">Estado: {user.status}</Text>
-        <br></br>
-        <Button
-          color="crimson"
-          variant="soft"
-          onClick={() => handleDisableUser()}
-        >
-          Deshabilitar usuario
-        </Button>
-      </Flex>
-    </Card>
+      </Card>
+    </Flex>
   );
 }

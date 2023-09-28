@@ -124,7 +124,7 @@ export default function ConfirmUser({ registerToken }) {
               router.push("/");
             }}
           >
-            Ingresar
+            Confirmar contraseña
           </button>
         </Form.Submit>
       </Form.Root>

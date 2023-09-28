@@ -4,7 +4,8 @@ import { Inter } from "next/font/google";
 import { Flex, Theme } from "@radix-ui/themes";
 import Menu from "@/components/Menubar";
 import { Providers } from "@/redux/provider";
-import MyFooter from "@/components/MyFooter";
+import Footer from "@/components/Footer";
+import Header from "../commons/Header";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -16,7 +17,10 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
-      <body className="bodyMain">
+      <body
+        className="bodyMain"
+        style={{ backgroundColor: "rgb(244, 244, 244)" }}
+      >
         <Providers>
           <Theme>
             <Flex justify={"center"} width={"90%"}>
@@ -24,11 +28,13 @@ export default function RootLayout({ children }) {
                 <Menu />
               </header>
             </Flex>
+            <Header />
             <Flex justify={"center"} style={{ margin: "2%" }}>
               {children}
             </Flex>
           </Theme>
-          <MyFooter />
+          <div style={{ marginBottom: "100px" }}></div>
+          <Footer />
         </Providers>
       </body>
     </html>

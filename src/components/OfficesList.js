@@ -10,7 +10,7 @@ import { fetchUser } from "@/hooks/hooks";
 export default function OfficesList() {
   const [offices, setOffices] = useState([]);
 
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
 
   useEffect(() => {
     fetchUser(dispatch);
@@ -34,11 +34,7 @@ export default function OfficesList() {
         style={{
           textAlign: "center",
         }}
-      >
-        <Text size={"8"} align="center" as="div">
-          Lista de Oficinas
-        </Text>
-      </div>
+      ></div>
       <div
         style={{
           margin: "10px",

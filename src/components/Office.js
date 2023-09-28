@@ -3,9 +3,17 @@
 import { Card, Flex, Text } from "@radix-ui/themes";
 import { useEffect, useState } from "react";
 import axiosInstance from "../../axiosConfig";
+import { useDispatch } from "react-redux";
+import { fetchUser } from "@/hooks/hooks";
 
 export default function User({ id }) {
   const [office, setOffice] = useState({});
+
+  const dispatch = useDispatch()
+
+  useEffect(() => {
+    fetchUser(dispatch);
+  }, []);
 
   useEffect(() => {
     const fetchData = async () => {

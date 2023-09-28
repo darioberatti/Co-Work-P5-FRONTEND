@@ -4,9 +4,17 @@ import { Card, Flex, Button, Text, Box } from "@radix-ui/themes";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import axiosInstance from "../../axiosConfig";
+import { useDispatch } from "react-redux";
+import { fetchUser } from "@/hooks/hooks";
 
 export default function OfficesList() {
   const [offices, setOffices] = useState([]);
+
+  const dispatch = useDispatch()
+
+  useEffect(() => {
+    fetchUser(dispatch);
+  }, []);
 
   useEffect(() => {
     const fetchData = async () => {

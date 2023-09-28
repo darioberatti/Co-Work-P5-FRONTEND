@@ -5,9 +5,18 @@ import { useFormik } from "formik";
 import * as Yup from "yup";
 import { useRouter } from "next/navigation";
 import axiosInstance from "../../axiosConfig";
+import { fetchUser } from "@/hooks/hooks";
+import { useDispatch } from "react-redux";
+import { useEffect } from "react";
 
 export default function NewOffice() {
   const router = useRouter();
+
+  const dispatch = useDispatch()
+
+  useEffect(() => {
+    fetchUser(dispatch);
+  }, []);
 
   const formik = useFormik({
     initialValues: {

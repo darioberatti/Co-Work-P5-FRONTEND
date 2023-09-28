@@ -18,7 +18,7 @@ export default function RootLayout({ children }) {
 
   return (
     <html lang="en">
-      <body className={inter.className}>
+      <body className="bodyMain">
         <Providers>
           <Theme>
             <Flex justify={"center"} width={"90%"}>

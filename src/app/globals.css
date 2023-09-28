@@ -240,7 +240,7 @@ button {
 /* Style for Card component */
 .userCard {
   background-color: white;
-  padding: 20px;
+  padding: 5px;
   border-radius: 5px;
   box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
 }

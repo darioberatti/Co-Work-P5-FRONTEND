@@ -15,7 +15,8 @@ const initialState = {
     DNI: undefined,
     age:undefined,
     roleId: undefined,
-    status: undefined
+    status: undefined,
+    role: undefined
   },
 };
 

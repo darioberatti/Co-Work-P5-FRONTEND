@@ -4,11 +4,14 @@ import { Card, Flex, Box, Button, Text } from "@radix-ui/themes";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import axiosInstance from "../../axiosConfig";
-import { useDispatch } from "react-redux";
-import { fetchUser } from "@/hooks/hooks";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchUser } from "@/hooks/fetchUser";
+
 
 export default function OfficesList() {
   const [offices, setOffices] = useState([]);
+
+  const user = useSelector((state) => state.user.value);
 
   const dispatch = useDispatch();
 
@@ -42,11 +45,17 @@ export default function OfficesList() {
           justifyContent: "center",
         }}
       >
-        <Link href={`/new-office`}>
-          <Button variant="solid" color="indigo" style={{ marginLeft: "10px" }}>
-            Crear Nueva Oficina
-          </Button>
-        </Link>
+        {user.role === "admin" ? (
+          <Link href={`/new-office`}>
+            <Button
+              variant="solid"
+              color="indigo"
+              style={{ marginLeft: "10px" }}
+            >
+              Crear Nueva Oficina
+            </Button>
+          </Link>
+        ) : null}
       </div>
 
       {offices?.map((office) => {

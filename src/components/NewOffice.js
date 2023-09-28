@@ -5,7 +5,7 @@ import { useFormik } from "formik";
 import * as Yup from "yup";
 import { useRouter } from "next/navigation";
 import axiosInstance from "../../axiosConfig";
-import { fetchUser } from "@/hooks/hooks";
+import { fetchUser } from "@/hooks/fetchUser";
 import { useDispatch } from "react-redux";
 import { useEffect } from "react";
 import Link from "next/link";

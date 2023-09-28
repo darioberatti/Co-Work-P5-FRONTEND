@@ -1,7 +1,6 @@
 "use client";
 
 import { Button, Card, Flex, Text } from "@radix-ui/themes";
-import axios from "axios";
 import { useEffect, useState } from "react";
 import axiosInstance from "../../axiosConfig";
 import { useDispatch, useSelector } from "react-redux";
@@ -20,7 +19,7 @@ export default function User({ id }) {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const user = await axios.get(`http://localhost:3001/staff/users/${id}`);
+        const user = await axiosInstance.get(`/staff/users/${id}`);
         setUser(user.data);
       } catch (error) {
         console.error(error);
@@ -64,10 +63,6 @@ export default function User({ id }) {
       console.error(error);
     }
   };
-
-  console.log("user estado -->", user);
-
-  console.log("loged user-->", logedUser);
 
   return (
     <Flex direction={"column"} className="userData">

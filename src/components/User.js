@@ -75,6 +75,9 @@ export default function User({ id }) {
             {user.email}
           </Text>
           <Text size={"4"} className="userDataText">
+            ID usuario: {user.id}
+          </Text>
+          <Text size={"4"} className="userDataText">
             DNI: {user.DNI}
           </Text>
           <Text size={"4"} className="userDataText">

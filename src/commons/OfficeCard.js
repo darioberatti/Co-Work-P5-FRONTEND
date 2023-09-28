@@ -13,11 +13,26 @@ export default function OfficeCard({ office }) {
       <Carousel>
         {office.urlImg?.map((imageUrl, index) => (
           <div key={index} style={{ width: "100%", textAlign: "center" }}>
-            <img
-              src={imageUrl}
-              alt={`Image ${index}`}
-              style={{ width: "100%", maxHeight: "300px" }}
-            />
+            <div
+              style={{
+                width: "100%",
+                paddingBottom: "75%", // Mantener una relación de aspecto 4:3 (75%)
+                position: "relative",
+              }}
+            >
+              <img
+                src={imageUrl}
+                alt={`Image ${index}`}
+                style={{
+                  objectFit: "cover", // Controlar cómo se ajusta la imagen
+                  width: "100%",
+                  height: "100%",
+                  position: "absolute",
+                  top: "0",
+                  left: "0",
+                }}
+              />
+            </div>
           </div>
         ))}
       </Carousel>
@@ -50,9 +65,10 @@ export default function OfficeCard({ office }) {
           </Text>
           <div
             style={{
-              margin: "10px",
+              marginTop: "10px",
               display: "flex",
               justifyContent: "center",
+              alignItems: "center",
             }}
           >
             {office.address ? (
@@ -73,7 +89,7 @@ export default function OfficeCard({ office }) {
           >
             <Link href={""}>
               <Button color="indigo" variant="soft">
-                Reservar en esta oficina
+                Reservar aquí
               </Button>
             </Link>
             <Link href={"/offices"}>

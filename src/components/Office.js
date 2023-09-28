@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import axiosInstance from "../../axiosConfig";
 import OfficeCard from "@/commons/OfficeCard";
+import { SetterValues } from "./SetterValues";
 
 export default function User({ id }) {
   const [office, setOffice] = useState({});
@@ -22,6 +23,7 @@ export default function User({ id }) {
   return (
     <div>
       <OfficeCard office={office} />
+      <SetterValues id={id}/>
     </div>
   );
 }

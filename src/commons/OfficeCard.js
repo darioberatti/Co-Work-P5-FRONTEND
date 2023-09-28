@@ -8,6 +8,8 @@ import { Card, Flex, Text, Box, Button } from "@radix-ui/themes";
 import GoogleMap from "./GoogleMap";
 
 export default function OfficeCard({ office }) {
+  console.log(office);
+
   return (
     <Card size="3" style={{ maxWidth: 400 }}>
       <Carousel>
@@ -58,7 +60,7 @@ export default function OfficeCard({ office }) {
             Hora de cierre: {office.closingTime || "Consultalo con el Staff"}
           </Text>
           <Text as="div" color="gray" mb="1" size="3">
-            Pisos disponibles: {office.floors}
+            Pisos disponibles: {office.floorsNumber}
           </Text>
           <Text as="div" color="gray" mb="1" size="3">
             Número de telefono: {office.phoneNumber}

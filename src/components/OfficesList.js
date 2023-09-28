@@ -38,7 +38,7 @@ export default function OfficesList() {
           justifyContent: "center",
         }}
       >
-        <Link href={`/new-office`}>
+        <Link href={"/new-office"}>
           <Button variant="solid" color="indigo" style={{ marginLeft: "10px" }}>
             Crear Nueva Oficina
           </Button>

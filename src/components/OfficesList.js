@@ -37,11 +37,7 @@ export default function OfficesList() {
         style={{
           textAlign: "center",
         }}
-      >
-        <Text size={"8"} align="center" as="div">
-          Lista de Oficinas
-        </Text>
-      </div>
+      ></div>
       <div
         style={{
           margin: "10px",

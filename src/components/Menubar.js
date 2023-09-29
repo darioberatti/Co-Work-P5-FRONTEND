@@ -35,6 +35,11 @@ export default function Menu() {
       {/* all users access */}
       {user.userId ? (
         <Menubar.Root className="MenubarRoot">
+          <img
+            src="https://www.plataforma5.la/static/media/LogoP5Mobile.a55e0d3ded6702e47da325ac762d2f5d.svg"
+            alt="P5 Header"
+            width="30"
+          />
           <Link href={"/home"}>
             <Menubar.Menu>
               <Menubar.Trigger className="MenubarTrigger">Home</Menubar.Trigger>
@@ -77,7 +82,22 @@ export default function Menu() {
           </Menubar.Menu>
         </Menubar.Root>
       ) : (
-        ""
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "left",
+            textAlign: "center",
+            height: "50px",
+            width: "100%",
+          }}
+        >
+          <img
+            src="https://www.plataforma5.la/static/media/LogoP5Desktop.d1842dd2bff00677295cd7d28a29e60c.svg"
+            alt="P5 Header"
+            width="150"
+          />
+        </div>
       )}
     </>
   );

@@ -18,7 +18,7 @@ export default function Header() {
   } else if (user.role === "staff") {
     role = "Staff";
   } else {
-    role = "Estudiante";
+    role = "Alumno";
   }
 
   if (path === "/") {

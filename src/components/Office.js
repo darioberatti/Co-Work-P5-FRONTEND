@@ -5,6 +5,7 @@ import axiosInstance from "../../axiosConfig";
 import { useDispatch } from "react-redux";
 import { fetchUser } from "@/hooks/fetchUser";
 import OfficeCard from "@/commons/OfficeCard";
+import { SetterValues } from "./SetterValues";
 
 export default function User({ id }) {
   const [office, setOffice] = useState({});
@@ -30,6 +31,7 @@ export default function User({ id }) {
   return (
     <div>
       <OfficeCard office={office} />
+      <SetterValues id={id}/>
     </div>
   );
 }

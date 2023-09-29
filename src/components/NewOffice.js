@@ -29,7 +29,7 @@ export default function NewOffice() {
       country: "",
       openingTime: "",
       closingTime: "",
-      floors: "",
+      floorsNumber: "",
       phoneNumber: "",
       urlImg: [],
     },
@@ -49,7 +49,7 @@ export default function NewOffice() {
         .required(),
       openingTime: Yup.string(),
       closingTime: Yup.string(),
-      floors: Yup.number()
+      floorsNumber: Yup.number()
         .required()
 
         .min(1)
@@ -63,7 +63,7 @@ export default function NewOffice() {
           withCredentials: true,
         });
         console.log("response axios ---> ", response);
-        router.push("/offices");
+        router.push(`/offices`);
       } catch (error) {
         console.error("Error axios register --> ", error.message);
       }
@@ -315,7 +315,7 @@ export default function NewOffice() {
           </Form.Control>
         </Form.Field>
 
-        <Form.Field className="FormField" name="floors">
+        <Form.Field className="FormField" name="floorsNumber">
           <div
             style={{
               display: "flex",
@@ -330,7 +330,7 @@ export default function NewOffice() {
             <Form.Message className="FormMessage" match="typeMismatch">
               Ingrese una cantidad de pisos válida
             </Form.Message>
-            {formik.errors.floors && formik.values.floors ? (
+            {formik.errors.floorsNumber && formik.values.floorsNumber ? (
               <Form.Message className="FormMessage">
                 Ingrese una cantidad de pisos válida
               </Form.Message>

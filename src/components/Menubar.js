@@ -12,8 +12,6 @@ export default function Menu() {
   const router = useRouter();
   const dispatch = useDispatch();
 
-  console.log("user ---> ", user)
-
   const handleLogout = async () => {
     try {
       const response = await axiosInstance.post(
@@ -29,7 +27,6 @@ export default function Menu() {
     }
   };
 
-
   return (
     <>
       {/* all users access */}
@@ -40,7 +37,7 @@ export default function Menu() {
             alt="P5 Header"
             width="30"
           />
-          <Link href={"/home"}>
+          <Link href={"/home"} style={{ textDecoration: "none" }}>
             <Menubar.Menu>
               <Menubar.Trigger className="MenubarTrigger">Home</Menubar.Trigger>
             </Menubar.Menu>
@@ -49,35 +46,35 @@ export default function Menu() {
           {/* staff & admin access Users & Register */}
           {user.role === "admin" || user.role === "staff" ? (
             <>
-              <Link href={"/register"}>
+              <Link href={"/register"} style={{ textDecoration: "none" }}>
                 <Menubar.Menu>
                   <Menubar.Trigger className="MenubarTrigger">
-                    Register
+                    Registrar
                   </Menubar.Trigger>
                 </Menubar.Menu>
               </Link>
-              <Link href={"/users"}>
+              <Link href={"/users"} style={{ textDecoration: "none" }}>
                 <Menubar.Menu>
                   <Menubar.Trigger className="MenubarTrigger">
-                    Users
+                    Usuarios
                   </Menubar.Trigger>
                 </Menubar.Menu>
               </Link>
             </>
           ) : null}
 
-            <Link href={"/offices"}>
-              <Menubar.Menu>
-                <Menubar.Trigger className="MenubarTrigger">
-                  Offices
-                </Menubar.Trigger>
-              </Menubar.Menu>
-            </Link>
-            
+          <Link href={"/offices"} style={{ textDecoration: "none" }}>
+            <Menubar.Menu>
+              <Menubar.Trigger className="MenubarTrigger">
+                Oficinas
+              </Menubar.Trigger>
+            </Menubar.Menu>
+          </Link>
+
           {/* all users access */}
           <Menubar.Menu>
             <Menubar.Trigger className="MenubarTrigger" onClick={handleLogout}>
-              LogOut
+              Salir
             </Menubar.Trigger>
           </Menubar.Menu>
         </Menubar.Root>

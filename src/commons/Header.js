@@ -11,6 +11,15 @@ export default function Header() {
   let text1 = "";
   let text2 = "";
   let text3 = "";
+  let role = "";
+
+  if (user.role === "admin") {
+    role = "Administrador";
+  } else if (user.role === "staff") {
+    role = "Staff";
+  } else {
+    role = "Estudiante";
+  }
 
   if (path === "/") {
     text1 = "Bienvenido a ";
@@ -18,14 +27,14 @@ export default function Header() {
     text3 = "Debes Iniciar Sesión";
   } else if (path === "/home") {
     text1 = "Perfil de ";
-    text2 = `${user.roleId}`;
+    text2 = `${role}`;
   } else if (path === "/offices") {
     text1 = "Lista de ";
     text2 = "Oficinas";
     text3 = "disponibles";
   } else {
     text1 = "Perfil de ";
-    text2 = `${user.roleId}`;
+    text2 = `${role}`;
   }
 
   return (

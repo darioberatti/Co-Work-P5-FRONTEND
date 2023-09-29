@@ -1,4 +1,4 @@
-import User from "@/components/User";
+import User from "@/commons/User";
 
 export default function UserView({params}) {
   const {id} = params

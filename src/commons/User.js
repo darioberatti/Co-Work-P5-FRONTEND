@@ -64,6 +64,26 @@ export default function User({ id }) {
     }
   };
 
+  let role = "";
+
+  if (user.role && user.role.name === "admin") {
+    role = "Admin";
+  } else if (user.role && user.role.name === "staff") {
+    role = "Staff";
+  } else {
+    role = "Alumno";
+  }
+
+  let status = "";
+
+  if (user.status === "pending") {
+    status = "Pendiente";
+  } else if (user.status === "enabled") {
+    status = "Activo";
+  } else {
+    status = "Deshabilitado";
+  }
+
   return (
     <Flex direction={"column"} className="userData">
       <Text size={"8"} className="userDataText">
@@ -89,7 +109,7 @@ export default function User({ id }) {
           <Flex justify={"between"} className="userDataText">
             {user.role ? (
               <Text size={"4"} className="userDataText">
-                Rol: {user.role.name}
+                Rol: {role}
               </Text>
             ) : (
               ""
@@ -110,7 +130,7 @@ export default function User({ id }) {
             )}
           </Flex>
           <Text size={"4"} className="userDataText">
-            Estado: {user.status}
+            Estado: {status}
           </Text>
           <br></br>
 

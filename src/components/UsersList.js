@@ -10,7 +10,7 @@ import { fetchUser } from "@/hooks/fetchUser";
 export default function UsersList() {
   const [users, setUsers] = useState([]);
 
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
 
   useEffect(() => {
     fetchUser(dispatch);
@@ -46,14 +46,33 @@ export default function UsersList() {
 
         <Table.Body>
           {users?.map((user) => {
+            let role = "";
+
+            if (user.role.name === "admin") {
+              role = "Admin";
+            } else if (user.role.name === "staff") {
+              role = "Staff";
+            } else {
+              role = "Alumno";
+            }
+
+            let status = "";
+
+            if (user.status === "pending") {
+              status = "Pendiente";
+            } else if (user.status === "enabled") {
+              status = "Activo";
+            } else {
+              status = "Deshabilitado";
+            }
             return (
               <Table.Row key={user.id} className={user.status}>
                 <Table.RowHeaderCell>{user.id}</Table.RowHeaderCell>
                 <Table.Cell>
                   {user.name} {user.lastName}
                 </Table.Cell>
-                <Table.Cell>{user.role.name}</Table.Cell>
-                <Table.Cell>{user.status}</Table.Cell>
+                <Table.Cell>{role}</Table.Cell>
+                <Table.Cell>{status}</Table.Cell>
 
                 <Table.Cell>
                   <Link href={`/users/${user.id}`}>+</Link>

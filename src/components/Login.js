@@ -15,7 +15,7 @@ import { toast } from "sonner";
 export default function Login() {
   const router = useRouter();
 
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
 
   useEffect(() => {
     fetchUser(dispatch);
@@ -113,7 +113,13 @@ export default function Login() {
         </Form.Field>
 
         <Form.Submit asChild>
-          <button className="Button" style={{ marginTop: 10 }}>
+          <button
+            className="Button"
+            style={{
+              fontWeight: "bold",
+              marginTop: 10,
+            }}
+          >
             Ingresar
           </button>
         </Form.Submit>

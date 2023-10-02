@@ -6,11 +6,11 @@ import { useDispatch } from "react-redux";
 import { fetchUser } from "@/hooks/fetchUser";
 import OfficeCard from "@/commons/OfficeCard";
 import { SetterValues } from "./SetterValues";
+import { Button } from "@radix-ui/themes";
 
 export default function User({ id }) {
   const [office, setOffice] = useState({});
-
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
 
   useEffect(() => {
     fetchUser(dispatch);
@@ -19,19 +19,44 @@ export default function User({ id }) {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const office = await axiosInstance.get(`/admin/offices/${id}`);
-        setOffice(office.data);
+        const officeResponse = await axiosInstance.get(`/admin/offices/${id}`);
+        setOffice(officeResponse.data);
       } catch (error) {
         console.error(error);
       }
     };
     fetchData();
-  }, []);
+  }, [id]);
+
+  const toggleStatus = async () => {
+    try {
+      const newStatus = office.status === "enabled" ? "disabled" : "enabled";
+
+      const updatedOffice = await axiosInstance.put(`/admin/offices/${id}`, {
+        status: newStatus,
+      });
+
+      setOffice(updatedOffice.data);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  console.log(office);
 
   return (
     <div>
       <OfficeCard office={office} />
-      <SetterValues id={id}/>
+      <SetterValues id={id} />
+      {office.status === "enabled" ? (
+        <Button color="red" onClick={toggleStatus} style={{ marginTop: "20px" }}>
+          Deshabilitar Oficina
+        </Button>
+      ) : (
+        <Button color="grass" onClick={toggleStatus} style={{ marginTop: "20px" }}>
+          Habilitar Oficina
+        </Button>
+      )}
     </div>
   );
 }

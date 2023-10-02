@@ -7,26 +7,35 @@
 .Button {
   all: unset;
   box-sizing: border-box;
+  font-family: monserrat, sans-serif;
 }
 
 .FormRoot {
   width: 260px;
+  font-family: monserrat, sans-serif;
+  font-weight: 400;
 }
 
 .FormField {
   display: grid;
   margin-bottom: 10px;
+  font-family: monserrat, sans-serif;
+  font-weight: 400;
 }
 
 .FormLabel {
   font-size: 15px;
-  font-weight: 500;
+  font-family: monserrat, sans-serif;
+  font-weight: 400;
   line-height: 35px;
   color: rgb(0, 0, 0);
+  font-weight: bolder;
 }
 
 .FormMessage {
   font-size: 13px;
+  font-family: monserrat, sans-serif;
+  font-weight: 400;
   color: rgb(255, 0, 0);
   opacity: 0.8;
 }
@@ -38,7 +47,8 @@
   align-items: center;
   justify-content: center;
   border-radius: 4px;
-
+  font-family: monserrat, sans-serif;
+  font-weight: 400;
   font-size: 15px;
   color: rgb(0, 0, 0);
   background-color: var(--black-a5);
@@ -76,13 +86,15 @@
   border-radius: 4px;
   padding: 0 15px;
   font-size: 15px;
+  font-family: monserrat, sans-serif;
+  font-weight: 400;
   line-height: 1;
   font-weight: 500;
   height: 35px;
   width: 100%;
 
   background-color: white;
-  color: var(--violet-11);
+  color: rgb(0, 31, 85);
   box-shadow: 0 2px 10px var(--black-a7);
 }
 .Button:hover {
@@ -100,10 +112,12 @@ button {
 
 .MenubarRoot {
   display: flex;
-  background-color: white;
+  background-color: rgb(244, 244, 244);
+  align-items: center;
   padding: 3px;
   border-radius: 6px;
   box-shadow: 0 2px 10px var(--black-a7);
+  font-family: monserrat, sans-serif;
 }
 
 .MenubarTrigger {
@@ -113,17 +127,18 @@ button {
   font-weight: 500;
   line-height: 1;
   border-radius: 4px;
-  color: var(--violet-11);
+  color: rgb(0, 31, 85);
   font-size: 13px;
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 2px;
+  font-weight: bolder;
 }
 
 .MenubarTrigger[data-highlighted],
 .MenubarTrigger[data-state="open"] {
-  background-color: var(--violet-4);
+  background-color: white;
 }
 
 .MenubarContent,
@@ -218,8 +233,6 @@ button {
   color: var(--mauve-8);
 }
 
-
-
 .userData {
   width: 90%;
   margin-top: 5%;
@@ -228,6 +241,8 @@ button {
   border-radius: 10px;
   margin: 20px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+  font-family: monserrat, sans-serif;
+  font-weight: 400;
 }
 
 /* Style for userDataText */
@@ -254,7 +269,6 @@ button {
   cursor: pointer;
 }
 
-
 /* .bodyMain {
   background: rgb(0, 31, 85);
   background: linear-gradient(
@@ -264,16 +278,15 @@ button {
   );
 } */
 
-.disabled{
+.disabled {
   background-color: rgb(255, 202, 202);
-  
 }
 
-.enabled{
+.enabled {
   background-color: rgb(195, 255, 195);
 }
 
-.pending{
+.pending {
   background-color: rgb(187, 187, 187);
 }
 
@@ -285,8 +298,11 @@ button {
   border-radius: 10px;
   margin: 20px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+  font-family: monserrat, sans-serif;
+  font-weight: 400;
 }
 
 .alerts{
   margin-bottom: 100px;
 }
+

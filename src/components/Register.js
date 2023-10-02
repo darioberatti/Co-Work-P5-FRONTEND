@@ -265,7 +265,13 @@ export default function Register() {
         </Form.Field>
 
         <Form.Submit asChild>
-          <button className="Button" style={{ marginTop: 10 }}>
+          <button
+            className="Button"
+            style={{
+              fontWeight: "bold",
+              marginTop: 10,
+            }}
+          >
             Registrar
           </button>
         </Form.Submit>

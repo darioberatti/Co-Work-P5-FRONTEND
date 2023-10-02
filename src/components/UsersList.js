@@ -75,7 +75,14 @@ export default function UsersList() {
                 <Table.Cell>{status}</Table.Cell>
 
                 <Table.Cell>
-                  <Link href={`/users/${user.id}`}>+</Link>
+                  <Link
+                    href={`/users/${user.id}`}
+                    style={{
+                      textDecoration: "none",
+                    }}
+                  >
+                    +
+                  </Link>
                 </Table.Cell>
               </Table.Row>
             );

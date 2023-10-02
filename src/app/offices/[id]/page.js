@@ -6,6 +6,8 @@ export default function OfficeView({ params }) {
     <div
       style={{
         textAlign: "center",
+        fontFamily: "monserrat, sans-serif",
+        fontWeight: "400",
       }}
     >
       <h1>Detalles de la Oficina</h1>

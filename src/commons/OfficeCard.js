@@ -8,8 +8,6 @@ import { Card, Flex, Text, Box, Button } from "@radix-ui/themes";
 import GoogleMap from "./GoogleMap";
 
 export default function OfficeCard({ office }) {
-  console.log(office);
-
   return (
     <Card size="3" style={{ maxWidth: 400 }}>
       <Carousel>
@@ -18,7 +16,7 @@ export default function OfficeCard({ office }) {
             <div
               style={{
                 width: "100%",
-                paddingBottom: "75%", // Mantener una relación de aspecto 4:3 (75%)
+                paddingBottom: "75%", // Relación de aspecto 4:3 (75%)
                 position: "relative",
               }}
             >
@@ -26,7 +24,7 @@ export default function OfficeCard({ office }) {
                 src={imageUrl}
                 alt={`Image ${index}`}
                 style={{
-                  objectFit: "cover", // Controlar cómo se ajusta la imagen
+                  objectFit: "cover", // Controla cómo se ajusta la imagen
                   width: "100%",
                   height: "100%",
                   position: "absolute",

@@ -9,7 +9,7 @@ export default function MyFooter() {
         height: "90px",
         width: "100%",
         color: "white",
-        fontFamily: "mosnerrat, sans-serif",
+        fontFamily: "monserrat, sans-serif",
         fontWeight: "400",
         backgroundColor: "rgb(0, 31, 85)",
         position: "fixed",

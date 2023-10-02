@@ -7,7 +7,6 @@ import axiosInstance from "../../axiosConfig";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchUser } from "@/hooks/fetchUser";
 
-
 export default function OfficesList() {
   const [offices, setOffices] = useState([]);
 
@@ -32,7 +31,12 @@ export default function OfficesList() {
   }, []);
 
   return (
-    <div>
+    <div
+      style={{
+        fontFamily: "monserrat, sans-serif",
+        fontWeight: "400",
+      }}
+    >
       <div
         style={{
           textAlign: "center",

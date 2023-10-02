@@ -6,6 +6,10 @@ import { useDispatch, useSelector } from "react-redux";
 import axiosInstance from "../../axiosConfig";
 import { useRouter } from "next/navigation";
 import { logoutUser } from "@/redux/user";
+import Image from "next/image";
+import LogoP5Desktop from "../../public/LogoP5Desktop.svg";
+import LogoP5Mobile from "../../public/LogoP5Mobile.svg";
+import logout from "../../public/logout.png";
 
 export default function Menu() {
   const user = useSelector((state) => state.user.value);
@@ -31,17 +35,27 @@ export default function Menu() {
     <>
       {/* all users access */}
       {user.userId ? (
-        <Menubar.Root className="MenubarRoot">
-          <img
-            src="https://www.plataforma5.la/static/media/LogoP5Mobile.a55e0d3ded6702e47da325ac762d2f5d.svg"
-            alt="P5 Header"
-            width="30"
-          />
-          <Link href={"/home"} style={{ textDecoration: "none" }}>
-            <Menubar.Menu>
-              <Menubar.Trigger className="MenubarTrigger">Home</Menubar.Trigger>
-            </Menubar.Menu>
-          </Link>
+        <Menubar.Root className="MenubarRoot" style={{ marginBottom: "10px" }}>
+          <Menubar.Menu>
+            <Menubar.Trigger>
+              <Link
+                className="MenubarTrigger"
+                href={"/home"}
+                style={{
+                  display: "flex",
+                  textDecoration: "none",
+                  marginRight: "5px",
+                }}
+              >
+                <Image
+                  src={LogoP5Mobile}
+                  alt="P5 Header"
+                  width={30}
+                  height={30}
+                />
+              </Link>
+            </Menubar.Trigger>
+          </Menubar.Menu>
 
           {/* staff & admin access Users & Register */}
           {user.role === "admin" || user.role === "staff" ? (
@@ -49,14 +63,14 @@ export default function Menu() {
               <Link href={"/register"} style={{ textDecoration: "none" }}>
                 <Menubar.Menu>
                   <Menubar.Trigger className="MenubarTrigger">
-                    Registrar
+                    REGISTRAR
                   </Menubar.Trigger>
                 </Menubar.Menu>
               </Link>
               <Link href={"/users"} style={{ textDecoration: "none" }}>
                 <Menubar.Menu>
                   <Menubar.Trigger className="MenubarTrigger">
-                    Usuarios
+                    USUARIOS
                   </Menubar.Trigger>
                 </Menubar.Menu>
               </Link>
@@ -66,7 +80,7 @@ export default function Menu() {
           <Link href={"/offices"} style={{ textDecoration: "none" }}>
             <Menubar.Menu>
               <Menubar.Trigger className="MenubarTrigger">
-                Oficinas
+                OFICINAS
               </Menubar.Trigger>
             </Menubar.Menu>
           </Link>
@@ -74,7 +88,7 @@ export default function Menu() {
           {/* all users access */}
           <Menubar.Menu>
             <Menubar.Trigger className="MenubarTrigger" onClick={handleLogout}>
-              Salir
+              <Image src={logout} alt="Logout" width={25} height={25} />
             </Menubar.Trigger>
           </Menubar.Menu>
         </Menubar.Root>
@@ -83,17 +97,13 @@ export default function Menu() {
           style={{
             display: "flex",
             flexDirection: "column",
-            alignItems: "left",
             textAlign: "center",
             height: "50px",
             width: "100%",
+            marginBottom: "10px",
           }}
         >
-          <img
-            src="https://www.plataforma5.la/static/media/LogoP5Desktop.d1842dd2bff00677295cd7d28a29e60c.svg"
-            alt="P5 Header"
-            width="150"
-          />
+          <Image src={LogoP5Desktop} alt="P5 Header" width={200} height={50} />
         </div>
       )}
     </>

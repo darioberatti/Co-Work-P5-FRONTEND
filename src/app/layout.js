@@ -6,6 +6,8 @@ import Menu from "@/components/Menubar";
 import { Providers } from "@/redux/provider";
 import Footer from "@/components/Footer";
 import Header from "../commons/Header";
+import { Toaster } from "sonner";
+
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -31,6 +33,7 @@ export default function RootLayout({ children }) {
             <Header />
             <Flex justify={"center"} style={{ margin: "2%" }}>
               {children}
+              <Toaster position="bottom-center"/>
             </Flex>
           </Theme>
           <div style={{ marginBottom: "100px" }}></div>

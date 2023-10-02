@@ -6,6 +6,7 @@ import { useDispatch, useSelector } from "react-redux";
 import axiosInstance from "../../axiosConfig";
 import { useRouter } from "next/navigation";
 import { logoutUser } from "@/redux/user";
+import { toast } from "sonner";
 
 export default function Menu() {
   const user = useSelector((state) => state.user.value);
@@ -20,10 +21,11 @@ export default function Menu() {
         { withCredentials: true }
       );
       dispatch(logoutUser());
-      alert("Se ha cerrado la sesión");
+      toast.success("Se ha cerrado la sesión", {className:"alerts"});
+
       router.push("/");
-    } catch (err) {
-      console.error(err);
+    } catch (error) {
+      toast.error(error.response.data, {className:"alerts"});
     }
   };
 

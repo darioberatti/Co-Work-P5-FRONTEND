@@ -8,6 +8,7 @@ import axiosInstance from "../../axiosConfig";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
 import { fetchUser } from "@/hooks/fetchUser";
+import { toast } from "sonner";
 
 export default function Register() {
   const user = useSelector((state) => state.user.value);
@@ -47,16 +48,16 @@ export default function Register() {
     }),
     onSubmit: async (formData) => {
       try {
-        const birthDate = (formData.birth + " 11:00:00");
+        const birthDate = formData.birth + " 11:00:00";
         formData.birth = birthDate;
 
         const response = await axiosInstance.post("/staff/users", formData);
 
-        console.log("response-->", response);
+        toast.success("Usuario creado correctamente", { className: "alerts" });
 
         router.push("/home");
       } catch (error) {
-        console.error("Error axios register --> ", error);
+        toast.error(error.response.data, { className: "alerts" });
       }
     },
   });

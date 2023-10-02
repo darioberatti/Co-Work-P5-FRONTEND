@@ -6,6 +6,7 @@ import { useFormik } from "formik";
 import * as Yup from "yup";
 import axiosInstance from "../../axiosConfig";
 import { useRouter } from "next/navigation";
+import { toast } from "sonner";
 
 export default function ForgotPassword() {
   const router = useRouter();
@@ -23,10 +24,12 @@ export default function ForgotPassword() {
           "/user/reset-password",
           formData
         );
-        alert("Correo de recuperación enviado");
+        toast.success("CCorreo de recuperación enviado", {className:"alerts"});
+
         router.push("/");
       } catch (error) {
-        console.error(error);
+        toast.error(error.response.data, {className:"alerts"});
+        
       }
     },
   });

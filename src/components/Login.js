@@ -10,6 +10,7 @@ import axiosInstance from "../../axiosConfig";
 import { useRouter } from "next/navigation";
 import { fetchUser } from "@/hooks/fetchUser";
 import { useDispatch } from "react-redux";
+import { toast } from "sonner";
 
 export default function Login() {
   const router = useRouter();
@@ -34,10 +35,10 @@ export default function Login() {
         const response = await axiosInstance.post("/user/login", formData, {
           withCredentials: true,
         });
-        alert("Has iniciado sesion");
+        toast.success("Has iniciado sesion", {className:"alerts"});
         router.push("/home");
       } catch (error) {
-        alert(error.response.data);
+        toast.error(error.response.data, {className:"alerts"});
       }
     },
   });

@@ -7,7 +7,7 @@ import "react-responsive-carousel/lib/styles/carousel.min.css";
 import { Card, Flex, Text, Box, Button } from "@radix-ui/themes";
 import GoogleMap from "./GoogleMap";
 
-export default function Card({ office }) {
+export default function OfficeCard({ office }) {
   console.log(office);
 
   return (

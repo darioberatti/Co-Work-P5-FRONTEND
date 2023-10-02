@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import axiosInstance from "../../axiosConfig";
 import { useDispatch } from "react-redux";
 import { fetchUser } from "@/utils/fetchUser";
-import Card from "@/commons/Card";
+import OfficeCard from "@/commons/OfficeCard";
 import { SetterValues } from "./SetterValues";
 
 export default function User({ id }) {
@@ -30,7 +30,7 @@ export default function User({ id }) {
 
   return (
     <div>
-      <Card office={office} />
+      <OfficeCard office={office} />
       <SetterValues id={id}/>
     </div>
   );

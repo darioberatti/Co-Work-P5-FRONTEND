@@ -9,12 +9,11 @@ import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
 import { fetchUser } from "@/hooks/fetchUser";
 
-
 export default function Register() {
   const user = useSelector((state) => state.user.value);
   const router = useRouter();
 
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
 
   useEffect(() => {
     fetchUser(dispatch);
@@ -26,7 +25,7 @@ export default function Register() {
       lastName: "",
       email: "",
       DNI: "",
-      age: "",
+      birth: "",
       course: "",
     },
     validationSchema: Yup.object({
@@ -43,16 +42,19 @@ export default function Register() {
         .min(10000000)
         .max(99999999),
 
-      age: Yup.number().required(),
+      birth: Yup.date().required(),
       course: Yup.string().required(),
     }),
     onSubmit: async (formData) => {
       try {
+        const birthDate = (formData.birth + " 11:00:00");
+        formData.birth = birthDate;
 
         const response = await axiosInstance.post("/staff/users", formData);
-        console.log("response axios ---> ", response);
-        router.push("/home");
 
+        console.log("response-->", response);
+
+        router.push("/home");
       } catch (error) {
         console.error("Error axios register --> ", error);
       }
@@ -143,7 +145,7 @@ export default function Register() {
             <Form.Message className="FormMessage" match="valueMissing">
               Ingrese un email
             </Form.Message>
-            
+
             {formik.errors.email && formik.values.email ? (
               <Form.Message className="FormMessage">
                 Ingrese un email válido
@@ -195,7 +197,7 @@ export default function Register() {
           </Form.Control>
         </Form.Field>
 
-        <Form.Field className="FormField" name="age">
+        <Form.Field className="FormField" name="birth">
           <div
             style={{
               display: "flex",
@@ -203,7 +205,7 @@ export default function Register() {
               justifyContent: "space-between",
             }}
           >
-            <Form.Label className="FormLabel">Edad</Form.Label>
+            <Form.Label className="FormLabel">Fecha de nacimiento</Form.Label>
             <Form.Message className="FormMessage" match="valueMissing">
               Ingrese un valor numérico
             </Form.Message>
@@ -221,7 +223,7 @@ export default function Register() {
           <Form.Control asChild>
             <input
               className="Input"
-              type="number"
+              type="date"
               required
               onChange={formik.handleChange}
             />

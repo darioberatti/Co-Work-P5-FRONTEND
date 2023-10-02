@@ -7,7 +7,6 @@ import axiosInstance from "../../axiosConfig";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchUser } from "@/hooks/fetchUser";
 
-
 export default function OfficesList() {
   const [offices, setOffices] = useState([]);
 
@@ -59,8 +58,13 @@ export default function OfficesList() {
       </div>
 
       {offices?.map((office) => {
+        const isDisabled = office.status === "disabled";
+
         return (
-          <div key={office.id} style={{ marginBottom: "20px" }}>
+          <div
+            key={office.id}
+            style={{ marginBottom: "20px", opacity: isDisabled ? 0.5 : 1, pointerEvents: isDisabled ? "none" : "" }}
+          >
             <Card size="3" style={{ maxWidth: 400 }}>
               <Flex align="center" gap={4}>
                 <img

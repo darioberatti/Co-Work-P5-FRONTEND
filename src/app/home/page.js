@@ -1,7 +1,7 @@
 "use client";
 import { useDispatch } from "react-redux";
 import { useEffect } from "react";
-import { fetchUser } from "@/hooks/fetchUser";
+import { fetchUser } from "@/utils/fetchUser";
 
 export default function Home() {
   const dispatch = useDispatch();

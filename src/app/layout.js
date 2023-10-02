@@ -5,7 +5,7 @@ import { Flex, Theme } from "@radix-ui/themes";
 import Menu from "@/components/Menubar";
 import { Providers } from "@/redux/provider";
 import Footer from "@/components/Footer";
-import Header from "../commons/Header";
+import Header from "../components/Header";
 import { Toaster } from "sonner";
 
 

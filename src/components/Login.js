@@ -8,7 +8,7 @@ import * as Yup from "yup";
 import { Field, ErrorMessage } from "formik";
 import axiosInstance from "../../axiosConfig";
 import { useRouter } from "next/navigation";
-import { fetchUser } from "@/hooks/fetchUser";
+import { fetchUser } from "@/utils/fetchUser";
 import { useDispatch } from "react-redux";
 import { toast } from "sonner";
 
@@ -32,9 +32,7 @@ export default function Login() {
     }),
     onSubmit: async (formData) => {
       try {
-        const response = await axiosInstance.post("/user/login", formData, {
-          withCredentials: true,
-        });
+        const response = await axiosInstance.post("/user/login", formData);
         toast.success("Has iniciado sesion", {className:"alerts"});
         router.push("/home");
       } catch (error) {

@@ -5,7 +5,7 @@ import { useFormik } from "formik";
 import * as Yup from "yup";
 import { useRouter } from "next/navigation";
 import axiosInstance from "../../axiosConfig";
-import { fetchUser } from "@/hooks/fetchUser";
+import { fetchUser } from "@/utils/fetchUser";
 import { useDispatch } from "react-redux";
 import { useEffect } from "react";
 import Link from "next/link";
@@ -59,9 +59,7 @@ export default function NewOffice() {
     }),
     onSubmit: async (formData) => {
       try {
-        const response = await axiosInstance.post("/admin/offices", formData, {
-          withCredentials: true,
-        });
+        const response = await axiosInstance.post("/admin/offices", formData);
         
       toast.success("Oficina creada correctamente", {className:"alerts"});
 

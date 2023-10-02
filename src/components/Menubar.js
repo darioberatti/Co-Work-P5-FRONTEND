@@ -21,8 +21,7 @@ export default function Menu() {
     try {
       const response = await axiosInstance.post(
         "/user/logout",
-        {},
-        { withCredentials: true }
+        {}
       );
       dispatch(logoutUser());
       toast.success("Se ha cerrado la sesión", {className:"alerts"});

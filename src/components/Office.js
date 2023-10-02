@@ -3,8 +3,8 @@
 import { useEffect, useState } from "react";
 import axiosInstance from "../../axiosConfig";
 import { useDispatch } from "react-redux";
-import { fetchUser } from "@/hooks/fetchUser";
-import OfficeCard from "@/commons/OfficeCard";
+import { fetchUser } from "@/utils/fetchUser";
+import OfficeCard from "@/components/OfficeCard";
 import { SetterValues } from "./SetterValues";
 import { Button } from "@radix-ui/themes";
 

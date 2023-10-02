@@ -7,7 +7,7 @@ import { useRouter } from "next/navigation";
 import axiosInstance from "../../axiosConfig";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
-import { fetchUser } from "@/hooks/fetchUser";
+import { fetchUser } from "@/utils/fetchUser";
 
 
 export default function Register() {

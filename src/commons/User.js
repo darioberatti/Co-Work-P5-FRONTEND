@@ -4,7 +4,7 @@ import { Button, Card, Flex, Text } from "@radix-ui/themes";
 import { useEffect, useState } from "react";
 import axiosInstance from "../../axiosConfig";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchUser } from "@/hooks/fetchUser";
+import { fetchUser } from "@/utils/fetchUser";
 
 export default function User({ id }) {
   const logedUser = useSelector((state) => state.user.value);

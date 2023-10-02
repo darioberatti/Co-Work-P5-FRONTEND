@@ -8,7 +8,7 @@ import * as Yup from "yup";
 import { Field, ErrorMessage } from "formik";
 import axiosInstance from "../../axiosConfig";
 import { useRouter } from "next/navigation";
-import { fetchUser } from "@/hooks/fetchUser";
+import { fetchUser } from "@/utils/fetchUser";
 import { useDispatch } from "react-redux";
 
 export default function Login() {

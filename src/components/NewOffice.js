@@ -9,6 +9,7 @@ import { fetchUser } from "@/hooks/fetchUser";
 import { useDispatch } from "react-redux";
 import { useEffect } from "react";
 import Link from "next/link";
+import { toast } from "sonner";
 
 
 export default function NewOffice() {
@@ -58,14 +59,15 @@ export default function NewOffice() {
     }),
     onSubmit: async (formData) => {
       try {
-        console.log(formData);
         const response = await axiosInstance.post("/admin/offices", formData, {
           withCredentials: true,
         });
-        console.log("response axios ---> ", response);
+        
+      toast.success("Oficina creada correctamente", {className:"alerts"});
+
         router.push(`/offices`);
       } catch (error) {
-        console.error("Error axios register --> ", error.message);
+      toast.error(error.response.data, {className:"alerts"});
       }
     },
   });

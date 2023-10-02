@@ -6,6 +6,7 @@ import axiosInstance from "../../axiosConfig";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchUser } from "@/hooks/fetchUser";
 import { birthSetter } from "@/utils/utils";
+import { toast } from "sonner";
 
 export default function User({ id }) {
   const logedUser = useSelector((state) => state.user.value);
@@ -39,14 +40,12 @@ export default function User({ id }) {
           ...prevUser,
           status: response.data.status,
         }));
-        alert("Usuario deshabilitado");
+        toast.success("Usuario deshabilitado", { className: "alerts" });
       }
     } catch (error) {
-      console.error(error);
+      toast.error(error.response.data, { className: "alerts" });
     }
   };
-
-  
 
   const handleEnableUser = async () => {
     try {
@@ -58,10 +57,10 @@ export default function User({ id }) {
           ...prevUser,
           status: response.data.status,
         }));
-        alert("Usuario habilitado");
+        toast.success("Usuario habilitado", { className: "alerts" });
       }
     } catch (error) {
-      console.error(error);
+      toast.error(error.response.data, { className: "alerts" });
     }
   };
 
@@ -77,13 +76,12 @@ export default function User({ id }) {
           ...prevUser,
           roleId: response.data.roleId,
         }));
-        alert("Usuario actualizado");
+        toast.success("Usuario actualizado", { className: "alerts" });
       }
     } catch (error) {
-      console.error(error);
+      toast.error(error.response.data, { className: "alerts" });
     }
   };
-
 
   let role = "";
 
@@ -166,9 +164,7 @@ export default function User({ id }) {
             >
               Deshabilitar usuario
             </Button>
-          ) : (
-            null
-          )}
+          ) : null}
           {user.status === "disabled" &&
           logedUser.userId !== user.id &&
           logedUser.roleId <= user.roleId ? (
@@ -180,9 +176,7 @@ export default function User({ id }) {
             >
               Habilitar usuario
             </Button>
-          ) : (
-            null
-          )}
+          ) : null}
         </Flex>
       </Card>
     </Flex>

@@ -5,6 +5,7 @@ import { useFormik } from "formik";
 import * as Yup from "yup";
 import { useRouter } from "next/navigation";
 import axiosInstance from "../../axiosConfig";
+import { toast } from "sonner";
 
 export default function ConfirmUser({ registerToken }) {
 
@@ -35,10 +36,9 @@ export default function ConfirmUser({ registerToken }) {
           "/staff/users/set-password",
           newFormData
         );
-        console.log("response axios ---> ", response);
-        window.alert("Contraseña establecida correctamente");
+        toast.success("Contraseña establecida correctamente", {className:"alerts"});
       } catch (error) {
-        console.error("Error axios setPassword --> ", error);
+        toast.error(error.response.data, {className:"alerts"});
       }
     },
   });

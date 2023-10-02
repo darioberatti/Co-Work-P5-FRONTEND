@@ -6,6 +6,7 @@ import { useDispatch, useSelector } from "react-redux";
 import axiosInstance from "../../axiosConfig";
 import { useRouter } from "next/navigation";
 import { logoutUser } from "@/redux/user";
+import { toast } from "sonner";
 import Image from "next/image";
 import LogoP5Desktop from "../../public/LogoP5Desktop.svg";
 import LogoP5Mobile from "../../public/LogoP5Mobile.svg";
@@ -24,10 +25,11 @@ export default function Menu() {
         { withCredentials: true }
       );
       dispatch(logoutUser());
-      alert("Se ha cerrado la sesión");
+      toast.success("Se ha cerrado la sesión", {className:"alerts"});
+
       router.push("/");
-    } catch (err) {
-      console.error(err);
+    } catch (error) {
+      toast.error(error.response.data, {className:"alerts"});
     }
   };
 

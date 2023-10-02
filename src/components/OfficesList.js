@@ -31,7 +31,12 @@ export default function OfficesList() {
   }, []);
 
   return (
-    <div>
+    <div
+      style={{
+        fontFamily: "monserrat, sans-serif",
+        fontWeight: "400",
+      }}
+    >
       <div
         style={{
           textAlign: "center",

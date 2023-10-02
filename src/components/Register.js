@@ -47,7 +47,7 @@ export default function Register() {
     }),
     onSubmit: async (formData) => {
       try {
-        const birthDate = (formData.birth + " 11:00:00");
+        const birthDate = formData.birth + " 11:00:00";
         formData.birth = birthDate;
 
         const response = await axiosInstance.post("/staff/users", formData);
@@ -264,7 +264,13 @@ export default function Register() {
         </Form.Field>
 
         <Form.Submit asChild>
-          <button className="Button" style={{ marginTop: 10 }}>
+          <button
+            className="Button"
+            style={{
+              fontWeight: "bold",
+              marginTop: 10,
+            }}
+          >
             Registrar
           </button>
         </Form.Submit>

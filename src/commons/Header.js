@@ -55,7 +55,7 @@ export default function Header() {
           color: "white",
           marginTop: "15px",
           textAlign: "center",
-          fontFamily: "mosnerrat, sans-serif",
+          fontFamily: "monserrat, sans-serif",
           fontWeight: "400",
           fontSize: "1.5rem",
         }}

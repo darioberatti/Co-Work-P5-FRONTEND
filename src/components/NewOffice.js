@@ -59,9 +59,7 @@ export default function NewOffice() {
     onSubmit: async (formData) => {
       try {
         console.log(formData);
-        const response = await axiosInstance.post("/admin/offices", formData, {
-          withCredentials: true,
-        });
+        const response = await axiosInstance.post("/admin/offices", formData);
         console.log("response axios ---> ", response);
         router.push(`/offices`);
       } catch (error) {

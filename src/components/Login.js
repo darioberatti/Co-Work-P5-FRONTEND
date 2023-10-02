@@ -31,9 +31,7 @@ export default function Login() {
     }),
     onSubmit: async (formData) => {
       try {
-        const response = await axiosInstance.post("/user/login", formData, {
-          withCredentials: true,
-        });
+        const response = await axiosInstance.post("/user/login", formData);
         alert("Has iniciado sesion");
         router.push("/home");
       } catch (error) {

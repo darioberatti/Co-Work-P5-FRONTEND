@@ -17,7 +17,6 @@ export default function Menu() {
       const response = await axiosInstance.post(
         "/user/logout",
         {},
-        { withCredentials: true }
       );
       dispatch(logoutUser());
       alert("Se ha cerrado la sesión");

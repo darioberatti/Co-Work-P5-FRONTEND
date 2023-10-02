@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 import React, { useState, useEffect } from "react";
 import axiosInstance from "../../axiosConfig";
@@ -7,7 +7,7 @@ import { Table, Text, Button } from "@radix-ui/themes";
 export const SetterValues = (props) => {
   const [office, setOffice] = useState({});
   const [inputValues, setInputValues] = useState({});
-  const [showCapacity, setShowCapacity] = useState(true); // Estado para controlar la visualización
+  const [showCapacity, setShowCapacity] = useState(true); 
   const { id } = props;
 
   useEffect(() => {
@@ -15,6 +15,14 @@ export const SetterValues = (props) => {
       try {
         const officeData = await axiosInstance.get(`/admin/offices/${id}`);
         setOffice(officeData.data);
+
+        // Cargar las capacidades desde la base de datos en inputValues
+        const capacities = {};
+        officeData.data.floors?.forEach((floor) => {
+          capacities[floor.id] = floor.tables[0].capacity;
+        });
+        setInputValues(capacities);
+
       } catch (error) {
         console.error(error);
       }
@@ -38,16 +46,18 @@ export const SetterValues = (props) => {
           targetFloor.tables[0].capacity = parseInt(newCapacity);
         }
 
-        console.log("UPDATED OFFICE", updatedOffice); // Llega la información actualizada correctamente.
-
-        // Usa la ruta para actualizar la oficina.
-        await axiosInstance.put(`/admin/offices/${id}`, updatedOffice);
+        // Usa la ruta para actualizar la capacidad de la mesa en el backend.
+        await axiosInstance.put(
+          `/admin/offices/${id}/tables/${targetFloor.tables[0].id}`,
+          { capacity: newCapacity }
+        );
 
         // Actualiza el estado local con el objeto de la oficina modificado.
         setOffice(updatedOffice);
 
         // Actualiza inputValues.
         setInputValues({ ...inputValues, [floorId]: newCapacity });
+
       } else {
         console.error("El valor ingresado no es un número válido.");
       }
@@ -83,17 +93,17 @@ export const SetterValues = (props) => {
                 <Table.RowHeaderCell>{floor.number}</Table.RowHeaderCell>
                 <Table.Cell>{floor.tables[0].name}</Table.Cell>
                 <Table.Cell>
-                  {showCapacity ? ( // Mostrar capacidad o input según el estado
+                  {showCapacity ? (
                     capacityValue
                   ) : (
                     <input
-                      value={capacityValue.toString()} // Convierte capacityValue en string.
+                      value={capacityValue.toString()}
                       type="number"
                       style={{ width: "50%" }}
                       onChange={(e) =>
                         setInputValues({
                           ...inputValues,
-                          [floor.id]: parseFloat(e.target.value), // Convierte el valor ingresado a número.
+                          [floor.id]: parseInt(e.target.value),
                         })
                       }
                     />

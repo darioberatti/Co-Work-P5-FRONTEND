@@ -162,7 +162,7 @@ export default function NewOffice() {
             <Form.Message className="FormMessage" match="typeMismatch">
               Ingrese una ciudad válida
             </Form.Message>
-            {formik.errors.city && formik.values.email ? (
+            {formik.errors.city && formik.values.city ? (
               <Form.Message className="FormMessage">
                 Ingrese una ciudad válida
               </Form.Message>
@@ -196,7 +196,7 @@ export default function NewOffice() {
             <Form.Message className="FormMessage" match="typeMismatch">
               Ingrese una provincia válida
             </Form.Message>
-            {formik.errors.city && formik.values.email ? (
+            {formik.errors.province && formik.values.province ? (
               <Form.Message className="FormMessage">
                 Ingrese una provincia válida
               </Form.Message>

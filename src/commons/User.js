@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import axiosInstance from "../../axiosConfig";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchUser } from "@/hooks/fetchUser";
+import { birthSetter } from "@/utils/utils";
 
 export default function User({ id }) {
   const logedUser = useSelector((state) => state.user.value);
@@ -121,7 +122,7 @@ export default function User({ id }) {
             DNI: {user.DNI}
           </Text>
           <Text size={"4"} className="userDataText">
-            Edad: {user.age}
+            Fecha de nacimiento: {user.birth && birthSetter(user.birth)}
           </Text>
           <Text size={"4"} className="userDataText">
             Curso: {user.course}

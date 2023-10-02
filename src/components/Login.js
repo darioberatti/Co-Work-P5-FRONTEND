@@ -37,7 +37,7 @@ export default function Login() {
         alert("Has iniciado sesion");
         router.push("/home");
       } catch (error) {
-        console.error(error.response.data);
+        alert(error.response.data);
       }
     },
   });

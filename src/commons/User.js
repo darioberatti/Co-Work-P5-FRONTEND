@@ -45,6 +45,25 @@ export default function User({ id }) {
     }
   };
 
+  
+
+  const handleEnableUser = async () => {
+    try {
+      if (confirm("¿Estas seguro que deseas habilitar este usuario?")) {
+        const response = await axiosInstance.put(`/staff/users/${id}`, {
+          status: "enabled",
+        });
+        setUser((prevUser) => ({
+          ...prevUser,
+          status: response.data.status,
+        }));
+        alert("Usuario habilitado");
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   const handleEditRole = async () => {
     try {
       if (logedUser.roleId >= user.roleId)
@@ -63,6 +82,7 @@ export default function User({ id }) {
       console.error(error);
     }
   };
+
 
   let role = "";
 
@@ -146,7 +166,21 @@ export default function User({ id }) {
               Deshabilitar usuario
             </Button>
           ) : (
-            ""
+            null
+          )}
+          {user.status === "disabled" &&
+          logedUser.userId !== user.id &&
+          logedUser.roleId <= user.roleId ? (
+            <Button
+              color="cyan"
+              variant="soft"
+              className="userButton"
+              onClick={() => handleEnableUser()}
+            >
+              Habilitar usuario
+            </Button>
+          ) : (
+            null
           )}
         </Flex>
       </Card>

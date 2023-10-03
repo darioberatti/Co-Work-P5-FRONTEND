@@ -3,12 +3,16 @@
 import React, { useState, useEffect } from "react";
 import axiosInstance from "../../axiosConfig";
 import { Table, Text, Button } from "@radix-ui/themes";
+import { useSelector } from "react-redux";
+import { toast } from "sonner";
 
 export const SetterValues = (props) => {
   const [office, setOffice] = useState({});
   const [inputValues, setInputValues] = useState({});
-  const [showCapacity, setShowCapacity] = useState(true); 
+  const [showCapacity, setShowCapacity] = useState(true);
   const { id } = props;
+
+  const user = useSelector((state) => state.user.value);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -22,7 +26,6 @@ export const SetterValues = (props) => {
           capacities[floor.id] = floor.tables[0].capacity;
         });
         setInputValues(capacities);
-
       } catch (error) {
         console.error(error);
       }
@@ -57,7 +60,6 @@ export const SetterValues = (props) => {
 
         // Actualiza inputValues.
         setInputValues({ ...inputValues, [floorId]: newCapacity });
-
       } else {
         console.error("El valor ingresado no es un número válido.");
       }
@@ -110,22 +112,30 @@ export const SetterValues = (props) => {
                   )}
                 </Table.Cell>
                 <Table.Cell>
-                  <Button
-                    color="indigo"
-                    variant="soft"
-                    onClick={() => handleClick(floor.id, capacityValue)}
-                  >
-                    Actualizar
-                  </Button>
+                  {user.role === "admin" ? (
+                    <Button
+                      color="indigo"
+                      variant="soft"
+                      onClick={() => handleClick(floor.id, capacityValue)}
+                    >
+                      Actualizar
+                    </Button>
+                  ) : (
+                    ""
+                  )}
                 </Table.Cell>
               </Table.Row>
             );
           })}
         </Table.Body>
       </Table.Root>
-      <Button onClick={toggleShowCapacity} style={{ marginTop: "20px" }}>
-        Mostrar Capacidad
-      </Button>
+      {user.role === "admin" ? (
+        <Button onClick={toggleShowCapacity} style={{ marginTop: "20px" }}>
+          Mostrar Capacidad
+        </Button>
+      ) : (
+        ""
+      )}
     </div>
   );
 };

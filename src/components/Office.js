@@ -5,7 +5,7 @@ import axiosInstance from "../../axiosConfig";
 import { useDispatch } from "react-redux";
 import { fetchUser } from "@/utils/fetchUser";
 import OfficeCard from "@/components/OfficeCard";
-import { SetterValues } from "./SetterValues";
+import SetterValues from "@/components/SetterValues";
 import { Button } from "@radix-ui/themes";
 import { useSelector } from "react-redux";
 
@@ -32,7 +32,9 @@ export default function User({ id }) {
   }, [id]);
 
   const toggleStatus = async () => {
-    if (confirm("¿Estás seguro que deseas cambiar el estado de esta oficina?")) {
+    if (
+      confirm("¿Estás seguro que deseas cambiar el estado de esta oficina?")
+    ) {
       try {
         const newStatus = office.status === "enabled" ? "disabled" : "enabled";
 

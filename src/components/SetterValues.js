@@ -4,9 +4,8 @@ import React, { useState, useEffect } from "react";
 import axiosInstance from "../../axiosConfig";
 import { Table, Text, Button } from "@radix-ui/themes";
 import { useSelector } from "react-redux";
-import { toast } from "sonner";
 
-export const SetterValues = (props) => {
+export default function SetterValues(props) {
   const [office, setOffice] = useState({});
   const [inputValues, setInputValues] = useState({});
   const [showCapacity, setShowCapacity] = useState(true);
@@ -138,4 +137,4 @@ export const SetterValues = (props) => {
       )}
     </div>
   );
-};
+}

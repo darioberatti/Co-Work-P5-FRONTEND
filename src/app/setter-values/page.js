@@ -1,6 +1,6 @@
 "use client";
 
-import { SetterValues } from "@/components/SetterValues";
+import SetterValues from "@/components/SetterValues";
 import { useSelector } from "react-redux";
 import { useRouter } from "next/navigation";
 

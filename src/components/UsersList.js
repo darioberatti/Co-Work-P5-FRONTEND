@@ -1,6 +1,6 @@
 "use client";
 
-import { Table, Text } from "@radix-ui/themes";
+import { Button, Table, Text } from "@radix-ui/themes";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import axiosInstance from "../../axiosConfig";
@@ -33,6 +33,11 @@ export default function UsersList() {
       <Text size={"8"} align="center" as="div">
         Lista de Usuarios
       </Text>
+        <Button color="indigo" variant="soft" style={{ margin:"3%"}}>
+      <Link href={"/register"} style={{ textDecoration: "none"}}>
+          Crear nuevo usuario
+      </Link>
+        </Button>
       <Table.Root>
         <Table.Header>
           <Table.Row>

@@ -19,16 +19,13 @@ export default function Menu() {
 
   const handleLogout = async () => {
     try {
-      const response = await axiosInstance.post(
-        "/user/logout",
-        {}
-      );
+      const response = await axiosInstance.post("/user/logout", {});
       dispatch(logoutUser());
-      toast.success("Se ha cerrado la sesión", {className:"alerts"});
+      toast.success("Se ha cerrado la sesión", { className: "alerts" });
 
       router.push("/");
     } catch (error) {
-      toast.error(error.response.data, {className:"alerts"});
+      toast.error(error.response.data, { className: "alerts" });
     }
   };
 
@@ -61,7 +58,7 @@ export default function Menu() {
           {/* staff & admin access Users & Register */}
           {user.role === "admin" || user.role === "staff" ? (
             <>
-              <Link href={"/users"} style={{ textDecoration: "none" }}>
+              <Link href={"/staff/users"} style={{ textDecoration: "none" }}>
                 <Menubar.Menu>
                   <Menubar.Trigger className="MenubarTrigger">
                     USUARIOS

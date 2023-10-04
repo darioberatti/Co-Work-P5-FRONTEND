@@ -33,11 +33,11 @@ export default function UsersList() {
       <Text size={"8"} align="center" as="div">
         Lista de Usuarios
       </Text>
-        <Button color="indigo" variant="soft" style={{ margin:"3%"}}>
-      <Link href={"/register"} style={{ textDecoration: "none"}}>
+      <Button color="indigo" variant="soft" style={{ margin: "3%" }}>
+        <Link href={"/staff/register"} style={{ textDecoration: "none" }}>
           Crear nuevo usuario
-      </Link>
-        </Button>
+        </Link>
+      </Button>
       <Table.Root>
         <Table.Header>
           <Table.Row>
@@ -81,7 +81,7 @@ export default function UsersList() {
 
                 <Table.Cell>
                   <Link
-                    href={`/users/${user.id}`}
+                    href={`/staff/users/${user.id}`}
                     style={{
                       textDecoration: "none",
                     }}

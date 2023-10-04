@@ -13,7 +13,7 @@ export default function Home() {
   return (
     <div
       style={{
-        fontFamily: "monserrat, sans-serif",
+        fontFamily: "Montserrat, sans-serif",
         fontWeight: "400",
         fontSize: "1.5rem",
       }}

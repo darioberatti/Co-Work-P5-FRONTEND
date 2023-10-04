@@ -20,6 +20,7 @@ export default function NewBooking(/*props*/) {
   const [offices, setOffices] = useState(null);
   const [selectedOffice, setSelectedOffice] = useState(null);
   const [selectedFloor, setSelectedFloor] = useState(null);
+  const [selectedShift, setSelectedShift] = useState(null);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -39,23 +40,33 @@ export default function NewBooking(/*props*/) {
   const handleSelectChange = (value) => {
     setSelectedOffice(value);
     setSelectedFloor(null);
+    setSelectedShift(null)
   };
 
   const handleFloorChange = (value) => {
     setSelectedFloor(value);
   };
 
+  const handleShiftChange = (value) => {
+    setSelectedShift(value);
+  };
+
   const handleSubmit = () => {
     console.log("Selected Office:", selectedOffice);
     console.log("Selected Floor:", selectedFloor);
+    console.log("Selected Shift:", selectedShift);
+    setSelectedOffice(null);
+    setSelectedFloor(null);
+    setSelectedShift(null)
   };
 
   return (
     <Card>
       {offices ? (
-        <>
+        <div className="booking-form">
           <h1>Reserva tu oficina</h1>
 
+          {/* Select de Oficina */}
           <Select.Root
             // defaultValue={null}
             value={selectedOffice}
@@ -94,6 +105,7 @@ export default function NewBooking(/*props*/) {
             </Select.Portal>
           </Select.Root>
 
+          {/* Select de Piso */}
           <Select.Root value={selectedFloor} onValueChange={handleFloorChange}>
             <Select.Trigger className="SelectTrigger" aria-label="Piso">
               <Select.Value>
@@ -128,10 +140,46 @@ export default function NewBooking(/*props*/) {
             </Select.Portal>
           </Select.Root>
 
-          
+          {/* Select de Turno */}
+          <Select.Root value={selectedShift} onValueChange={handleShiftChange}>
+          <Select.Trigger className="SelectTrigger" aria-label="Shift">
+            <Select.Value>
+              {selectedShift ? selectedShift : "Selecciona el turno"}
+            </Select.Value>
+            <Select.Icon className="SelectIcon">
+              <ChevronDownIcon />
+            </Select.Icon>
+          </Select.Trigger>
+          <Select.Portal>
+            <Select.Content className="SelectContent">
+              <Select.ScrollUpButton className="SelectScrollButton">
+                <ChevronUpIcon />
+              </Select.ScrollUpButton>
+              <Select.Viewport className="SelectViewport">
+                <Select.Group>
+                  <Select.Item
+                    className="SelectItem"
+                    value="Mañana"
+                  >
+                    Mañana
+                  </Select.Item>
+                  <Select.Item
+                    className="SelectItem"
+                    value="Tarde"
+                  >
+                    Tarde
+                  </Select.Item>
+                </Select.Group>
+              </Select.Viewport>
+              <Select.ScrollDownButton className="SelectScrollButton">
+                <ChevronDownIcon />
+              </Select.ScrollDownButton>
+            </Select.Content>
+          </Select.Portal>
+        </Select.Root>
 
           <Button onClick={handleSubmit}>Enviar</Button>
-        </>
+        </div>
       ) : null}
     </Card>
   );

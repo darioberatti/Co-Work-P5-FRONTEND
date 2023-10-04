@@ -402,4 +402,17 @@ button {
   cursor: default;
 }
 
+.booking-form {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 16px;
+}
 
+.booking-form .SelectTrigger {
+  width: 90%; /* Asegura que los Select ocupen todo el ancho disponible */
+}
+
+.booking-form Button {
+  align-self: center; /* Coloca el botón al final del formulario */
+}

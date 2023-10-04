@@ -316,6 +316,7 @@ button {
   border-radius: 4px;
   padding: 0 15px;
   font-size: 13px;
+  font-family: monserrat, sans-serif;
   line-height: 1;
   height: 35px;
   gap: 5px;
@@ -407,12 +408,13 @@ button {
   flex-direction: column;
   align-items: flex-start;
   gap: 16px;
+  font-family: monserrat, sans-serif;
 }
 
 .booking-form .SelectTrigger {
-  width: 90%; /* Asegura que los Select ocupen todo el ancho disponible */
+  width: 90%; 
 }
 
 .booking-form Button {
-  align-self: center; /* Coloca el botón al final del formulario */
+  align-self: center;
 }

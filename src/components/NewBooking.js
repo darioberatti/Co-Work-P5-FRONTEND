@@ -1,26 +1,29 @@
 "use client";
 
-import * as Form from "@radix-ui/react-form";
 import { Button, Card, Text } from "@radix-ui/themes";
 import * as Select from "@radix-ui/react-select";
-import { useFormik } from "formik";
-import * as Yup from "yup";
-import { useRouter } from "next/navigation";
 import axiosInstance from "../../axiosConfig";
 import { fetchUser } from "@/utils/fetchUser";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useState } from "react";
-import Link from "next/link";
+
 import { toast } from "sonner";
 
 import { ChevronDownIcon, ChevronUpIcon } from "@radix-ui/react-icons";
 
-export default function NewBooking(/*props*/) {
-  // const { id } = props;
+export default function NewBooking() {
+  const dispatch = useDispatch();
   const [offices, setOffices] = useState(null);
   const [selectedOffice, setSelectedOffice] = useState(null);
-  const [selectedFloor, setSelectedFloor] = useState(null);
   const [selectedShift, setSelectedShift] = useState(null);
+  const [selectedTable, setSelectedTable] = useState(null);
+  const [selectedDate, setSelectedDate] = useState("");
+
+  const user = useSelector((state) => state.user.value);
+
+  useEffect(() => {
+    fetchUser(dispatch);
+  }, []);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -34,30 +37,46 @@ export default function NewBooking(/*props*/) {
     fetchData();
   }, []);
 
-  console.log("offices ---> ", offices);
+  // console.log("offices ---> ", offices);
   // console.log("offices true ---> ", Boolean(offices));
 
   const handleSelectChange = (value) => {
     setSelectedOffice(value);
-    setSelectedFloor(null);
-    setSelectedShift(null)
-  };
 
-  const handleFloorChange = (value) => {
-    setSelectedFloor(value);
+    setSelectedShift(null);
   };
 
   const handleShiftChange = (value) => {
     setSelectedShift(value);
   };
 
-  const handleSubmit = () => {
-    console.log("Selected Office:", selectedOffice);
-    console.log("Selected Floor:", selectedFloor);
-    console.log("Selected Shift:", selectedShift);
-    setSelectedOffice(null);
-    setSelectedFloor(null);
-    setSelectedShift(null)
+  const handleTableChange = (value) => {
+    setSelectedTable(value);
+  };
+
+
+  const handleSubmit = async () => {
+    // console.log("Selected Office:", selectedOffice);
+    // console.log("Selected Floor:", selectedFloor);
+    // console.log("Selected Table:", selectedTable);
+    // console.log("Selected Shift:", selectedShift);
+    // console.log("Selected Date:", selectedDate);
+    // console.log("user", user);
+    try {
+      const dateTime = selectedDate + " 11:00:00";
+      const formData = {
+        day: dateTime,
+        shift: selectedShift,
+        status: "active",
+        userId: user.userId,
+        tableId: selectedTable.id,
+      };
+
+      const response = await axiosInstance.post("/booking", formData);
+      toast.success("Reserva creada correctamente", { className: "alerts" });
+    } catch (error) {
+      toast.error(error.response.data, { className: "alerts" });
+    }
   };
 
   return (
@@ -105,11 +124,12 @@ export default function NewBooking(/*props*/) {
             </Select.Portal>
           </Select.Root>
 
-          {/* Select de Piso */}
-          <Select.Root value={selectedFloor} onValueChange={handleFloorChange}>
-            <Select.Trigger className="SelectTrigger" aria-label="Piso">
+          {/* Select de Mesa */}
+
+          <Select.Root value={selectedTable} onValueChange={handleTableChange}>
+            <Select.Trigger className="SelectTrigger" aria-label="Mesa">
               <Select.Value>
-                {selectedFloor ? `Piso ${selectedFloor.number}` : "Selecciona un piso"}
+                {selectedTable ? selectedTable.name : "Selecciona una mesa"}
               </Select.Value>
               <Select.Icon className="SelectIcon">
                 <ChevronDownIcon />
@@ -122,13 +142,13 @@ export default function NewBooking(/*props*/) {
                 </Select.ScrollUpButton>
                 <Select.Viewport className="SelectViewport">
                   <Select.Group>
-                    {selectedOffice?.floors.map((floor) => (
+                    {selectedOffice?.tables.map((table) => (
                       <Select.Item
                         className="SelectItem"
-                        key={floor.id}
-                        value={floor}
+                        key={table.id}
+                        value={table}
                       >
-                        {`Piso ${floor.number}`}
+                        {table.name}
                       </Select.Item>
                     ))}
                   </Select.Group>
@@ -142,41 +162,45 @@ export default function NewBooking(/*props*/) {
 
           {/* Select de Turno */}
           <Select.Root value={selectedShift} onValueChange={handleShiftChange}>
-          <Select.Trigger className="SelectTrigger" aria-label="Shift">
-            <Select.Value>
-              {selectedShift ? selectedShift : "Selecciona el turno"}
-            </Select.Value>
-            <Select.Icon className="SelectIcon">
-              <ChevronDownIcon />
-            </Select.Icon>
-          </Select.Trigger>
-          <Select.Portal>
-            <Select.Content className="SelectContent">
-              <Select.ScrollUpButton className="SelectScrollButton">
-                <ChevronUpIcon />
-              </Select.ScrollUpButton>
-              <Select.Viewport className="SelectViewport">
-                <Select.Group>
-                  <Select.Item
-                    className="SelectItem"
-                    value="Mañana"
-                  >
-                    Mañana
-                  </Select.Item>
-                  <Select.Item
-                    className="SelectItem"
-                    value="Tarde"
-                  >
-                    Tarde
-                  </Select.Item>
-                </Select.Group>
-              </Select.Viewport>
-              <Select.ScrollDownButton className="SelectScrollButton">
+            <Select.Trigger className="SelectTrigger" aria-label="Shift">
+              <Select.Value>
+                {selectedShift ? selectedShift : "Selecciona el turno"}
+              </Select.Value>
+              <Select.Icon className="SelectIcon">
                 <ChevronDownIcon />
-              </Select.ScrollDownButton>
-            </Select.Content>
-          </Select.Portal>
-        </Select.Root>
+              </Select.Icon>
+            </Select.Trigger>
+            <Select.Portal>
+              <Select.Content className="SelectContent">
+                <Select.ScrollUpButton className="SelectScrollButton">
+                  <ChevronUpIcon />
+                </Select.ScrollUpButton>
+                <Select.Viewport className="SelectViewport">
+                  <Select.Group>
+                    <Select.Item className="SelectItem" value="mañana">
+                      Mañana: 9:00 a 13:00hs
+                    </Select.Item>
+                    <Select.Item className="SelectItem" value="tarde">
+                      Tarde: 14:00 a 18:00hs
+                    </Select.Item>
+                  </Select.Group>
+                </Select.Viewport>
+                <Select.ScrollDownButton className="SelectScrollButton">
+                  <ChevronDownIcon />
+                </Select.ScrollDownButton>
+              </Select.Content>
+            </Select.Portal>
+          </Select.Root>
+
+          <div className="date-picker SelectTrigger">
+            <label htmlFor="date">Fecha </label>
+            <input
+              type="date"
+              id="date"
+              value={selectedDate}
+              onChange={(e) => setSelectedDate(e.target.value)}
+            />
+          </div>
 
           <Button onClick={handleSubmit}>Enviar</Button>
         </div>
@@ -185,211 +209,4 @@ export default function NewBooking(/*props*/) {
   );
 }
 
-/*
-SELECT
-<Card>
-    {offices ? (
-      <>
-        <h1>Reserva tu oficina</h1>
 
-        <Select.Root
-          defaultValue={null}
-          value={selectedOffice}
-          onValueChange={handleSelectChange}
-        >
-          <Select.Trigger className="SelectTrigger" aria-label="Oficina">
-            <Select.Value>
-                {selectedOffice ? selectedOffice.name : "Selecciona tu oficina"}
-              </Select.Value>
-            <Select.Icon className="SelectIcon">
-              <ChevronDownIcon />
-            </Select.Icon>
-          </Select.Trigger>
-          <Select.Portal>
-            <Select.Content className="SelectContent">
-              <Select.ScrollUpButton className="SelectScrollButton">
-                <ChevronUpIcon />
-              </Select.ScrollUpButton>
-              <Select.Viewport className="SelectViewport">
-                <Select.Group>
-                  {offices.map((office) => (
-                    <Select.Item
-                      className="SelectItem"
-                      key={office.id}
-                      value={office}
-                    >
-                      {office.name}
-                    </Select.Item>
-                  ))}
-                </Select.Group>
-              </Select.Viewport>
-              <Select.ScrollDownButton className="SelectScrollButton">
-                <ChevronDownIcon />
-              </Select.ScrollDownButton>
-            </Select.Content>
-          </Select.Portal>
-        </Select.Root>
-        <Button onClick={handleSubmit}>Enviar</Button>
-      </>
-    ) : null}
-  </Card>
-
-*/
-
-/*
-  FORMULARIO
-  <Card>
-      <Form.Root className="FormRoot" onSubmit={formik.handleSubmit}>
-        <Text size={"8"} align="center" as="div">
-          Reserva tu oficina
-        </Text>
-
-        <Form.Field className="FormField" name="office">
-          <div
-            style={{
-              display: "flex",
-              alignItems: "baseline",
-              justifyContent: "space-between",
-            }}
-          >
-            <Form.Label className="FormLabel">Oficina</Form.Label>
-            <Form.Message className="FormMessage" match="valueMissing">
-              Ingrese una oficina
-            </Form.Message>
-            <Form.Message className="FormMessage" match="typeMismatch">
-              Ingrese una oficina válida
-            </Form.Message>
-            {formik.errors.office && formik.values.office ? (
-              <Form.Message className="FormMessage">
-                Ingrese una oficina válida
-              </Form.Message>
-            ) : (
-              ""
-            )}
-          </div>
-          <Form.Control asChild>
-            <input
-              className="Input"
-              type="text"
-              required
-              onChange={formik.handleChange}
-            />
-          </Form.Control>
-        </Form.Field>
-
-        <Form.Field className="FormField" name="floor">
-          <div
-            style={{
-              display: "flex",
-              alignItems: "baseline",
-              justifyContent: "space-between",
-            }}
-          >
-            <Form.Label className="FormLabel">Piso</Form.Label>
-            <Form.Message className="FormMessage" match="valueMissing">
-              Ingrese un piso
-            </Form.Message>
-            <Form.Message className="FormMessage" match="typeMismatch">
-              Ingrese un piso válido
-            </Form.Message>
-          </div>
-          {office?.floors && (
-            <Select className="Input" required onChange={formik.handleChange}>
-              {office.floors.map((floor) => (
-                <option key={floor.id} value={floor.id}>
-                  {floor.number}
-                </option>
-              ))}
-            </Select>
-          )}
-        </Form.Field>
-
-        <Form.Field className="FormField" name="date">
-          <div
-            style={{
-              display: "flex",
-              alignItems: "baseline",
-              justifyContent: "space-between",
-            }}
-          >
-            <Form.Label className="FormLabel">Fecha de reserva</Form.Label>
-            <Form.Message className="FormMessage" match="valueMissing">
-              Ingrese una fecha
-            </Form.Message>
-            <Form.Message className="FormMessage" match="typeMismatch">
-              Ingrese una fecha válida
-            </Form.Message>
-            {formik.errors.date && formik.values.date ? (
-              <Form.Message className="FormMessage">
-                Ingrese una fecha válida
-              </Form.Message>
-            ) : (
-              ""
-            )}
-          </div>
-          <Form.Control asChild>
-            <input
-              className="Input"
-              type="date"
-              required
-              onChange={formik.handleChange}
-            />
-          </Form.Control>
-        </Form.Field>
-
-        <Form.Field className="FormField" name="shift">
-          <div
-            style={{
-              display: "flex",
-              alignItems: "baseline",
-              justifyContent: "space-between",
-            }}
-          >
-            <Form.Label className="FormLabel">Turno</Form.Label>
-            <Form.Message className="FormMessage" match="valueMissing">
-              Ingrese unn turno
-            </Form.Message>
-            <Form.Message className="FormMessage" match="typeMismatch">
-              Ingrese un turno válido
-            </Form.Message>
-            {formik.errors.shift && formik.values.shift ? (
-              <Form.Message className="FormMessage">
-                Ingrese un turno válido
-              </Form.Message>
-            ) : (
-              ""
-            )}
-          </div>
-          <Form.Control asChild>
-            <input
-              className="Input"
-              type="text"
-              required
-              onChange={formik.handleChange}
-            />
-          </Form.Control>
-        </Form.Field>
-
-        <Form.Submit asChild>
-          <button className="Button" style={{ marginTop: 10 }}>
-            Reservar
-          </button>
-        </Form.Submit>
-      </Form.Root>
-      <div
-        style={{
-          marginTop: "20px",
-          display: "flex",
-          justifyContent: "center",
-        }}
-      >
-        <Link href={"/offices"}>
-          <Button color="green" variant="soft">
-            Volver a Oficinas
-          </Button>
-        </Link>
-      </div>
-    </Card>
-
-
-*/

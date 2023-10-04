@@ -1,12 +1,10 @@
 import NewBooking from "@/components/NewBooking";
 
-export default function NewBookingView({params}) {
-  const {id} = params
-  console.log("params ---> ", id) 
+export default function NewBookingView() {
 
   return (
     <div>
-      <NewBooking id={id}/>
+      <NewBooking />
     </div>
   );
 }

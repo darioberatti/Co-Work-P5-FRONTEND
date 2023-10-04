@@ -61,13 +61,6 @@ export default function Menu() {
           {/* staff & admin access Users & Register */}
           {user.role === "admin" || user.role === "staff" ? (
             <>
-              <Link href={"/register"} style={{ textDecoration: "none" }}>
-                <Menubar.Menu>
-                  <Menubar.Trigger className="MenubarTrigger">
-                    REGISTRAR
-                  </Menubar.Trigger>
-                </Menubar.Menu>
-              </Link>
               <Link href={"/users"} style={{ textDecoration: "none" }}>
                 <Menubar.Menu>
                   <Menubar.Trigger className="MenubarTrigger">

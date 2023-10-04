@@ -2,6 +2,8 @@
 
 import { usePathname } from "next/navigation";
 import { useSelector } from "react-redux";
+import background from "../../public/background.svg";
+import Image from "next/image";
 
 export default function Header() {
   const user = useSelector((state) => state.user.value);
@@ -48,6 +50,7 @@ export default function Header() {
         justifyContent: "center",
         borderRadius: "0px 0px 100px 100px",
         backgroundColor: "rgb(0, 31, 85)",
+        position: "relative",
       }}
     >
       <div
@@ -55,17 +58,34 @@ export default function Header() {
           color: "white",
           marginTop: "15px",
           textAlign: "center",
-          fontFamily: "monserrat, sans-serif",
+          fontFamily: "Montserrat, sans-serif",
           fontWeight: "400",
           fontSize: "1.5rem",
+          position: "relative",
         }}
       >
         <span style={{ margin: "0" }}>{text1}</span>
-        <span style={{ margin: "0", fontWeight: "bold" }}>{text2}</span>
+        <span
+          style={{
+            margin: "0",
+            fontWeight: "bold",
+          }}
+        >
+          {text2}
+        </span>
 
         <br></br>
         <p style={{ margin: "0" }}>{text3}</p>
       </div>
+      <Image
+        src={background}
+        alt="Background"
+        width={"100%"}
+        height={180}
+        style={{
+          position: "absolute",
+        }}
+      />
     </div>
   );
 }

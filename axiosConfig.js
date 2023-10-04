@@ -15,7 +15,7 @@ const axiosInstance = axios.create({
 axiosInstance.interceptors.request.use(
   (config) => {
     let token = Cookies.get("token");
-    console.log("token req--->", token);
+    /* console.log("token req--->", token); */
     config.headers.Authorization = `Bearer ${token}`;
     return config;
   },
@@ -27,7 +27,7 @@ axiosInstance.interceptors.request.use(
 axiosInstance.interceptors.response.use(
   (config) => {
     let token = Cookies.get("token");
-    console.log("token response--->", token);
+    /*  console.log("token response--->", token); */
     config.headers.Authorization = `Bearer ${token}`;
     return config;
   },
@@ -35,7 +35,6 @@ axiosInstance.interceptors.response.use(
     return Promise.reject(error);
   }
 );
-
 
 // export const fetchAPI = (
 //   { method, url, body },

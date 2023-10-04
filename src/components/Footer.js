@@ -1,3 +1,6 @@
+import Image from "next/image";
+import logoP5Footer from "../../public/LogoP5Footer.svg";
+
 export default function MyFooter() {
   return (
     <div
@@ -9,7 +12,7 @@ export default function MyFooter() {
         height: "90px",
         width: "100%",
         color: "white",
-        fontFamily: "monserrat, sans-serif",
+        fontFamily: "Montserrat, sans-serif",
         fontWeight: "400",
         backgroundColor: "rgb(0, 31, 85)",
         position: "fixed",
@@ -22,10 +25,11 @@ export default function MyFooter() {
           marginTop: "10px",
         }}
       >
-        <img
-          src="https://www.plataforma5.la/static/media/LogoP5Footer.5278a9a1010612a25ba638427ecd72ef.svg"
-          alt="P5Footer"
-          width="100"
+        <Image
+          src={logoP5Footer}
+          alt="Logo P5 Footer"
+          width={150}
+          height={30}
         />
       </div>
       <hr style={{ width: "130px", margin: "10px 0", borderColor: "white" }} />

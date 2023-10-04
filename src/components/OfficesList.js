@@ -68,7 +68,7 @@ export default function OfficesList() {
         return (
           <div
             key={office.id}
-            style={{ marginBottom: "20px", opacity: isDisabled ? 0.5 : 1, pointerEvents: isDisabled ? "none" : "" }}
+            style={{ marginBottom: "20px", opacity: isDisabled ? 0.5 : 1 }}
           >
             <Card size="3" style={{ maxWidth: 400 }}>
               <Flex align="center" gap={4}>

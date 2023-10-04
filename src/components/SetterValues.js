@@ -10,24 +10,20 @@ import { toast } from "sonner";
 
 export default function SetterValues(props) {
   const [office, setOffice] = useState({});
+  const [officesTables, setOfficesTables] = useState([]);
   const [inputValues, setInputValues] = useState({});
   const [showCapacity, setShowCapacity] = useState(true);
   const { id } = props;
-
   const user = useSelector((state) => state.user.value);
+
+  console.log("office--->", office);
+  console.log("officesTables--->", officesTables);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         const officeData = await axiosInstance.get(`/admin/offices/${id}`);
         setOffice(officeData.data);
-
-        // Cargar las capacidades desde la base de datos en inputValues
-        const capacities = {};
-        officeData.data.floors?.forEach((floor) => {
-          capacities[floor.id] = floor.tables[0].capacity;
-        });
-        setInputValues(capacities);
       } catch (error) {
         console.error(error);
       }
@@ -35,40 +31,66 @@ export default function SetterValues(props) {
     fetchData();
   }, [id]);
 
-  const handleClick = async (floorId, newCapacity) => {
-    try {
-      if (!isNaN(newCapacity)) {
-        // Clona el objeto de la oficina.
-        const updatedOffice = { ...office };
-
-        // Encuentra el piso que coincide con el floorId proporcionado.
-        const targetFloor = updatedOffice.floors.find(
-          (floor) => floor.id === floorId
+  //Use Effect para obtener las mesas de una Oficina
+  useEffect(() => {
+    const fetchTablesData = async () => {
+      try {
+        const tablesData = await axiosInstance.get(
+          `/admin/offices/${id}/tables`
         );
+        setOfficesTables(tablesData.data);
 
-        if (targetFloor) {
-          // Actualiza la capacidad de la primera mesa en el piso.
-          targetFloor.tables[0].capacity = parseInt(newCapacity);
-        }
-
-        // Usa la ruta para actualizar la capacidad de la mesa en el backend.
-        await axiosInstance.put(
-          `/admin/offices/${id}/tables/${targetFloor.tables[0].id}`,
-          { capacity: newCapacity }
-        );
-
-        // Actualiza el estado local con el objeto de la oficina modificado.
-        setOffice(updatedOffice);
-
-        // Actualiza inputValues.
-        setInputValues({ ...inputValues, [floorId]: newCapacity });
-      } else {
-        console.error("El valor ingresado no es un número válido.");
+        // Cargar las capacidades desde la base de datos en inputValues
+        const capacities = {};
+        tablesData.data?.forEach((table) => {
+          capacities[table.id] = table.capacity;
+        });
+        setInputValues(capacities);
+      } catch (error) {
+        console.error(error);
       }
-    } catch (error) {
-      console.error(error);
-    }
-  };
+    };
+    fetchTablesData();
+  }, [id]);
+
+  // const handleClick = async (floorId, newCapacity) => {
+  //   try {
+  //     if (!isNaN(newCapacity)) {
+  //       // Clona el objeto de la oficina.
+  //       const updatedOffice = { ...office };
+
+  //       console.log("updatedOffice-->", updatedOffice);
+
+  //       // Encuentra el piso que coincide con el floorId proporcionado.
+  //       const targetFloor = updatedOffice.floors.find(
+  //         (floor) => floor.id === floorId
+  //       );
+
+  //       console.log("targetFloor-->", targetFloor);
+
+  //       if (targetFloor) {
+  //         // Actualiza la capacidad de la primera mesa en el piso.
+  //         targetFloor.tables[0].capacity = parseInt(newCapacity);
+  //       }
+
+  //       // Usa la ruta para actualizar la capacidad de la mesa en el backend.
+  //       await axiosInstance.put(
+  //         `/admin/offices/${id}/tables/${targetFloor.tables[0].id}`,
+  //         { capacity: newCapacity }
+  //       );
+
+  //       // Actualiza el estado local con el objeto de la oficina modificado.
+  //       setOffice(updatedOffice);
+
+  //       // Actualiza inputValues.
+  //       setInputValues({ ...inputValues, [floorId]: newCapacity });
+  //     } else {
+  //       console.error("El valor ingresado no es un número válido.");
+  //     }
+  //   } catch (error) {
+  //     console.error(error);
+  //   }
+  // };
 
   // Función para cambiar la visualización al hacer clic en el botón.
   const toggleShowCapacity = () => {
@@ -83,9 +105,20 @@ export default function SetterValues(props) {
     },
   });
 
+  const handleDeleteTable = async (tableId) => {
+    try {
+      const deletedTable = await axiosInstance.delete(
+        `/admin/offices/${id}/tables/${tableId}`
+      );
+      toast.success("Mesa eliminada correctamente", { className: "alerts" });
+      setOfficesTables(officesTables.filter((table) => table.id !== tableId));
+    } catch (error) {
+      toast.error(error.response.data, { className: "alerts" });
+    }
+  };
+
   const handleTableSubmit = async () => {
     try {
-      console.log("SUBMITEADO");
       const { floor, name, capacity } = formik.values;
 
       const response = await axiosInstance.post(
@@ -93,37 +126,45 @@ export default function SetterValues(props) {
         { floor, name, capacity }
       );
 
+      console.log("response--->", response);
       toast.success("Mesa creada correctamente", { className: "alerts" });
 
-      // router.push("/home");
+      setOfficesTables([...officesTables, response.data]);
+
+      formik.setValues({
+        floor: "",
+        name: "", 
+        capacity: "", 
+      });
     } catch (error) {
       toast.error(error.response.data, { className: "alerts" });
     }
   };
 
   return (
-    <div>
+    <div style={{ marginTop: "2%" }}>
       <Text size={"8"} align="center" as="div">
-        Lista de Mesas
+        Mesas disponibles
       </Text>
-      <Table.Root>
+      <Table.Root style={{ marginTop: "2%" }}>
         <Table.Header>
           <Table.Row>
-            <Table.ColumnHeaderCell>Piso</Table.ColumnHeaderCell>
             <Table.ColumnHeaderCell>Nombre</Table.ColumnHeaderCell>
+            <Table.ColumnHeaderCell>Piso</Table.ColumnHeaderCell>
             <Table.ColumnHeaderCell>Capacidad</Table.ColumnHeaderCell>
           </Table.Row>
         </Table.Header>
         <Table.Body>
-          {office.floors?.map((floor) => {
-            const capacityValue = inputValues[floor.id] || 0;
+          {officesTables?.map((table) => {
+            // const capacityValue = inputValues[table.id]
 
             return (
-              <Table.Row key={floor.id}>
-                <Table.RowHeaderCell>{floor.number}</Table.RowHeaderCell>
-                <Table.Cell>{floor.tables[0].name}</Table.Cell>
+              <Table.Row key={table.id}>
+                <Table.RowHeaderCell>{table.name}</Table.RowHeaderCell>
+                <Table.Cell>{table.floor}</Table.Cell>
                 <Table.Cell>
-                  {showCapacity ? (
+                  {table.capacity}
+                  {/* {showCapacity ? (
                     capacityValue
                   ) : (
                     <input
@@ -133,20 +174,21 @@ export default function SetterValues(props) {
                       onChange={(e) =>
                         setInputValues({
                           ...inputValues,
-                          [floor.id]: parseInt(e.target.value),
+                          [table.id]: parseInt(e.target.value),
                         })
                       }
                     />
-                  )}
+                  )} */}
                 </Table.Cell>
                 <Table.Cell>
                   {user.role === "admin" ? (
                     <Button
-                      color="indigo"
+                      color="crimson"
                       variant="soft"
-                      onClick={() => handleClick(floor.id, capacityValue)}
+                      // onClick={() => handleClick(table.id, capacityValue)}
+                      onClick={() => handleDeleteTable(table.id)}
                     >
-                      Actualizar
+                      Eliminar
                     </Button>
                   ) : (
                     ""
@@ -155,54 +197,58 @@ export default function SetterValues(props) {
               </Table.Row>
             );
           })}
-
-          <Table.Row>
-            <Table.RowHeaderCell>
-              <input
-                name="floor"
-                type="number"
-                className="Input"
-                style={{ width: "70%" }}
-                onChange={formik.handleChange}
-              />
-            </Table.RowHeaderCell>
-            <Table.Cell>
-              <input
-                name="name"
-                className="Input"
-                type="text"
-                style={{ width: "100%" }}
-                onChange={formik.handleChange}
-              />
-            </Table.Cell>
-            <Table.Cell>
-              <input
-                name="capacity"
-                type="number"
-                className="Input"
-                style={{ width: "50%" }}
-                onChange={formik.handleChange}
-              />
-            </Table.Cell>
-            <Table.Cell>
-              <Button
-                color="cyan"
-                variant="soft"
-                onClick={() => handleTableSubmit()}
-              >
-                Crear
-              </Button>
-            </Table.Cell>
-          </Table.Row>
+          {user.role === "admin" ? (
+            <Table.Row>
+              <Table.RowHeaderCell>
+                <input
+                  name="name"
+                  value={formik.values.name}
+                  className="Input"
+                  type="text"
+                  style={{ width: "100%" }}
+                  onChange={formik.handleChange}
+                />
+              </Table.RowHeaderCell>
+              <Table.Cell>
+                <input
+                  name="floor"
+                  value={formik.values.floor}
+                  type="number"
+                  className="Input"
+                  style={{ width: "70%" }}
+                  onChange={formik.handleChange}
+                />
+              </Table.Cell>
+              <Table.Cell>
+                <input
+                  name="capacity"
+                  value={formik.values.capacity}
+                  type="number"
+                  className="Input"
+                  style={{ width: "50%" }}
+                  onChange={formik.handleChange}
+                />
+              </Table.Cell>
+              <Table.Cell>
+                <Button
+                  color="cyan"
+                  variant="soft"
+                  onClick={() => handleTableSubmit()}
+                >
+                  Crear
+                </Button>
+              </Table.Cell>
+            </Table.Row>
+          ) : null}
         </Table.Body>
       </Table.Root>
-      {user.role === "admin" ? (
+      {/* {user.role === "admin" ? (
         <Button onClick={toggleShowCapacity} style={{ marginTop: "20px" }}>
           Mostrar Capacidad
         </Button>
       ) : (
         ""
-      )}
+      )} */}
     </div>
   );
 }

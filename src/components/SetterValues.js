@@ -4,6 +4,9 @@ import React, { useState, useEffect } from "react";
 import axiosInstance from "../../axiosConfig";
 import { Table, Text, Button } from "@radix-ui/themes";
 import { useSelector } from "react-redux";
+import * as Form from "@radix-ui/react-form";
+import { useFormik } from "formik";
+import { toast } from "sonner";
 
 export default function SetterValues(props) {
   const [office, setOffice] = useState({});
@@ -72,6 +75,32 @@ export default function SetterValues(props) {
     setShowCapacity(!showCapacity);
   };
 
+  const formik = useFormik({
+    initialValues: {
+      name: "",
+      floor: "",
+      capacity: "",
+    },
+  });
+
+  const handleTableSubmit = async () => {
+    try {
+      console.log("SUBMITEADO");
+      const { floor, name, capacity } = formik.values;
+
+      const response = await axiosInstance.post(
+        `/admin/offices/${office.id}/tables`,
+        { floor, name, capacity }
+      );
+
+      toast.success("Mesa creada correctamente", { className: "alerts" });
+
+      // router.push("/home");
+    } catch (error) {
+      toast.error(error.response.data, { className: "alerts" });
+    }
+  };
+
   return (
     <div>
       <Text size={"8"} align="center" as="div">
@@ -126,6 +155,45 @@ export default function SetterValues(props) {
               </Table.Row>
             );
           })}
+
+          <Table.Row>
+            <Table.RowHeaderCell>
+              <input
+                name="floor"
+                type="number"
+                className="Input"
+                style={{ width: "70%" }}
+                onChange={formik.handleChange}
+              />
+            </Table.RowHeaderCell>
+            <Table.Cell>
+              <input
+                name="name"
+                className="Input"
+                type="text"
+                style={{ width: "100%" }}
+                onChange={formik.handleChange}
+              />
+            </Table.Cell>
+            <Table.Cell>
+              <input
+                name="capacity"
+                type="number"
+                className="Input"
+                style={{ width: "50%" }}
+                onChange={formik.handleChange}
+              />
+            </Table.Cell>
+            <Table.Cell>
+              <Button
+                color="cyan"
+                variant="soft"
+                onClick={() => handleTableSubmit()}
+              >
+                Crear
+              </Button>
+            </Table.Cell>
+          </Table.Row>
         </Table.Body>
       </Table.Root>
       {user.role === "admin" ? (

@@ -87,7 +87,7 @@ export default function OfficeCard({ office }) {
               gap: "20px",
             }}
           >
-            <Link href={""}>
+            <Link href={`/offices/${office.id}/new-booking`}>
               <Button color="indigo" variant="soft">
                 Reservar aquí
               </Button>

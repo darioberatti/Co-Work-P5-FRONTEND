@@ -7,10 +7,12 @@ import { fetchUser } from "@/utils/fetchUser";
 import OfficeCard from "@/components/OfficeCard";
 import { SetterValues } from "./SetterValues";
 import { Button } from "@radix-ui/themes";
+import { useRouter } from "next/navigation";
 
 export default function User({ id }) {
   const [office, setOffice] = useState({});
   const dispatch = useDispatch();
+  const router = useRouter();
 
   useEffect(() => {
     fetchUser(dispatch);
@@ -22,7 +24,11 @@ export default function User({ id }) {
         const officeResponse = await axiosInstance.get(`/admin/offices/${id}`);
         setOffice(officeResponse.data);
       } catch (error) {
-        console.error(error);
+        if (error.response && error.response.status === 400) {
+          router.push("/not-found");
+        } else {
+          console.error(error);
+        }
       }
     };
     fetchData();

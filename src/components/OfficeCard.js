@@ -9,7 +9,7 @@ import GoogleMap from "../commons/GoogleMap";
 
 export default function OfficeCard({ office }) {
   return (
-    <Card size="3" style={{ maxWidth: 400 }}>
+    <Card size="3" style={{ maxWidth: "400px", margin: "0 auto" }}>
       <Carousel>
         {office.urlImg?.map((imageUrl, index) => (
           <div key={index} style={{ width: "100%", textAlign: "center" }}>
@@ -63,6 +63,9 @@ export default function OfficeCard({ office }) {
           <Text as="div" color="gray" mb="1" size="3">
             Número de telefono: {office.phoneNumber}
           </Text>
+          <Text as="div" color="gray" mb="1" size="3">
+            Estado: {office.status === "disabled" ? "Inhabilitada" : "Activa"}
+          </Text>
           <div
             style={{
               marginTop: "10px",
@@ -87,11 +90,21 @@ export default function OfficeCard({ office }) {
               gap: "20px",
             }}
           >
-            <Link href={`/offices/${office.id}/new-booking`}>
+
+            
               <Button color="indigo" variant="soft">
                 Reservar aquí
               </Button>
             </Link>
+
+            {office.status === "enabled" ? (
+              <Link href={`/offices/${office.id}/new-booking`}>
+                <Button color="indigo" variant="soft">
+                  Reservar aquí
+                </Button>
+              </Link>
+            ) : null}
+
             <Link href={"/offices"}>
               <Button color="green" variant="soft">
                 Volver a Oficinas

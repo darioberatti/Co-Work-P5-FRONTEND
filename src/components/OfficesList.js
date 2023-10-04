@@ -50,7 +50,7 @@ export default function OfficesList() {
         }}
       >
         {user.role === "admin" ? (
-          <Link href={`/new-office`}>
+          <Link href={`/admin/new-office`}>
             <Button
               variant="solid"
               color="indigo"

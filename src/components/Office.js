@@ -5,13 +5,16 @@ import axiosInstance from "../../axiosConfig";
 import { useDispatch } from "react-redux";
 import { fetchUser } from "@/utils/fetchUser";
 import OfficeCard from "@/components/OfficeCard";
-import { SetterValues } from "./SetterValues";
+import SetterValues from "@/components/SetterValues";
 import { Button } from "@radix-ui/themes";
+import { useRouter } from "next/navigation";
 import { useSelector } from "react-redux";
+
 
 export default function User({ id }) {
   const [office, setOffice] = useState({});
   const dispatch = useDispatch();
+  const router = useRouter();
 
   const user = useSelector((state) => state.user.value);
 
@@ -25,14 +28,20 @@ export default function User({ id }) {
         const officeResponse = await axiosInstance.get(`/admin/offices/${id}`);
         setOffice(officeResponse.data);
       } catch (error) {
-        console.error(error);
+        if (error.response && error.response.status === 400) {
+          router.push("/not-found");
+        } else {
+          console.error(error);
+        }
       }
     };
     fetchData();
   }, [id]);
 
   const toggleStatus = async () => {
-    if (confirm("¿Estás seguro que deseas cambiar el estado de esta oficina?")) {
+    if (
+      confirm("¿Estás seguro que deseas cambiar el estado de esta oficina?")
+    ) {
       try {
         const newStatus = office.status === "enabled" ? "disabled" : "enabled";
 

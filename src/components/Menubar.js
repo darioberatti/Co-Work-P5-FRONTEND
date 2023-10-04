@@ -79,6 +79,14 @@ export default function Menu() {
             </Menubar.Menu>
           </Link>
 
+          <Link href={"/bookings"} style={{ textDecoration: "none" }}>
+            <Menubar.Menu>
+              <Menubar.Trigger className="MenubarTrigger">
+                RESERVAS
+              </Menubar.Trigger>
+            </Menubar.Menu>
+          </Link>
+
           {/* all users access */}
           <Menubar.Menu>
             <Menubar.Trigger className="MenubarTrigger" onClick={handleLogout}>

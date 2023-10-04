@@ -19,6 +19,7 @@ export default function NewBooking(/*props*/) {
   // const { id } = props;
   const [offices, setOffices] = useState(null);
   const [selectedOffice, setSelectedOffice] = useState(null);
+  const [selectedFloor, setSelectedFloor] = useState(null);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -33,63 +34,106 @@ export default function NewBooking(/*props*/) {
   }, []);
 
   console.log("offices ---> ", offices);
-  console.log("offices true ---> ", Boolean(offices));
+  // console.log("offices true ---> ", Boolean(offices));
 
   const handleSelectChange = (value) => {
     setSelectedOffice(value);
+    setSelectedFloor(null);
+  };
+
+  const handleFloorChange = (value) => {
+    setSelectedFloor(value);
   };
 
   const handleSubmit = () => {
     console.log("Selected Office:", selectedOffice);
+    console.log("Selected Floor:", selectedFloor);
   };
 
   return (
     <Card>
-    {offices ? (
-      <>
-        <h1>Reserva tu oficina</h1>
+      {offices ? (
+        <>
+          <h1>Reserva tu oficina</h1>
 
-        <Select.Root
-          defaultValue={null}
-          value={selectedOffice}
-          onValueChange={handleSelectChange}
-        >
-          <Select.Trigger className="SelectTrigger" aria-label="Oficina">
-            <Select.Value>
+          <Select.Root
+            // defaultValue={null}
+            value={selectedOffice}
+            onValueChange={handleSelectChange}
+          >
+            <Select.Trigger className="SelectTrigger" aria-label="Oficina">
+              <Select.Value>
                 {selectedOffice ? selectedOffice.name : "Selecciona la oficina"}
               </Select.Value>
-            <Select.Icon className="SelectIcon">
-              <ChevronDownIcon />
-            </Select.Icon>
-          </Select.Trigger>
-          <Select.Portal>
-            <Select.Content className="SelectContent">
-              <Select.ScrollUpButton className="SelectScrollButton">
-                <ChevronUpIcon />
-              </Select.ScrollUpButton>
-              <Select.Viewport className="SelectViewport">
-                <Select.Group>
-                  {offices.map((office) => (
-                    <Select.Item
-                      className="SelectItem"
-                      key={office.id}
-                      value={office}
-                    >
-                      {office.name}
-                    </Select.Item>
-                  ))}
-                </Select.Group>
-              </Select.Viewport>
-              <Select.ScrollDownButton className="SelectScrollButton">
+              <Select.Icon className="SelectIcon">
                 <ChevronDownIcon />
-              </Select.ScrollDownButton>
-            </Select.Content>
-          </Select.Portal>
-        </Select.Root>
-        <Button onClick={handleSubmit}>Enviar</Button>
-      </>
-    ) : null}
-  </Card>
+              </Select.Icon>
+            </Select.Trigger>
+            <Select.Portal>
+              <Select.Content className="SelectContent">
+                <Select.ScrollUpButton className="SelectScrollButton">
+                  <ChevronUpIcon />
+                </Select.ScrollUpButton>
+                <Select.Viewport className="SelectViewport">
+                  <Select.Group>
+                    {offices.map((office) => (
+                      <Select.Item
+                        className="SelectItem"
+                        key={office.id}
+                        value={office}
+                      >
+                        {office.name}
+                      </Select.Item>
+                    ))}
+                  </Select.Group>
+                </Select.Viewport>
+                <Select.ScrollDownButton className="SelectScrollButton">
+                  <ChevronDownIcon />
+                </Select.ScrollDownButton>
+              </Select.Content>
+            </Select.Portal>
+          </Select.Root>
+
+          <Select.Root value={selectedFloor} onValueChange={handleFloorChange}>
+            <Select.Trigger className="SelectTrigger" aria-label="Piso">
+              <Select.Value>
+                {selectedFloor ? `Piso ${selectedFloor.number}` : "Selecciona un piso"}
+              </Select.Value>
+              <Select.Icon className="SelectIcon">
+                <ChevronDownIcon />
+              </Select.Icon>
+            </Select.Trigger>
+            <Select.Portal>
+              <Select.Content className="SelectContent">
+                <Select.ScrollUpButton className="SelectScrollButton">
+                  <ChevronUpIcon />
+                </Select.ScrollUpButton>
+                <Select.Viewport className="SelectViewport">
+                  <Select.Group>
+                    {selectedOffice?.floors.map((floor) => (
+                      <Select.Item
+                        className="SelectItem"
+                        key={floor.id}
+                        value={floor}
+                      >
+                        {`Piso ${floor.number}`}
+                      </Select.Item>
+                    ))}
+                  </Select.Group>
+                </Select.Viewport>
+                <Select.ScrollDownButton className="SelectScrollButton">
+                  <ChevronDownIcon />
+                </Select.ScrollDownButton>
+              </Select.Content>
+            </Select.Portal>
+          </Select.Root>
+
+          
+
+          <Button onClick={handleSubmit}>Enviar</Button>
+        </>
+      ) : null}
+    </Card>
   );
 }
 
@@ -143,8 +187,6 @@ SELECT
   </Card>
 
 */
-
-
 
 /*
   FORMULARIO

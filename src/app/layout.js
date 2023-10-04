@@ -8,7 +8,6 @@ import Footer from "@/components/Footer";
 import Header from "../components/Header";
 import { Toaster } from "sonner";
 
-
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata = {
@@ -41,7 +40,7 @@ export default function RootLayout({ children }) {
             <Header />
             <Flex justify={"center"} style={{ margin: "2%" }}>
               {children}
-              <Toaster position="bottom-center"/>
+              <Toaster position="bottom-center" />
             </Flex>
           </Theme>
           <div style={{ marginBottom: "100px" }}></div>

@@ -20,6 +20,19 @@ export default function UsersList() {
     const fetchData = async () => {
       try {
         const users = await axiosInstance.get("/staff/users");
+        users["data"].sort((a, b) => {
+          const statusOrder = { enabled: 1, pending: 2, disabled: 3 };
+
+          // Primero, compara por status
+          const statusComparison = statusOrder[a.status] - statusOrder[b.status];
+        
+          // Si los estados son iguales, entonces compara por id
+          if (statusComparison === 0) {
+            return a.id - b.id;
+          }
+        
+          return statusComparison;
+        });
         setUsers(users.data);
       } catch (error) {
         console.error(error);

@@ -153,7 +153,7 @@ export default function User({ id }) {
           </Text>
           <br></br>
 
-          {user.status !== "disabled" &&
+          {user.status === "enabled" &&
           logedUser.userId !== user.id &&
           logedUser.roleId <= user.roleId ? (
             <Button

@@ -7,6 +7,7 @@ import { useSelector } from "react-redux";
 import * as Form from "@radix-ui/react-form";
 import { useFormik } from "formik";
 import { toast } from "sonner";
+import { useRouter } from "next/navigation";
 
 export default function TablesList(props) {
   const [office, setOffice] = useState({});
@@ -15,6 +16,7 @@ export default function TablesList(props) {
   const [showCapacity, setShowCapacity] = useState(true);
   const { id } = props;
   const user = useSelector((state) => state.user.value);
+  const router = useRouter();
 
   console.log("office--->", office);
   console.log("officesTables--->", officesTables);
@@ -47,7 +49,11 @@ export default function TablesList(props) {
         });
         setInputValues(capacities);
       } catch (error) {
-        console.error(error);
+        if (error.response && error.response.status === 400) {
+          router.push("/not-found");
+        } else {
+          console.error(error);
+        }
       }
     };
     fetchTablesData();

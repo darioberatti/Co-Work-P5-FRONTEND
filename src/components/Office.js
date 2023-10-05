@@ -10,7 +10,6 @@ import { useRouter } from "next/navigation";
 import { useSelector } from "react-redux";
 import TablesList from "./TablesList";
 
-
 export default function User({ id }) {
   const [office, setOffice] = useState({});
   const dispatch = useDispatch();
@@ -28,11 +27,7 @@ export default function User({ id }) {
         const officeResponse = await axiosInstance.get(`/admin/offices/${id}`);
         setOffice(officeResponse.data);
       } catch (error) {
-        if (error.response && error.response.status === 400) {
-          router.push("/not-found");
-        } else {
-          console.error(error);
-        }
+        console.error(error);
       }
     };
     fetchData();

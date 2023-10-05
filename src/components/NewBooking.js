@@ -19,6 +19,8 @@ export default function NewBooking() {
   const [selectedTable, setSelectedTable] = useState(null);
   const [selectedDate, setSelectedDate] = useState("");
 
+  const [viewOccupation, setViewOccupation] = useState(false);
+
   const user = useSelector((state) => state.user.value);
 
   useEffect(() => {
@@ -37,12 +39,13 @@ export default function NewBooking() {
     fetchData();
   }, []);
 
-  // console.log("offices ---> ", offices);
-  // console.log("offices true ---> ", Boolean(offices));
+  // Validate the occupation
+  const handleOccupation = () => {
+    setViewOccupation(true);
+  };
 
   const handleSelectChange = (value) => {
     setSelectedOffice(value);
-
     setSelectedShift(null);
   };
 
@@ -155,6 +158,8 @@ export default function NewBooking() {
             </Select.Portal>
           </Select.Root>
 
+          {/* Input Date */}
+
           <div className="date-picker SelectTrigger">
             <label htmlFor="date">Fecha </label>
             <input
@@ -165,9 +170,13 @@ export default function NewBooking() {
             />
           </div>
 
+          {/* Occupancy check */}
+
+          <Button onClick={handleOccupation}>Ver disponibilidad</Button>
+
           {/* Select de Mesa */}
 
-          {selectedOffice && selectedShift && selectedDate ? (
+          {viewOccupation ? (
             <Select.Root
               value={selectedTable}
               onValueChange={handleTableChange}
@@ -206,7 +215,9 @@ export default function NewBooking() {
             </Select.Root>
           ) : null}
 
-          <Button onClick={handleSubmit}>Enviar</Button>
+          {selectedTable ? (
+            <Button onClick={handleSubmit}>Reservar Turno</Button>
+          ) : null}
         </div>
       ) : null}
     </Card>

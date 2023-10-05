@@ -19,6 +19,11 @@ export default function NewBooking() {
   const [selectedTable, setSelectedTable] = useState(null);
   const [selectedDate, setSelectedDate] = useState("");
 
+  const [occupation, setOccupation] = useState(null);
+  const [viewOccupation, setViewOccupation] = useState(false);
+  const [occupationByOffice, setOccupationByOffice] = useState(null);
+  const [occupationByTable, setOccupationByTable] = useState(null);
+
   const user = useSelector((state) => state.user.value);
 
   useEffect(() => {
@@ -37,12 +42,48 @@ export default function NewBooking() {
     fetchData();
   }, []);
 
-  // console.log("offices ---> ", offices);
-  // console.log("offices true ---> ", Boolean(offices));
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const occupationResponse = await axiosInstance.get("/occupation");
+        setOccupation(occupationResponse.data);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+    fetchData();
+  }, []);
+
+  // Validate the occupation
+  const handleOccupation = () => {
+    if (selectedDate && selectedOffice && selectedShift) {
+      const filteredOccupations = occupation.filter(
+        (occ) =>
+          occ.table.officeId === selectedOffice.id &&
+          occ.shift === selectedShift &&
+          occ.day.slice(0, 10) === selectedDate
+      );
+
+      setOccupationByOffice(filteredOccupations);
+      setSelectedTable(null)
+      setOccupationByTable(null)
+      setViewOccupation(true);
+    } else {
+      toast.error("Campos incompletos", { className: "alerts" });
+    }
+  };
+
+  useEffect(() => {
+    if (occupationByOffice && selectedTable) {
+      const filteredOccupationByTable = occupationByOffice.find(
+        (occ) => occ.tableId === selectedTable.id
+      );
+      setOccupationByTable(filteredOccupationByTable);
+    }
+  }, [selectedTable]);
 
   const handleSelectChange = (value) => {
     setSelectedOffice(value);
-
     setSelectedShift(null);
   };
 
@@ -54,14 +95,7 @@ export default function NewBooking() {
     setSelectedTable(value);
   };
 
-
   const handleSubmit = async () => {
-    // console.log("Selected Office:", selectedOffice);
-    // console.log("Selected Floor:", selectedFloor);
-    // console.log("Selected Table:", selectedTable);
-    // console.log("Selected Shift:", selectedShift);
-    // console.log("Selected Date:", selectedDate);
-    // console.log("user", user);
     try {
       const dateTime = selectedDate + " 11:00:00";
       const formData = {
@@ -71,7 +105,6 @@ export default function NewBooking() {
         userId: user.userId,
         tableId: selectedTable.id,
       };
-
       const response = await axiosInstance.post("/booking", formData);
       toast.success("Reserva creada correctamente", { className: "alerts" });
     } catch (error) {
@@ -124,44 +157,11 @@ export default function NewBooking() {
             </Select.Portal>
           </Select.Root>
 
-          {/* Select de Mesa */}
-
-          <Select.Root value={selectedTable} onValueChange={handleTableChange}>
-            <Select.Trigger className="SelectTrigger" aria-label="Mesa">
-              <Select.Value>
-                {selectedTable ? selectedTable.name : "Selecciona una mesa"}
-              </Select.Value>
-              <Select.Icon className="SelectIcon">
-                <ChevronDownIcon />
-              </Select.Icon>
-            </Select.Trigger>
-            <Select.Portal>
-              <Select.Content className="SelectContent">
-                <Select.ScrollUpButton className="SelectScrollButton">
-                  <ChevronUpIcon />
-                </Select.ScrollUpButton>
-                <Select.Viewport className="SelectViewport">
-                  <Select.Group>
-                    {selectedOffice?.tables.map((table) => (
-                      <Select.Item
-                        className="SelectItem"
-                        key={table.id}
-                        value={table}
-                      >
-                        {table.name}
-                      </Select.Item>
-                    ))}
-                  </Select.Group>
-                </Select.Viewport>
-                <Select.ScrollDownButton className="SelectScrollButton">
-                  <ChevronDownIcon />
-                </Select.ScrollDownButton>
-              </Select.Content>
-            </Select.Portal>
-          </Select.Root>
-
           {/* Select de Turno */}
-          <Select.Root value={selectedShift} onValueChange={handleShiftChange}>
+          <Select.Root 
+          value={selectedShift} 
+          onValueChange={handleShiftChange}
+          >
             <Select.Trigger className="SelectTrigger" aria-label="Shift">
               <Select.Value>
                 {selectedShift ? selectedShift : "Selecciona el turno"}
@@ -192,6 +192,8 @@ export default function NewBooking() {
             </Select.Portal>
           </Select.Root>
 
+          {/* Input Date */}
+
           <div className="date-picker SelectTrigger">
             <label htmlFor="date">Fecha </label>
             <input
@@ -202,11 +204,62 @@ export default function NewBooking() {
             />
           </div>
 
-          <Button onClick={handleSubmit}>Enviar</Button>
+          {/* Occupancy check */}
+
+          <Button onClick={handleOccupation}>Ver disponibilidad</Button>
+
+          {/* Select de Mesa */}
+
+          {viewOccupation ? (
+            <Select.Root
+              value={selectedTable}
+              onValueChange={handleTableChange}
+            >
+              <Select.Trigger className="SelectTrigger" aria-label="Mesa">
+                <Select.Value>
+                  {selectedTable ? selectedTable.name : "Selecciona una mesa"}
+                </Select.Value>
+                <Select.Icon className="SelectIcon">
+                  <ChevronDownIcon />
+                </Select.Icon>
+              </Select.Trigger>
+              <Select.Portal>
+                <Select.Content className="SelectContent">
+                  <Select.ScrollUpButton className="SelectScrollButton">
+                    <ChevronUpIcon />
+                  </Select.ScrollUpButton>
+                  <Select.Viewport className="SelectViewport">
+                    <Select.Group>
+                      {selectedOffice?.tables.map((table) => (
+                        <Select.Item
+                          className="SelectItem"
+                          key={table.id}
+                          value={table}
+                        >
+                          {table.name}
+                        </Select.Item>
+                      ))}
+                    </Select.Group>
+                  </Select.Viewport>
+                  <Select.ScrollDownButton className="SelectScrollButton">
+                    <ChevronDownIcon />
+                  </Select.ScrollDownButton>
+                </Select.Content>
+              </Select.Portal>
+            </Select.Root>
+          ) : null}
+
+          {occupationByTable ? (
+            <p className="SelectTrigger">{`Lugares disponibles: ${occupationByTable.actualCapacity}`}</p>
+          ) : selectedTable ? (
+            <p className="SelectTrigger">{`Lugares disponibles: ${selectedTable.capacity}`}</p>
+          ) : null}
+
+          {selectedTable ? (
+            <Button onClick={handleSubmit}>Reservar Turno</Button>
+          ) : null}
         </div>
       ) : null}
     </Card>
   );
 }
-
-

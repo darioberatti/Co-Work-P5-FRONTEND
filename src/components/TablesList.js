@@ -7,14 +7,16 @@ import { useSelector } from "react-redux";
 import * as Form from "@radix-ui/react-form";
 import { useFormik } from "formik";
 import { toast } from "sonner";
+import { useRouter } from "next/navigation";
 
-export default function SetterValues(props) {
+export default function TablesList(props) {
   const [office, setOffice] = useState({});
   const [officesTables, setOfficesTables] = useState([]);
   const [inputValues, setInputValues] = useState({});
   const [showCapacity, setShowCapacity] = useState(true);
   const { id } = props;
   const user = useSelector((state) => state.user.value);
+  const router = useRouter();
 
   console.log("office--->", office);
   console.log("officesTables--->", officesTables);
@@ -47,7 +49,11 @@ export default function SetterValues(props) {
         });
         setInputValues(capacities);
       } catch (error) {
-        console.error(error);
+        if (error.response && error.response.status === 400) {
+          router.push("/not-found");
+        } else {
+          console.error(error);
+        }
       }
     };
     fetchTablesData();
@@ -133,15 +139,15 @@ export default function SetterValues(props) {
 
       formik.setValues({
         floor: "",
-        name: "", 
-        capacity: "", 
+        name: "",
+        capacity: "",
       });
     } catch (error) {
       toast.error(error.response.data, { className: "alerts" });
     }
   };
 
-  return (
+  return office.status === "enabled" ? (
     <div style={{ marginTop: "2%" }}>
       <Text size={"8"} align="center" as="div">
         Mesas disponibles
@@ -250,5 +256,9 @@ export default function SetterValues(props) {
         ""
       )} */}
     </div>
+  ) : (
+    <Text size={"8"} align="center" as="div">
+      Mesas inhabilitadas
+    </Text>
   );
 }

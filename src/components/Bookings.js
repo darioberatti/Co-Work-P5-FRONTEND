@@ -6,6 +6,8 @@ import Link from "next/link";
 import { useSelector } from "react-redux";
 import { descriptionBookings } from "@/utils/changeDateFormat";
 import axiosInstance from "axiosConfig";
+import { fetchUser } from "@/utils/fetchUser";
+import { useDispatch } from "react-redux";
 
 export default function Bookings() {
   const [bookings, setBookings] = useState([]);

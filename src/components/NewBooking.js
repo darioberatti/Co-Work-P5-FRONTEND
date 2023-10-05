@@ -19,7 +19,10 @@ export default function NewBooking() {
   const [selectedTable, setSelectedTable] = useState(null);
   const [selectedDate, setSelectedDate] = useState("");
 
+  const [occupation, setOccupation] = useState(null);
   const [viewOccupation, setViewOccupation] = useState(false);
+  const [occupationByOffice, setOccupationByOffice] = useState(null);
+  const [occupationByTable, setOccupationByTable] = useState(null);
 
   const user = useSelector((state) => state.user.value);
 
@@ -39,10 +42,45 @@ export default function NewBooking() {
     fetchData();
   }, []);
 
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const occupationResponse = await axiosInstance.get("/occupation");
+        setOccupation(occupationResponse.data);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+    fetchData();
+  }, []);
+
   // Validate the occupation
   const handleOccupation = () => {
-    setViewOccupation(true);
+    if (selectedDate && selectedOffice && selectedShift) {
+      const filteredOccupations = occupation.filter(
+        (occ) =>
+          occ.table.officeId === selectedOffice.id &&
+          occ.shift === selectedShift &&
+          occ.day.slice(0, 10) === selectedDate
+      );
+
+      setOccupationByOffice(filteredOccupations);
+      setSelectedTable(null)
+      setOccupationByTable(null)
+      setViewOccupation(true);
+    } else {
+      toast.error("Campos incompletos", { className: "alerts" });
+    }
   };
+
+  useEffect(() => {
+    if (occupationByOffice && selectedTable) {
+      const filteredOccupationByTable = occupationByOffice.find(
+        (occ) => occ.tableId === selectedTable.id
+      );
+      setOccupationByTable(filteredOccupationByTable);
+    }
+  }, [selectedTable]);
 
   const handleSelectChange = (value) => {
     setSelectedOffice(value);
@@ -58,12 +96,6 @@ export default function NewBooking() {
   };
 
   const handleSubmit = async () => {
-    // console.log("Selected Office:", selectedOffice);
-    // console.log("Selected Floor:", selectedFloor);
-    // console.log("Selected Table:", selectedTable);
-    // console.log("Selected Shift:", selectedShift);
-    // console.log("Selected Date:", selectedDate);
-    // console.log("user", user);
     try {
       const dateTime = selectedDate + " 11:00:00";
       const formData = {
@@ -73,7 +105,6 @@ export default function NewBooking() {
         userId: user.userId,
         tableId: selectedTable.id,
       };
-
       const response = await axiosInstance.post("/booking", formData);
       toast.success("Reserva creada correctamente", { className: "alerts" });
     } catch (error) {
@@ -127,7 +158,10 @@ export default function NewBooking() {
           </Select.Root>
 
           {/* Select de Turno */}
-          <Select.Root value={selectedShift} onValueChange={handleShiftChange}>
+          <Select.Root 
+          value={selectedShift} 
+          onValueChange={handleShiftChange}
+          >
             <Select.Trigger className="SelectTrigger" aria-label="Shift">
               <Select.Value>
                 {selectedShift ? selectedShift : "Selecciona el turno"}
@@ -213,6 +247,12 @@ export default function NewBooking() {
                 </Select.Content>
               </Select.Portal>
             </Select.Root>
+          ) : null}
+
+          {occupationByTable ? (
+            <p className="SelectTrigger">{`Lugares disponibles: ${occupationByTable.actualCapacity}`}</p>
+          ) : selectedTable ? (
+            <p className="SelectTrigger">{`Lugares disponibles: ${selectedTable.capacity}`}</p>
           ) : null}
 
           {selectedTable ? (

@@ -5,10 +5,10 @@ import axiosInstance from "../../axiosConfig";
 import { useDispatch } from "react-redux";
 import { fetchUser } from "@/utils/fetchUser";
 import OfficeCard from "@/components/OfficeCard";
-import SetterValues from "@/components/SetterValues";
 import { Button } from "@radix-ui/themes";
 import { useRouter } from "next/navigation";
 import { useSelector } from "react-redux";
+import TablesList from "./TablesList";
 
 
 export default function User({ id }) {
@@ -59,7 +59,7 @@ export default function User({ id }) {
   return (
     <div>
       <OfficeCard office={office} />
-      <SetterValues id={id} />
+      <TablesList id={id} />
       {user.role === "admin" ? (
         office.status === "enabled" ? (
           <Button

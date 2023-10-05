@@ -1,16 +1,23 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Card, Flex, Box, Text, Button } from "@radix-ui/themes";
 import Link from "next/link";
 import { generateBookings } from "@/utils/fakeBookings";
 import { descriptionBookings } from "@/utils/changeDateFormat";
+import { fetchUser } from "@/utils/fetchUser";
+import { useDispatch } from "react-redux";
 
 export default function Bookings() {
   const bookings = generateBookings();
 
   const [activeReserves, setActiveReserves] = useState(true);
   const [history, setHistory] = useState(false);
+  const dispatch = useDispatch();
+ 
+  useEffect(() => {
+    fetchUser(dispatch);
+  }, []);
 
   const handleActiveReservesClick = () => {
     setActiveReserves(true);

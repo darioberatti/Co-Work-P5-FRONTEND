@@ -9,7 +9,7 @@ import { useFormik } from "formik";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 
-export default function SetterValues(props) {
+export default function TablesList(props) {
   const [office, setOffice] = useState({});
   const [officesTables, setOfficesTables] = useState([]);
   const [inputValues, setInputValues] = useState({});
@@ -139,15 +139,15 @@ export default function SetterValues(props) {
 
       formik.setValues({
         floor: "",
-        name: "", 
-        capacity: "", 
+        name: "",
+        capacity: "",
       });
     } catch (error) {
       toast.error(error.response.data, { className: "alerts" });
     }
   };
 
-  return (
+  return office.status === "enabled" ? (
     <div style={{ marginTop: "2%" }}>
       <Text size={"8"} align="center" as="div">
         Mesas disponibles
@@ -256,5 +256,9 @@ export default function SetterValues(props) {
         ""
       )} */}
     </div>
+  ) : (
+    <Text size={"8"} align="center" as="div">
+      Mesas inhabilitadas
+    </Text>
   );
 }

@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 import axiosInstance from "../../axiosConfig";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchUser } from "@/utils/fetchUser";
-import { birthSetter } from "@/utils/utils";
+import { birthSetter } from "@/utils/changeDateFormat";
 import { toast } from "sonner";
 
 export default function User({ id }) {

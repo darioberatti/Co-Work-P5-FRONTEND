@@ -54,7 +54,6 @@ export default function NewBooking() {
     setSelectedTable(value);
   };
 
-
   const handleSubmit = async () => {
     // console.log("Selected Office:", selectedOffice);
     // console.log("Selected Floor:", selectedFloor);
@@ -124,42 +123,6 @@ export default function NewBooking() {
             </Select.Portal>
           </Select.Root>
 
-          {/* Select de Mesa */}
-
-          <Select.Root value={selectedTable} onValueChange={handleTableChange}>
-            <Select.Trigger className="SelectTrigger" aria-label="Mesa">
-              <Select.Value>
-                {selectedTable ? selectedTable.name : "Selecciona una mesa"}
-              </Select.Value>
-              <Select.Icon className="SelectIcon">
-                <ChevronDownIcon />
-              </Select.Icon>
-            </Select.Trigger>
-            <Select.Portal>
-              <Select.Content className="SelectContent">
-                <Select.ScrollUpButton className="SelectScrollButton">
-                  <ChevronUpIcon />
-                </Select.ScrollUpButton>
-                <Select.Viewport className="SelectViewport">
-                  <Select.Group>
-                    {selectedOffice?.tables.map((table) => (
-                      <Select.Item
-                        className="SelectItem"
-                        key={table.id}
-                        value={table}
-                      >
-                        {table.name}
-                      </Select.Item>
-                    ))}
-                  </Select.Group>
-                </Select.Viewport>
-                <Select.ScrollDownButton className="SelectScrollButton">
-                  <ChevronDownIcon />
-                </Select.ScrollDownButton>
-              </Select.Content>
-            </Select.Portal>
-          </Select.Root>
-
           {/* Select de Turno */}
           <Select.Root value={selectedShift} onValueChange={handleShiftChange}>
             <Select.Trigger className="SelectTrigger" aria-label="Shift">
@@ -202,11 +165,50 @@ export default function NewBooking() {
             />
           </div>
 
+          {/* Select de Mesa */}
+
+          {selectedOffice && selectedShift && selectedDate ? (
+            <Select.Root
+              value={selectedTable}
+              onValueChange={handleTableChange}
+            >
+              <Select.Trigger className="SelectTrigger" aria-label="Mesa">
+                <Select.Value>
+                  {selectedTable ? selectedTable.name : "Selecciona una mesa"}
+                </Select.Value>
+                <Select.Icon className="SelectIcon">
+                  <ChevronDownIcon />
+                </Select.Icon>
+              </Select.Trigger>
+              <Select.Portal>
+                <Select.Content className="SelectContent">
+                  <Select.ScrollUpButton className="SelectScrollButton">
+                    <ChevronUpIcon />
+                  </Select.ScrollUpButton>
+                  <Select.Viewport className="SelectViewport">
+                    <Select.Group>
+                      {selectedOffice?.tables.map((table) => (
+                        <Select.Item
+                          className="SelectItem"
+                          key={table.id}
+                          value={table}
+                        >
+                          {table.name}
+                        </Select.Item>
+                      ))}
+                    </Select.Group>
+                  </Select.Viewport>
+                  <Select.ScrollDownButton className="SelectScrollButton">
+                    <ChevronDownIcon />
+                  </Select.ScrollDownButton>
+                </Select.Content>
+              </Select.Portal>
+            </Select.Root>
+          ) : null}
+
           <Button onClick={handleSubmit}>Enviar</Button>
         </div>
       ) : null}
     </Card>
   );
 }
-
-

@@ -22,6 +22,14 @@ export default function OfficesList() {
     const fetchData = async () => {
       try {
         const response = await axiosInstance.get("/admin/offices");
+        response["data"].sort((a, b) => {
+          const statusOrder = { enabled: 1, disabled: 2 };
+          const statusComparison = statusOrder[a.status] - statusOrder[b.status];
+          if (statusComparison === 0) {
+            return a.id - b.id;
+          }
+          return statusComparison;
+        });
         setOffices(response.data);
       } catch (error) {
         console.error(error);

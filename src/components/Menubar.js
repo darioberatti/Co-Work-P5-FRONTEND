@@ -9,7 +9,7 @@ import { logoutUser } from "@/redux/user";
 import { toast } from "sonner";
 import Image from "next/image";
 import LogoP5Desktop from "../../public/LogoP5Desktop.svg";
-import LogoP5Mobile from "../../public/LogoP5Mobile.svg";
+import homeLogo from "../../public/home.png";
 import logout from "../../public/logout.png";
 
 export default function Menu() {
@@ -45,12 +45,7 @@ export default function Menu() {
                   marginRight: "5px",
                 }}
               >
-                <Image
-                  src={LogoP5Mobile}
-                  alt="P5 Header"
-                  width={30}
-                  height={30}
-                />
+                <Image src={homeLogo} alt="Home Logo" width={35} height={35} />
               </Link>
             </Menubar.Trigger>
           </Menubar.Menu>

@@ -7,25 +7,25 @@
 .Button {
   all: unset;
   box-sizing: border-box;
-  font-family: monserrat, sans-serif;
+  font-family: Montserrat, sans-serif;
 }
 
 .FormRoot {
   width: 260px;
-  font-family: monserrat, sans-serif;
+  font-family: Montserrat, sans-serif;
   font-weight: 400;
 }
 
 .FormField {
   display: grid;
   margin-bottom: 10px;
-  font-family: monserrat, sans-serif;
+  font-family: Montserrat, sans-serif;
   font-weight: 400;
 }
 
 .FormLabel {
   font-size: 15px;
-  font-family: monserrat, sans-serif;
+  font-family: Montserrat, sans-serif;
   font-weight: 400;
   line-height: 35px;
   color: rgb(0, 0, 0);
@@ -34,7 +34,7 @@
 
 .FormMessage {
   font-size: 13px;
-  font-family: monserrat, sans-serif;
+  font-family: Montserrat, sans-serif;
   font-weight: 400;
   color: rgb(255, 0, 0);
   opacity: 0.8;
@@ -47,7 +47,7 @@
   align-items: center;
   justify-content: center;
   border-radius: 4px;
-  font-family: monserrat, sans-serif;
+  font-family: Montserrat, sans-serif;
   font-weight: 400;
   font-size: 15px;
   color: rgb(0, 0, 0);
@@ -86,7 +86,7 @@
   border-radius: 4px;
   padding: 0 15px;
   font-size: 15px;
-  font-family: monserrat, sans-serif;
+  font-family: Montserrat, sans-serif;
   font-weight: 400;
   line-height: 1;
   font-weight: 500;
@@ -117,7 +117,7 @@ button {
   padding: 3px;
   border-radius: 6px;
   box-shadow: 0 2px 10px var(--black-a7);
-  font-family: monserrat, sans-serif;
+  font-family: Montserrat, sans-serif;
 }
 
 .MenubarTrigger {
@@ -241,7 +241,7 @@ button {
   border-radius: 10px;
   margin: 20px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
-  font-family: monserrat, sans-serif;
+  font-family: Montserrat, sans-serif;
   font-weight: 400;
 }
 
@@ -269,14 +269,9 @@ button {
   cursor: pointer;
 }
 
-/* .bodyMain {
-  background: rgb(0, 31, 85);
-  background: linear-gradient(
-    90deg,
-    rgba(0, 31, 85, 0) 0%,
-    rgba(7, 58, 124, 1) 100%
-  );
-} */
+.bodyMain {
+  background: rgb(244, 244, 244);
+}
 
 .disabled {
   background-color: rgb(255, 202, 202);
@@ -298,16 +293,13 @@ button {
   border-radius: 10px;
   margin: 20px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
-  font-family: monserrat, sans-serif;
+  font-family: Montserrat, sans-serif;
   font-weight: 400;
 }
 
-.alerts{
+.alerts {
   margin-bottom: 100px;
 }
-
-
-
 
 .SelectTrigger {
   display: inline-flex;
@@ -316,7 +308,7 @@ button {
   border-radius: 4px;
   padding: 0 15px;
   font-size: 13px;
-  font-family: monserrat, sans-serif;
+  font-family: Montserrat, sans-serif;
   line-height: 1;
   height: 35px;
   gap: 5px;
@@ -342,7 +334,8 @@ button {
   overflow: hidden;
   background-color: white;
   border-radius: 6px;
-  box-shadow: 0px 10px 38px -10px rgba(22, 23, 24, 0.35), 0px 10px 20px -15px rgba(22, 23, 24, 0.2);
+  box-shadow: 0px 10px 38px -10px rgba(22, 23, 24, 0.35),
+    0px 10px 20px -15px rgba(22, 23, 24, 0.2);
 }
 
 .SelectViewport {
@@ -408,11 +401,11 @@ button {
   flex-direction: column;
   align-items: flex-start;
   gap: 16px;
-  font-family: monserrat, sans-serif;
+  font-family: Montserrat, sans-serif;
 }
 
 .booking-form .SelectTrigger {
-  width: 90%; 
+  width: 90%;
 }
 
 .booking-form Button {

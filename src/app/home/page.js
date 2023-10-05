@@ -2,6 +2,7 @@
 import { useDispatch } from "react-redux";
 import { useEffect } from "react";
 import { fetchUser } from "@/utils/fetchUser";
+import HomeView from "@/components/HomeView";
 
 export default function Home() {
   const dispatch = useDispatch();
@@ -11,14 +12,8 @@ export default function Home() {
   }, []);
 
   return (
-    <div
-      style={{
-        fontFamily: "Montserrat, sans-serif",
-        fontWeight: "400",
-        fontSize: "1.5rem",
-      }}
-    >
-      Vista Home Usuarios
+    <div>
+      <HomeView />
     </div>
   );
 }

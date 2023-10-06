@@ -10,11 +10,16 @@ import { fetchUser } from "@/utils/fetchUser";
 import { useDispatch } from "react-redux";
 
 export default function Bookings() {
+  const dispatch = useDispatch();
   const [bookings, setBookings] = useState([]);
   const user = useSelector((state) => state.user.value);
   const [activeReserves, setActiveReserves] = useState(true);
   const [history, setHistory] = useState(false);
   const [officeData, setOfficeData] = useState({});
+
+  useEffect(() => {
+    fetchUser(dispatch);
+  }, []);
 
   useEffect(() => {
     const fetchData = async () => {

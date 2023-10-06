@@ -37,7 +37,7 @@ export default function Header() {
   } else if (path === "/bookings") {
     text1 = "Lista de ";
     text2 = "Reservas Activas";
-    text3 = "y Historial";
+    text3 = "e Historial";
   } else {
     text1 = "Perfil de ";
     text2 = `${role}`;

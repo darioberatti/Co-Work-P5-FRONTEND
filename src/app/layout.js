@@ -26,10 +26,7 @@ export default function RootLayout({ children }) {
           sizes="<generated>"
         />
       </head>
-      <body
-        className="bodyMain"
-        style={{ backgroundColor: "rgb(244, 244, 244)" }}
-      >
+      <body className="bodyMain">
         <Providers>
           <Theme>
             <Flex justify={"center"} width={"90%"}>

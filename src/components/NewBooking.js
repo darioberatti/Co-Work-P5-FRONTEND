@@ -10,6 +10,7 @@ import { useEffect, useState } from "react";
 import { toast } from "sonner";
 
 import { ChevronDownIcon, ChevronUpIcon } from "@radix-ui/react-icons";
+import { useRouter } from "next/navigation";
 
 export default function NewBooking() {
   const dispatch = useDispatch();
@@ -25,6 +26,8 @@ export default function NewBooking() {
   const [occupationByTable, setOccupationByTable] = useState(null);
 
   const user = useSelector((state) => state.user.value);
+
+  const router = useRouter();
 
   useEffect(() => {
     fetchUser(dispatch);
@@ -107,6 +110,7 @@ export default function NewBooking() {
       };
       const response = await axiosInstance.post("/booking", formData);
       toast.success("Reserva creada correctamente", { className: "alerts" });
+      router.push("/bookings")
     } catch (error) {
       toast.error(error.response.data, { className: "alerts" });
     }

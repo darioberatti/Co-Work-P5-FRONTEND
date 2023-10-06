@@ -48,14 +48,12 @@ export default function Bookings() {
   };
 
   useEffect(() => {
-    bookings
-      .filter((booking) => booking.status === "active")
-      .forEach((booking) => fetchOfficeData(booking));
+    bookings.forEach((booking) => fetchOfficeData(booking));
   }, [bookings]);
 
-  console.log(user);
+  /*   console.log(user);
   console.log(bookings);
-  console.log(officeData);
+  console.log(officeData); */
 
   const deleteBooking = async (bookingId) => {
     if (confirm("¿Estás seguro que deseas eliminar esta reserva?")) {

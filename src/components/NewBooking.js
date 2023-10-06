@@ -25,6 +25,8 @@ export default function NewBooking() {
   const [occupationByOffice, setOccupationByOffice] = useState(null);
   const [occupationByTable, setOccupationByTable] = useState(null);
 
+  const [isDisabled, setIsDisabled] = useState(false);
+
   const user = useSelector((state) => state.user.value);
 
   const router = useRouter();
@@ -37,7 +39,8 @@ export default function NewBooking() {
     const fetchData = async () => {
       try {
         const officeResponse = await axiosInstance.get(`/admin/offices`);
-        setOffices(officeResponse.data);
+        const activeOffices = officeResponse.data.filter((office) => office.status === "enabled")
+        setOffices(activeOffices);
       } catch (error) {
         console.error(error);
       }
@@ -68,9 +71,10 @@ export default function NewBooking() {
       );
 
       setOccupationByOffice(filteredOccupations);
-      setSelectedTable(null)
-      setOccupationByTable(null)
+      setSelectedTable(null);
+      setOccupationByTable(null);
       setViewOccupation(true);
+      setIsDisabled(true);
     } else {
       toast.error("Campos incompletos", { className: "alerts" });
     }
@@ -98,6 +102,11 @@ export default function NewBooking() {
     setSelectedTable(value);
   };
 
+  const handleModification = () => {
+    setSelectedTable(null);
+    setIsDisabled(false);
+  };
+
   const handleSubmit = async () => {
     try {
       const dateTime = selectedDate + " 11:00:00";
@@ -110,7 +119,7 @@ export default function NewBooking() {
       };
       const response = await axiosInstance.post("/booking", formData);
       toast.success("Reserva creada correctamente", { className: "alerts" });
-      router.push("/bookings")
+      router.push("/bookings");
     } catch (error) {
       toast.error(error.response.data, { className: "alerts" });
     }
@@ -127,6 +136,7 @@ export default function NewBooking() {
             // defaultValue={null}
             value={selectedOffice}
             onValueChange={handleSelectChange}
+            disabled={isDisabled}
           >
             <Select.Trigger className="SelectTrigger" aria-label="Oficina">
               <Select.Value>
@@ -162,9 +172,10 @@ export default function NewBooking() {
           </Select.Root>
 
           {/* Select de Turno */}
-          <Select.Root 
-          value={selectedShift} 
-          onValueChange={handleShiftChange}
+          <Select.Root
+            value={selectedShift}
+            onValueChange={handleShiftChange}
+            disabled={isDisabled}
           >
             <Select.Trigger className="SelectTrigger" aria-label="Shift">
               <Select.Value>
@@ -200,17 +211,34 @@ export default function NewBooking() {
 
           <div className="date-picker SelectTrigger">
             <label htmlFor="date">Fecha </label>
-            <input
-              type="date"
-              id="date"
-              value={selectedDate}
-              onChange={(e) => setSelectedDate(e.target.value)}
-            />
+            {isDisabled ? (
+              <input
+                disabled
+                type="date"
+                id="date"
+                value={selectedDate}
+                onChange={(e) => setSelectedDate(e.target.value)}
+              />
+            ) : (
+              <input
+                type="date"
+                id="date"
+                value={selectedDate}
+                onChange={(e) => setSelectedDate(e.target.value)}
+              />
+            )}
           </div>
 
+          {/* Modify selection Button */}
           {/* Occupancy check */}
 
-          <Button onClick={handleOccupation}>Ver disponibilidad</Button>
+          {isDisabled ? (
+            <Button color="crimson" onClick={handleModification}>
+              Modificar seleccion
+            </Button>
+          ) : (
+            <Button onClick={handleOccupation}>Ver disponibilidad</Button>
+          )}
 
           {/* Select de Mesa */}
 

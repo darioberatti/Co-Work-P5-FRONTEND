@@ -94,7 +94,7 @@ export default function OfficeCard({ office }) {
             {office.status === "enabled" ? (
               <Link href={`/offices/${office.id}/new-booking`}>
                 <Button color="indigo" variant="soft">
-                  Reservar aquí
+                  Reservar Oficina
                 </Button>
               </Link>
             ) : null}

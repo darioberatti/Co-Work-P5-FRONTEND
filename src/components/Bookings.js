@@ -173,7 +173,7 @@ export default function Bookings() {
           ))}
       {history &&
         bookings
-          .filter((booking) => booking.status === "complete")
+          .filter((booking) => booking.status === "completed")
           .map((booking) => (
             <div key={booking.id} style={{ marginBottom: "20px" }}>
               <Card size="3" style={{ maxWidth: 400 }}>

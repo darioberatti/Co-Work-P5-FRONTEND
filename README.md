@@ -1,6 +1,6 @@
 Este es un proyecto realizado con [Next.js](https://nextjs.org/) inicializado con [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
-# RETRO FUTBOL CLUB (FRONT-END)
+# Plataforma 5 - Co-Work - (FRONT-END)
 
 ## Antes de empezar..
 

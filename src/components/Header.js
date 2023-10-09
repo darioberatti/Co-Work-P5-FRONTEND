@@ -28,24 +28,20 @@ export default function Header() {
     text1 = "Bienvenido a ";
     text2 = "Co-Work P5";
     text3 = "Debes Iniciar Sesión";
-  }
-
-  if (role) {
-    if (path === "/home") {
-      text1 = "Perfil de ";
-      text2 = `${role}`;
-    } else if (path === "/offices") {
-      text1 = "Lista de ";
-      text2 = "Oficinas";
-      text3 = "disponibles";
-    } else if (path === "/bookings") {
-      text1 = "Lista de ";
-      text2 = "Reservas Activas";
-      text3 = "e Historial";
-    } else {
-      text1 = "Perfil de ";
-      text2 = `${role}`;
-    }
+  } else if (path === "/home") {
+    text1 = "Perfil de ";
+    text2 = `${role}`;
+  } else if (path === "/offices") {
+    text1 = "Lista de ";
+    text2 = "Oficinas";
+    text3 = "disponibles";
+  } else if (path === "/bookings") {
+    text1 = "Lista de ";
+    text2 = "Reservas";
+    text3 = "e Historial";
+  } else {
+    text1 = "Perfil de ";
+    text2 = `${role}`;
   }
 
   return (

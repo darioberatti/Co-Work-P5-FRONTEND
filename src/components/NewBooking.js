@@ -147,7 +147,7 @@ export default function NewBooking() {
               </Select.Icon>
             </Select.Trigger>
             <Select.Portal>
-              <Select.Content className="SelectContent">
+              <Select.Content className="SelectContent" position="popper">
                 <Select.ScrollUpButton className="SelectScrollButton">
                   <ChevronUpIcon />
                 </Select.ScrollUpButton>
@@ -186,7 +186,7 @@ export default function NewBooking() {
               </Select.Icon>
             </Select.Trigger>
             <Select.Portal>
-              <Select.Content className="SelectContent">
+              <Select.Content className="SelectContent" position="popper">
                 <Select.ScrollUpButton className="SelectScrollButton">
                   <ChevronUpIcon />
                 </Select.ScrollUpButton>
@@ -256,7 +256,7 @@ export default function NewBooking() {
                 </Select.Icon>
               </Select.Trigger>
               <Select.Portal>
-                <Select.Content className="SelectContent">
+                <Select.Content className="SelectContent" position="popper">
                   <Select.ScrollUpButton className="SelectScrollButton">
                     <ChevronUpIcon />
                   </Select.ScrollUpButton>

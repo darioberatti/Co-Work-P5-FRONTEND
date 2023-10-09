@@ -36,7 +36,7 @@ export default function Header() {
     text3 = "disponibles";
   } else if (path === "/bookings") {
     text1 = "Lista de ";
-    text2 = "Reservas Activas";
+    text2 = "Reservas";
     text3 = "e Historial";
   } else {
     text1 = "Perfil de ";

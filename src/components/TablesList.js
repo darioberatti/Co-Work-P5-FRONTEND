@@ -1,8 +1,8 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, use } from "react";
 import axiosInstance from "../../axiosConfig";
-import { Table, Text, Button } from "@radix-ui/themes";
+import { Table, Text, Button, AlertDialog, Flex } from "@radix-ui/themes";
 import { useSelector } from "react-redux";
 import * as Form from "@radix-ui/react-form";
 import { useFormik } from "formik";
@@ -14,12 +14,9 @@ export default function TablesList(props) {
   const [officesTables, setOfficesTables] = useState([]);
   const [inputValues, setInputValues] = useState({});
   const [showCapacity, setShowCapacity] = useState(true);
-  const { id } = props;
+  const { id, status } = props;
   const user = useSelector((state) => state.user.value);
   const router = useRouter();
-
-  console.log("office--->", office);
-  console.log("officesTables--->", officesTables);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -31,7 +28,7 @@ export default function TablesList(props) {
       }
     };
     fetchData();
-  }, [id]);
+  }, [status]);
 
   //Use Effect para obtener las mesas de una Oficina
   useEffect(() => {
@@ -99,9 +96,9 @@ export default function TablesList(props) {
   // };
 
   // Función para cambiar la visualización al hacer clic en el botón.
-  const toggleShowCapacity = () => {
-    setShowCapacity(!showCapacity);
-  };
+  // const toggleShowCapacity = () => {
+  //   setShowCapacity(!showCapacity);
+  // };
 
   const formik = useFormik({
     initialValues: {
@@ -188,14 +185,40 @@ export default function TablesList(props) {
                 </Table.Cell>
                 <Table.Cell>
                   {user.role === "admin" ? (
-                    <Button
-                      color="crimson"
-                      variant="soft"
-                      // onClick={() => handleClick(table.id, capacityValue)}
-                      onClick={() => handleDeleteTable(table.id)}
-                    >
-                      Eliminar
-                    </Button>
+                    <AlertDialog.Root>
+                      <AlertDialog.Trigger>
+                        <Button
+                          color="crimson"
+                          variant="soft"
+                          // onClick={() => handleClick(table.id, capacityValue)}
+                        >
+                          Eliminar
+                        </Button>
+                      </AlertDialog.Trigger>
+                      <AlertDialog.Content style={{ maxWidth: "80%" }}>
+                        <AlertDialog.Title> Eliminar Mesa</AlertDialog.Title>
+                        <AlertDialog.Description size="2">
+                          ¿Estas seguro que deseas eliminar esta mesa?
+                        </AlertDialog.Description>
+
+                        <Flex gap="3" mt="4" justify="end">
+                          <AlertDialog.Cancel>
+                            <Button variant="soft" color="gray">
+                              Cancelar
+                            </Button>
+                          </AlertDialog.Cancel>
+                          <AlertDialog.Action>
+                            <Button
+                              color="crimson"
+                              variant="soft"
+                              onClick={() => handleDeleteTable(table.id)}
+                            >
+                              Eliminar
+                            </Button>
+                          </AlertDialog.Action>
+                        </Flex>
+                      </AlertDialog.Content>
+                    </AlertDialog.Root>
                   ) : (
                     ""
                   )}

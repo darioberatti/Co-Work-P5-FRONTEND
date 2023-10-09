@@ -24,7 +24,7 @@ export default function ForgotPassword() {
           "/user/reset-password",
           formData
         );
-        toast.success("CCorreo de recuperación enviado", {className:"alerts"});
+        toast.success("Correo de recuperación enviado", {className:"alerts"});
 
         router.push("/");
       } catch (error) {

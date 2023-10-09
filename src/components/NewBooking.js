@@ -1,6 +1,6 @@
 "use client";
 
-import { Button, Card, Text } from "@radix-ui/themes";
+import { AlertDialogTrigger, Button, Card, Text } from "@radix-ui/themes";
 import * as Select from "@radix-ui/react-select";
 import axiosInstance from "../../axiosConfig";
 import { fetchUser } from "@/utils/fetchUser";
@@ -12,6 +12,9 @@ import { toast } from "sonner";
 import { ChevronDownIcon, ChevronUpIcon } from "@radix-ui/react-icons";
 import { useRouter } from "next/navigation";
 
+import * as AlertDialog from "@radix-ui/react-alert-dialog";
+import { birthSetter } from "@/utils/changeDateFormat";
+
 export default function NewBooking() {
   const dispatch = useDispatch();
   const [offices, setOffices] = useState(null);
@@ -20,12 +23,16 @@ export default function NewBooking() {
   const [selectedTable, setSelectedTable] = useState(null);
   const [selectedDate, setSelectedDate] = useState("");
 
+
+
   const [occupation, setOccupation] = useState(null);
   const [viewOccupation, setViewOccupation] = useState(false);
   const [occupationByOffice, setOccupationByOffice] = useState(null);
   const [occupationByTable, setOccupationByTable] = useState(null);
 
   const [isDisabled, setIsDisabled] = useState(false);
+
+  const [isAlertDialogOpen, setIsAlertDialogOpen] = useState(false);
 
   const user = useSelector((state) => state.user.value);
 
@@ -109,6 +116,11 @@ export default function NewBooking() {
     setIsDisabled(false);
   };
 
+
+  const handleCloseAlertDialog = () => {
+    setIsAlertDialogOpen(false);
+  };
+
   const handleSubmit = async () => {
     try {
       const dateTime = selectedDate + " 11:00:00";
@@ -126,6 +138,8 @@ export default function NewBooking() {
       toast.error(error.response.data, { className: "alerts" });
     }
   };
+
+  console.log("selectedOffice ---> ", selectedOffice)
 
   return (
     <Card>
@@ -290,13 +304,55 @@ export default function NewBooking() {
           ) : null}
 
           {selectedTable ? (
-            <Button
-              onClick={handleSubmit}
-              disabled={occupationByTable?.actualCapacity < 1}
-            >
-              Reservar Turno
-            </Button>
+            <AlertDialog.Root onOpenChange={setIsAlertDialogOpen}>
+              <AlertDialog.Trigger asChild>
+                <Button
+                disabled={occupationByTable?.actualCapacity < 1}
+                >
+                  Reservar Turno
+                </Button>
+              </AlertDialog.Trigger>
+              <AlertDialog.Overlay className="AlertDialogOverlay" />
+              <AlertDialog.Content className="AlertDialogContent">
+                <AlertDialog.Title className="AlertDialogTitle">
+                  Revisa tu Reserva
+                </AlertDialog.Title>
+                <AlertDialog.Description className="AlertDialogDescription">
+                  {`Oficina: ${selectedOffice.name}`}
+                </AlertDialog.Description>
+                <AlertDialog.Description className="AlertDialogDescription">
+                  {`Dirección: ${selectedOffice.address} - ${selectedOffice.city} - ${selectedOffice.province}`}
+                </AlertDialog.Description>
+                <AlertDialog.Description className="AlertDialogDescription">
+                  {`Mesa: ${selectedTable.name}`}
+                </AlertDialog.Description>
+                <AlertDialog.Description className="AlertDialogDescription">
+                  {`Fecha: ${birthSetter(selectedDate)}`}
+                </AlertDialog.Description>
+                <AlertDialog.Description className="AlertDialogDescription">
+                  {`Turno: ${selectedShift}`}
+                </AlertDialog.Description>
+                <div
+                  style={{
+                    display: "flex",
+                    gap: 25,
+                    justifyContent: "flex-end",
+                  }}
+                >
+                  <AlertDialog.Cancel asChild>
+                    <Button color="crimson" onClick={handleCloseAlertDialog}>Cancelar</Button>
+                  </AlertDialog.Cancel>
+                  <AlertDialog.Action asChild>
+                    <Button onClick={handleSubmit}>Confirmar Reserva</Button>
+                  </AlertDialog.Action>
+                </div>
+              </AlertDialog.Content>
+            </AlertDialog.Root>
           ) : null}
+
+          <Button variant="outline" onClick={() => router.push("/bookings")}>
+            Volver a mis reservas
+          </Button>
         </div>
       ) : null}
     </Card>

@@ -1,13 +1,15 @@
-"use client";
+//"use client";
 import Image from "next/image";
 import Coworking from "../../public/Coworking.png";
 import LogoP5Mobile from "../../public/LogoP5Mobile.svg";
 import { Button } from "@radix-ui/themes";
 import Link from "next/link";
-import { useSelector } from "react-redux";
+//import { useSelector } from "react-redux";
+import userData from "@/utils/getUser";
 
-export default function HomeView() {
-  const user = useSelector((state) => state.user.value);
+export default async function HomeView() {
+  //const user = useSelector((state) => state.user.value);
+  const user = await userData();
 
   return (
     <div

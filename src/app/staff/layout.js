@@ -9,7 +9,7 @@ export default async function StaffLayout({ children }) {
   return (
     <>
       {user.role !== "admin" && user.role !== "staff"
-        ? redirect("/home")
+        ? redirect("/home", "replace")
         : children}
     </>
   );

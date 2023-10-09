@@ -5,5 +5,5 @@ export default async function AdminLayout({ children }) {
   const user = await userData();
 
   //console.log("USUARIO DE ADMIN---------------------", user);
-  return <>{user.role !== "admin" ? redirect("/home") : children}</>;
+  return <>{user.role !== "admin" ? redirect("/home", "replace") : children}</>;
 }

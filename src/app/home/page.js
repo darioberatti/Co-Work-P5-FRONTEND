@@ -1,19 +1,9 @@
-"use client";
-import { useDispatch } from "react-redux";
-import { useEffect } from "react";
-import { fetchUser } from "@/utils/fetchUser";
 import HomeView from "@/components/HomeView";
+import userData from "@/utils/getUser";
+import { redirect } from "next/navigation";
 
-export default function Home() {
-  const dispatch = useDispatch();
+export default async function Home() {
+  const user = await userData();
 
-  useEffect(() => {
-    fetchUser(dispatch);
-  }, []);
-
-  return (
-    <div>
-      <HomeView />
-    </div>
-  );
+  return <div>{user ? <HomeView /> : redirect("/", "replace")}</div>;
 }

@@ -39,7 +39,9 @@ export default function NewBooking() {
     const fetchData = async () => {
       try {
         const officeResponse = await axiosInstance.get(`/admin/offices`);
-        const activeOffices = officeResponse.data.filter((office) => office.status === "enabled")
+        const activeOffices = officeResponse.data.filter(
+          (office) => office.status === "enabled"
+        );
         setOffices(activeOffices);
       } catch (error) {
         console.error(error);
@@ -288,7 +290,12 @@ export default function NewBooking() {
           ) : null}
 
           {selectedTable ? (
-            <Button onClick={handleSubmit}>Reservar Turno</Button>
+            <Button
+              onClick={handleSubmit}
+              disabled={occupationByTable?.actualCapacity < 1}
+            >
+              Reservar Turno
+            </Button>
           ) : null}
         </div>
       ) : null}

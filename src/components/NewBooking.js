@@ -297,6 +297,12 @@ export default function NewBooking() {
               Reservar Turno
             </Button>
           ) : null}
+          <Button 
+          variant="outline" 
+          onClick={() => router.push("/bookings")}
+          >
+            Volver a mis reservas
+            </Button>
         </div>
       ) : null}
     </Card>

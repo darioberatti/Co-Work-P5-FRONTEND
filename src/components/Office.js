@@ -5,7 +5,7 @@ import axiosInstance from "../../axiosConfig";
 import { useDispatch } from "react-redux";
 import { fetchUser } from "@/utils/fetchUser";
 import OfficeCard from "@/components/OfficeCard";
-import { Button } from "@radix-ui/themes";
+import { AlertDialog, Button, Flex } from "@radix-ui/themes";
 import { useRouter } from "next/navigation";
 import { useSelector } from "react-redux";
 import TablesList from "./TablesList";
@@ -34,44 +34,78 @@ export default function User({ id }) {
   }, [id]);
 
   const toggleStatus = async () => {
-    if (
-      confirm("¿Estás seguro que deseas cambiar el estado de esta oficina?")
-    ) {
-      try {
-        const newStatus = office.status === "enabled" ? "disabled" : "enabled";
+    try {
+      const newStatus = office.status === "enabled" ? "disabled" : "enabled";
 
-        const updatedOffice = await axiosInstance.put(`/admin/offices/${id}`, {
-          status: newStatus,
-        });
+      const updatedOffice = await axiosInstance.put(`/admin/offices/${id}`, {
+        status: newStatus,
+      });
 
-        setOffice(updatedOffice.data);
-      } catch (error) {
-        console.error(error);
-      }
+      setOffice(updatedOffice.data);
+    } catch (error) {
+      console.error(error);
     }
   };
 
   return (
     <div>
       <OfficeCard office={office} />
-      <TablesList id={id} />
+      <TablesList id={id} status={office.status}/>
       {user.role === "admin" ? (
         office.status === "enabled" ? (
-          <Button
-            color="red"
-            onClick={toggleStatus}
-            style={{ marginTop: "20px" }}
-          >
-            Deshabilitar Oficina
-          </Button>
+          <AlertDialog.Root>
+            <AlertDialog.Trigger>
+              <Button color="red" style={{ marginTop: "20px" }}>
+                Deshabilitar Oficina
+              </Button>
+            </AlertDialog.Trigger>
+            <AlertDialog.Content style={{ maxWidth: "80%" }}>
+              <AlertDialog.Title> Deshabilitar Oficina</AlertDialog.Title>
+              <AlertDialog.Description size="2">
+                ¿Estas seguro que deseas deshabilitar esta oficina?
+              </AlertDialog.Description>
+
+              <Flex gap="3" mt="4" justify="end">
+                <AlertDialog.Cancel>
+                  <Button variant="soft" color="gray">
+                    Cancelar
+                  </Button>
+                </AlertDialog.Cancel>
+                <AlertDialog.Action>
+                  <Button color="red" onClick={toggleStatus}>
+                    Deshabilitar Oficina
+                  </Button>
+                </AlertDialog.Action>
+              </Flex>
+            </AlertDialog.Content>
+          </AlertDialog.Root>
         ) : (
-          <Button
-            color="grass"
-            onClick={toggleStatus}
-            style={{ marginTop: "20px" }}
-          >
-            Habilitar Oficina
-          </Button>
+          <AlertDialog.Root>
+            <AlertDialog.Trigger>
+              <Button color="grass" style={{ marginTop: "20px" }}>
+                Habilitar Oficina
+              </Button>
+            </AlertDialog.Trigger>
+            <AlertDialog.Content style={{ maxWidth: "80%" }}>
+              <AlertDialog.Title> Habilitar Oficina</AlertDialog.Title>
+              <AlertDialog.Description size="2">
+                ¿Estas seguro que deseas habilitar esta oficina?
+              </AlertDialog.Description>
+
+              <Flex gap="3" mt="4" justify="end">
+                <AlertDialog.Cancel>
+                  <Button variant="soft" color="gray">
+                    Cancelar
+                  </Button>
+                </AlertDialog.Cancel>
+                <AlertDialog.Action>
+                  <Button color="red" onClick={toggleStatus}>
+                    Habilitar Oficina
+                  </Button>
+                </AlertDialog.Action>
+              </Flex>
+            </AlertDialog.Content>
+          </AlertDialog.Root>
         )
       ) : (
         ""

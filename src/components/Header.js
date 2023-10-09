@@ -19,10 +19,11 @@ export default function Header() {
     role = "Administrador";
   } else if (user.role === "staff") {
     role = "Staff";
-  } else {
+  } else if (user.role === "student") {
     role = "Alumno";
+  } else {
+    role = "";
   }
-
   if (path === "/") {
     text1 = "Bienvenido a ";
     text2 = "Co-Work P5";

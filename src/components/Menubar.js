@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, { useEffect } from "react";
 import * as Menubar from "@radix-ui/react-menubar";
 import Link from "next/link";
 import { useDispatch, useSelector } from "react-redux";
@@ -11,11 +11,18 @@ import Image from "next/image";
 import LogoP5Desktop from "../../public/LogoP5Desktop.svg";
 import homeLogo from "../../public/home.png";
 import logout from "../../public/logout.png";
+import { fetchUser } from "@/utils/fetchUser";
+import { usePathname } from "next/navigation";
 
 export default function Menu() {
   const user = useSelector((state) => state.user.value);
   const router = useRouter();
   const dispatch = useDispatch();
+  const pathname = usePathname();
+
+  useEffect(() => {
+    fetchUser(dispatch);
+  }, [pathname]);
 
   const handleLogout = async () => {
     try {

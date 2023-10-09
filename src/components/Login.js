@@ -63,9 +63,7 @@ export default function Login() {
             <Form.Message className="FormMessage" match="valueMissing">
               Ingrese un email
             </Form.Message>
-            <Form.Message className="FormMessage" match="typeMismatch">
-              Ingrese un email válido
-            </Form.Message>
+            
             {formik.errors.email && formik.values.email ? (
               <Form.Message className="FormMessage">
                 Ingrese un email válido

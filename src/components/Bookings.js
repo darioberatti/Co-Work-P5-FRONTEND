@@ -35,6 +35,12 @@ export default function Bookings() {
     fetchData();
   }, [user.userId]);
 
+  useEffect(() => {
+    if (bookings.length > 0) {
+      bookings.forEach((booking) => fetchOfficeData(booking));
+    }
+  }, [bookings]);
+
   const fetchOfficeData = async (booking) => {
     try {
       const response = await axiosInstance.get(
@@ -49,22 +55,21 @@ export default function Bookings() {
     }
   };
 
-  useEffect(() => {
-    if (Array.isArray(bookings)) {
-      bookings.forEach((booking) => fetchOfficeData(booking));
-    }
-  }, [bookings]);
-
   const cancelBooking = async (bookingId) => {
     try {
       if (confirm("¿Estás seguro que deseas cancelar esta reserva?")) {
         const response = await axiosInstance.put(`/booking/${bookingId}`, {
           status: "canceled",
         });
-        setBookings((prevBookings) => ({
-          ...prevBookings,
-          status: response.data.status,
-        }));
+        setBookings((prevBookings) => {
+          const updatedBookings = prevBookings.map((booking) => {
+            if (booking.id === bookingId) {
+              return { ...booking, status: response.data.status };
+            }
+            return booking;
+          });
+          return updatedBookings;
+        });
         toast.success("Reserva cancelada", { className: "alerts" });
       }
     } catch (error) {
@@ -88,48 +93,6 @@ export default function Bookings() {
     setActiveBookings(false);
     setHistory(false);
     setCanceledBookings(true);
-  };
-
-  const renderBookingCards = (filteredBookings) => {
-    return (
-      <div>
-        {filteredBookings.map((booking) => (
-          <div key={booking.id} style={{ marginBottom: "20px" }}>
-            <Card size="3" style={{ maxWidth: 400 }}>
-              <Flex align="center" gap={4}>
-                <img
-                  src={officeData[booking.id]?.urlImg[0] || ""}
-                  alt="Icon"
-                  height="120px"
-                  width="120px"
-                />
-                <Box style={{ marginLeft: "10px" }}>
-                  <Text size="5">{`N° de Servicio #${booking.id}`}</Text>
-                  <Text as="div" color="gray" mb="1" size="2">
-                    {`Fecha: ${descriptionBookings(booking.day)}`}
-                  </Text>
-                  <Text as="div" color="gray" mb="1" size="2">
-                    {`Lugar: ${officeData[booking.id]?.name || ""}`}{" "}
-                  </Text>
-                  <Text as="div" color="gray" mb="1" size="2">
-                    {`Turno: ${booking.shift}`}
-                  </Text>
-                  {activeBookings && (
-                    <Button
-                      color="red"
-                      onClick={() => cancelBooking(booking.id)}
-                      style={{ marginTop: "10px" }}
-                    >
-                      Cancelar Reserva
-                    </Button>
-                  )}
-                </Box>
-              </Flex>
-            </Card>
-          </div>
-        ))}
-      </div>
-    );
   };
 
   return (
@@ -226,20 +189,104 @@ export default function Bookings() {
         </button>
       </div>
       {activeBookings &&
-        Array.isArray(bookings) &&
-        renderBookingCards(
-          bookings.filter((booking) => booking.status === "active")
-        )}
+        bookings
+          .filter((booking) => booking.status === "active")
+          .map((booking) => (
+            <div key={booking.id} style={{ marginBottom: "20px" }}>
+              <Card size="3" style={{ maxWidth: 400 }}>
+                <Flex align="center" gap={4}>
+                  <img
+                    src={officeData[booking.id]?.urlImg[0] || ""}
+                    alt="Icon"
+                    height="120px"
+                    width="120px"
+                  />
+                  <Box style={{ marginLeft: "10px" }}>
+                    <Text size="5">{`N° de Servicio #${booking.id}`}</Text>
+                    <Text as="div" color="gray" mb="1" size="2">
+                      {`Fecha: ${descriptionBookings(booking.day)}`}
+                    </Text>
+                    <Text as="div" color="gray" mb="1" size="2">
+                      {`Lugar: ${officeData[booking.id]?.name || ""}`}
+                    </Text>
+                    <Text as="div" color="gray" mb="1" size="2">
+                      {`Turno: ${booking.shift}`}
+                    </Text>
+                    <Button
+                      color="red"
+                      onClick={() => cancelBooking(booking.id)}
+                      style={{ marginTop: "10px" }}
+                    >
+                      Eliminar Reserva
+                    </Button>
+                  </Box>
+                </Flex>
+              </Card>
+            </div>
+          ))}
       {history &&
-        Array.isArray(bookings) &&
-        renderBookingCards(
-          bookings.filter((booking) => booking.status === "completed")
-        )}
+        bookings
+          .filter((booking) => booking.status === "complete")
+          .map((booking) => (
+            <div key={booking.id} style={{ marginBottom: "20px" }}>
+              <Card size="3" style={{ maxWidth: 400 }}>
+                <Flex align="center" gap={4}>
+                  <img
+                    src={officeData[booking.id]?.urlImg[0] || ""}
+                    alt="Icon"
+                    height="120px"
+                    width="120px"
+                  />
+                  <Box style={{ marginLeft: "10px" }}>
+                    <Text size="5">{`N° de Servicio #${booking.id}`}</Text>
+                    <Text as="div" color="gray" mb="1" size="2">
+                      {`Fecha: ${descriptionBookings(booking.day)}`}
+                    </Text>
+                    <Text as="div" color="gray" mb="1" size="2">
+                      {`Lugar: ${officeData[booking.id]?.name || ""}`}{" "}
+                    </Text>
+                    <Text as="div" color="gray" mb="1" size="2">
+                      {`Turno: ${booking.shift}`}
+                    </Text>
+                  </Box>
+                </Flex>
+              </Card>
+            </div>
+          ))}
       {canceledBookings &&
-        Array.isArray(bookings) &&
-        renderBookingCards(
-          bookings.filter((booking) => booking.status === "canceled")
-        )}
+        bookings
+          .filter((booking) => booking.status === "canceled")
+          .map((booking) => (
+            <div key={booking.id} style={{ marginBottom: "20px" }}>
+              <Card size="3" style={{ maxWidth: 400 }}>
+                <Flex align="center" gap={4}>
+                  <img
+                    src={officeData[booking.id]?.urlImg[0] || ""}
+                    alt="Icon"
+                    height="120px"
+                    width="120px"
+                  />
+                  <Box style={{ marginLeft: "10px" }}>
+                    <Text size="5">{`N° de Servicio #${booking.id}`}</Text>
+                    <Text as="div" color="gray" mb="1" size="2">
+                      {`Fecha: ${descriptionBookings(booking.day)}`}
+                    </Text>
+                    <Text as="div" color="gray" mb="1" size="2">
+                      {`Lugar: ${officeData[booking.id]?.name || ""}`}{" "}
+                    </Text>
+                    <Text as="div" color="gray" mb="1" size="2">
+                      {`Turno: ${booking.shift}`}
+                    </Text>
+                  </Box>
+                </Flex>
+              </Card>
+            </div>
+          ))}
+      {bookings.length === 0 && (
+        <div style={{ textAlign: "center" }}>
+          <Text size="4">No tienes reservas</Text>
+        </div>
+      )}
     </div>
   );
 }

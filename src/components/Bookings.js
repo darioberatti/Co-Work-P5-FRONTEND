@@ -50,7 +50,9 @@ export default function Bookings() {
   };
 
   useEffect(() => {
-    bookings.forEach((booking) => fetchOfficeData(booking));
+    if (Array.isArray(bookings)) {
+      bookings.forEach((booking) => fetchOfficeData(booking));
+    }
   }, [bookings]);
 
   const cancelBooking = async (bookingId) => {
@@ -223,9 +225,21 @@ export default function Bookings() {
           </Text>
         </button>
       </div>
-      {activeBookings && renderBookingCards(bookings.filter((booking) => booking.status === "active"))}
-      {history && renderBookingCards(bookings.filter((booking) => booking.status === "completed"))}
-      {canceledBookings && renderBookingCards(bookings.filter((booking) => booking.status === "canceled"))}
+      {activeBookings &&
+        Array.isArray(bookings) &&
+        renderBookingCards(
+          bookings.filter((booking) => booking.status === "active")
+        )}
+      {history &&
+        Array.isArray(bookings) &&
+        renderBookingCards(
+          bookings.filter((booking) => booking.status === "completed")
+        )}
+      {canceledBookings &&
+        Array.isArray(bookings) &&
+        renderBookingCards(
+          bookings.filter((booking) => booking.status === "canceled")
+        )}
     </div>
   );
 }

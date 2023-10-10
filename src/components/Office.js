@@ -14,8 +14,11 @@ export default function User({ id }) {
   const [office, setOffice] = useState({});
   const dispatch = useDispatch();
   const router = useRouter();
+  const [bookings, setBookings] = useState({});
 
   const user = useSelector((state) => state.user.value);
+
+  let message = "¿Estas seguro que deseas deshabilitar esta oficina?";
 
   useEffect(() => {
     fetchUser(dispatch);
@@ -33,6 +36,28 @@ export default function User({ id }) {
     fetchData();
   }, [id]);
 
+  for (let i = 0; i < bookings.length; i++) {
+    if (
+      bookings[i].table.officeId === parseInt(id) &&
+      bookings[i].status === "active"
+    ) {
+      message =
+        "ADVERTENCIA: Existen reservas activas hechas en esta oficina. ¿Estas seguro que deseas deshabilitar esta oficina?";
+    }
+  }
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await axiosInstance.get(`/booking`);
+        setBookings(response.data);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+    fetchData();
+  }, []);
+
   const toggleStatus = async () => {
     try {
       const newStatus = office.status === "enabled" ? "disabled" : "enabled";
@@ -42,15 +67,33 @@ export default function User({ id }) {
       });
 
       setOffice(updatedOffice.data);
+
+      if (newStatus === "disabled") {
+
+        for (let i = 0; i < bookings.length; i++) {
+          const booking = bookings[i];
+          if (
+            booking.table.officeId === parseInt(id) &&
+            booking.status === "active"
+          ) {
+            await axiosInstance.delete(`/booking/${booking.id}`);
+          }
+        }
+
+        const response = await axiosInstance.get(`/booking`);
+        setBookings(response.data);
+      }
     } catch (error) {
       console.error(error);
     }
-  };
+  }
+
+  console.log(bookings);
 
   return (
     <div>
       <OfficeCard office={office} />
-      <TablesList id={id} status={office.status}/>
+      <TablesList id={id} status={office.status} />
       {user.role === "admin" ? (
         office.status === "enabled" ? (
           <AlertDialog.Root>
@@ -62,7 +105,7 @@ export default function User({ id }) {
             <AlertDialog.Content style={{ maxWidth: "80%" }}>
               <AlertDialog.Title> Deshabilitar Oficina</AlertDialog.Title>
               <AlertDialog.Description size="2">
-                ¿Estas seguro que deseas deshabilitar esta oficina?
+                {message}
               </AlertDialog.Description>
 
               <Flex gap="3" mt="4" justify="end">

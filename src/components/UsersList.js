@@ -1,6 +1,6 @@
 "use client";
 
-import { Button, Table, Text, TextField } from "@radix-ui/themes";
+import { Button, Flex, Table, Text, TextField } from "@radix-ui/themes";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import axiosInstance from "../../axiosConfig";
@@ -12,8 +12,9 @@ export default function UsersList() {
   const [users, setUsers] = useState([]);
   const [showedState, setShowedState] = useState("enabled");
   const [searchInput, setSearchInput] = useState("");
+  const [showingSearch, setShowingSearch] = useState(false);
+  const [dependencyGetUsers, setDependencyGetUsers] = useState(0);
 
-  console.log(searchInput);
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -44,15 +45,25 @@ export default function UsersList() {
       }
     };
     fetchData();
-  }, []);
+  }, [dependencyGetUsers]);
 
   const handleshowedState = (status) => {
     setShowedState(status);
   };
 
-  const handleSearch = ()=>{
-    console.log("searchInput on submit-->", searchInput);
-  }
+  const handleSearch = async () => {
+    try {
+      const response = await axiosInstance.get(
+        `/staff/users/search/${searchInput}`
+      );
+      setUsers(response.data);
+      setShowedState(response.data[0].status);
+      setSearchInput("");
+      setShowingSearch(true);
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
   return (
     <>
@@ -141,19 +152,44 @@ export default function UsersList() {
             </Text>
           </button>
         </div>
-        <TextField.Root>
+        <TextField.Root style={{ marginTop: "4%" }}>
           <TextField.Slot>
             <MagnifyingGlassIcon height="16" width="16" />
           </TextField.Slot>
           <TextField.Input
-            placeholder="Busca por nombre"
+            placeholder="Busca por nombre o email"
             value={searchInput}
             onChange={(e) => {
               setSearchInput(e.target.value);
             }}
           />
-          <Button onClick={()=>{handleSearch()}}>Buscar</Button>
+          <Button
+            variant="classic"
+            highContrast
+            onClick={() => {
+              handleSearch();
+            }}
+          >
+            Buscar
+          </Button>
         </TextField.Root>
+
+        {showingSearch ? (
+          <Flex justify={"between"} style={{ marginTop: "5%" }}>
+            <Text size={"5"} align="center" as="div">
+              Resultados de búsqueda
+            </Text>
+            <Button
+              variant="classic"
+              onClick={() => {
+                setShowingSearch(false);
+                setDependencyGetUsers(dependencyGetUsers + 1);
+              }}
+            >
+              Ver todos
+            </Button>
+          </Flex>
+        ) : null}
 
         <Table.Root>
           <Table.Header>
@@ -211,6 +247,17 @@ export default function UsersList() {
                   </Table.Row>
                 );
               })}
+            {users?.filter((user) => user.status === showedState).length ===
+            0 ? (
+              <Table.Row style={{ textAlign: "center" }}>
+                <Table.RowHeaderCell>-</Table.RowHeaderCell>
+                <Table.Cell>-</Table.Cell>
+                <Table.Cell>-</Table.Cell>
+                <Table.Cell>-</Table.Cell>
+
+                <Table.Cell>-</Table.Cell>
+              </Table.Row>
+            ) : null}
           </Table.Body>
         </Table.Root>
       </div>

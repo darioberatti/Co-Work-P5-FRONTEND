@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import { Card, Flex, Box, Text, Button } from "@radix-ui/themes";
+import { Card, Flex, Box, Text, Button, AlertDialog } from "@radix-ui/themes";
 import Link from "next/link";
 import { useSelector } from "react-redux";
 import { descriptionBookings } from "@/utils/changeDateFormat";
@@ -57,21 +57,19 @@ export default function Bookings() {
 
   const cancelBooking = async (bookingId) => {
     try {
-      if (confirm("¿Estás seguro que deseas cancelar esta reserva?")) {
-        const response = await axiosInstance.put(`/booking/${bookingId}`, {
-          status: "canceled",
+      const response = await axiosInstance.put(`/booking/${bookingId}`, {
+        status: "canceled",
+      });
+      setBookings((prevBookings) => {
+        const updatedBookings = prevBookings.map((booking) => {
+          if (booking.id === bookingId) {
+            return { ...booking, status: response.data.status };
+          }
+          return booking;
         });
-        setBookings((prevBookings) => {
-          const updatedBookings = prevBookings.map((booking) => {
-            if (booking.id === bookingId) {
-              return { ...booking, status: response.data.status };
-            }
-            return booking;
-          });
-          return updatedBookings;
-        });
-        toast.success("Reserva cancelada", { className: "alerts" });
-      }
+        return updatedBookings;
+      });
+      toast.success("Reserva cancelada", { className: "alerts" });
     } catch (error) {
       toast.error(error.response.data, { className: "alerts" });
     }
@@ -192,7 +190,15 @@ export default function Bookings() {
         (bookings.filter((booking) => booking.status === "active").length ===
         0 ? (
           <div style={{ marginBottom: "20px" }}>
-            <p style={{display: "flex", justifyContent: "center", fontSize: "14px"}}>No tienes reservas activas en este momento.</p>
+            <p
+              style={{
+                display: "flex",
+                justifyContent: "center",
+                fontSize: "14px",
+              }}
+            >
+              No tienes reservas activas en este momento.
+            </p>
           </div>
         ) : (
           bookings
@@ -218,13 +224,40 @@ export default function Bookings() {
                       <Text as="div" color="gray" mb="1" size="2">
                         {`Turno: ${booking.shift}`}
                       </Text>
-                      <Button
-                        color="red"
-                        onClick={() => cancelBooking(booking.id)}
-                        style={{ marginTop: "10px" }}
-                      >
-                        Eliminar Reserva
-                      </Button>
+
+                      <AlertDialog.Root>
+                        <AlertDialog.Trigger>
+                          <Button color="red" style={{ marginTop: "10px" }}>
+                            Eliminar Reserva
+                          </Button>
+                        </AlertDialog.Trigger>
+                        <AlertDialog.Content style={{ maxWidth: "80%" }}>
+                          <AlertDialog.Title>
+                            {" "}
+                            Eliminar Reserva
+                          </AlertDialog.Title>
+                          <AlertDialog.Description size="2">
+                            ¿Estás seguro que deseas cancelar esta reserva?
+                          </AlertDialog.Description>
+
+                          <Flex gap="3" mt="4" justify="end">
+                            <AlertDialog.Cancel>
+                              <Button variant="soft" color="gray">
+                                Cancelar
+                              </Button>
+                            </AlertDialog.Cancel>
+                            <AlertDialog.Action>
+                              <Button
+                                variant="solid"
+                                color="red"
+                                onClick={() => cancelBooking(booking.id)}
+                              >
+                                Eliminar
+                              </Button>
+                            </AlertDialog.Action>
+                          </Flex>
+                        </AlertDialog.Content>
+                      </AlertDialog.Root>
                     </Box>
                   </Flex>
                 </Card>
@@ -235,7 +268,15 @@ export default function Bookings() {
         (bookings.filter((booking) => booking.status === "complete").length ===
         0 ? (
           <div style={{ marginBottom: "20px" }}>
-            <p style={{display: "flex", justifyContent: "center", fontSize: "14px"}}>No tienes reservas completadas en este momento.</p>
+            <p
+              style={{
+                display: "flex",
+                justifyContent: "center",
+                fontSize: "14px",
+              }}
+            >
+              No tienes reservas completadas en este momento.
+            </p>
           </div>
         ) : (
           bookings
@@ -271,7 +312,15 @@ export default function Bookings() {
         (bookings.filter((booking) => booking.status === "canceled").length ===
         0 ? (
           <div style={{ marginBottom: "20px" }}>
-            <p style={{display: "flex", justifyContent: "center", fontSize: "14px"}}>No tienes reservas canceladas.</p>
+            <p
+              style={{
+                display: "flex",
+                justifyContent: "center",
+                fontSize: "14px",
+              }}
+            >
+              No tienes reservas canceladas.
+            </p>
           </div>
         ) : (
           bookings

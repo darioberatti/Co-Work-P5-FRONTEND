@@ -14,6 +14,7 @@ import { useRouter } from "next/navigation";
 
 import * as AlertDialog from "@radix-ui/react-alert-dialog";
 import { birthSetter } from "@/utils/changeDateFormat";
+import { subtractTimeFromDate } from "@/utils/updateNewDate";
 
 export default function NewBooking() {
   const dispatch = useDispatch();
@@ -123,9 +124,11 @@ export default function NewBooking() {
 
   const handleSubmit = async () => {
     try {
-      const dateTime = selectedDate + " 11:00:00";
+      const dateTime = selectedShift === "mañana" ? selectedDate + " 09:00:00" :selectedDate + " 14:00:00"
+      const date = new Date(dateTime)
+      const updatedTime = subtractTimeFromDate(date, 3)
       const formData = {
-        day: dateTime,
+        day: updatedTime,
         shift: selectedShift,
         status: "active",
         userId: user.userId,

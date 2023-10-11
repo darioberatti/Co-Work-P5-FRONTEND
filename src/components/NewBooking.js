@@ -24,7 +24,14 @@ export default function NewBooking() {
   const [selectedTable, setSelectedTable] = useState(null);
   const [selectedDate, setSelectedDate] = useState("");
 
-
+  //Validación para no permitir reservas a días anteriores
+  const date = new Date();
+  date.setDate(date.getDate() - 1)
+  const selectedNewDate = new Date (selectedDate)
+  if (selectedNewDate && selectedNewDate<date){
+    toast.error("Ingrese una fecha válida para reservar", { className: "alerts" })
+    setSelectedDate("")
+  }
 
   const [occupation, setOccupation] = useState(null);
   const [viewOccupation, setViewOccupation] = useState(false);
@@ -117,16 +124,18 @@ export default function NewBooking() {
     setIsDisabled(false);
   };
 
-
   const handleCloseAlertDialog = () => {
     setIsAlertDialogOpen(false);
   };
 
   const handleSubmit = async () => {
     try {
-      const dateTime = selectedShift === "mañana" ? selectedDate + " 09:00:00" :selectedDate + " 14:00:00"
-      const date = new Date(dateTime)
-      const updatedTime = subtractTimeFromDate(date, 3)
+      const dateTime =
+        selectedShift === "mañana"
+          ? selectedDate + " 09:00:00"
+          : selectedDate + " 14:00:00";
+      const date = new Date(dateTime);
+      const updatedTime = subtractTimeFromDate(date, 3);
       const formData = {
         day: updatedTime,
         shift: selectedShift,
@@ -142,7 +151,7 @@ export default function NewBooking() {
     }
   };
 
-  console.log("selectedOffice ---> ", selectedOffice)
+  console.log("selectedOffice ---> ", selectedOffice);
 
   return (
     <Card>
@@ -309,9 +318,7 @@ export default function NewBooking() {
           {selectedTable ? (
             <AlertDialog.Root onOpenChange={setIsAlertDialogOpen}>
               <AlertDialog.Trigger asChild>
-                <Button
-                disabled={occupationByTable?.actualCapacity < 1}
-                >
+                <Button disabled={occupationByTable?.actualCapacity < 1}>
                   Reservar Turno
                 </Button>
               </AlertDialog.Trigger>
@@ -343,7 +350,9 @@ export default function NewBooking() {
                   }}
                 >
                   <AlertDialog.Cancel asChild>
-                    <Button color="crimson" onClick={handleCloseAlertDialog}>Cancelar</Button>
+                    <Button color="crimson" onClick={handleCloseAlertDialog}>
+                      Cancelar
+                    </Button>
                   </AlertDialog.Cancel>
                   <AlertDialog.Action asChild>
                     <Button onClick={handleSubmit}>Confirmar Reserva</Button>

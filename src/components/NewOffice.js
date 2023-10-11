@@ -21,6 +21,8 @@ export default function NewOffice() {
     fetchUser(dispatch);
   }, []);
 
+  let lettersRegex = /^[a-zA-ZÀ-ÿ\u00f1\u00d1]+(\s*[a-zA-ZÀ-ÿ\u00f1\u00d1]*)*[a-zA-ZÀ-ÿ\u00f1\u00d1]+$/g;
+
   const formik = useFormik({
     initialValues: {
       name: "",
@@ -36,17 +38,17 @@ export default function NewOffice() {
     },
     validationSchema: Yup.object({
       name: Yup.string()
-        .matches(/^[aA-zZ\s]+$/)
+        .matches(lettersRegex)
         .required(),
       address: Yup.string().required(),
       city: Yup.string()
-        .matches(/^[aA-zZ\s]+$/)
+        .matches(lettersRegex)
         .required(),
       province: Yup.string()
-        .matches(/^[aA-zZ\s]+$/)
+        .matches(lettersRegex)
         .required(),
       country: Yup.string()
-        .matches(/^[aA-zZ\s]+$/)
+        .matches(lettersRegex)
         .required(),
       openingTime: Yup.string(),
       closingTime: Yup.string(),
@@ -275,7 +277,7 @@ export default function NewOffice() {
               className="Input"
               type="text"
               required
-              placeholder="9 hs"
+              placeholder="09:00"
               onChange={formik.handleChange}
             />
           </Form.Control>
@@ -309,7 +311,7 @@ export default function NewOffice() {
               className="Input"
               type="text"
               required
-              placeholder="18 hs"
+              placeholder="18:00"
               onChange={formik.handleChange}
             />
           </Form.Control>

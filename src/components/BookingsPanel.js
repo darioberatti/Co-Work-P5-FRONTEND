@@ -3,8 +3,13 @@
 import axiosInstance from "axiosConfig";
 import React, { useState, useEffect } from "react";
 import { Button, Table, Text, TextField } from "@radix-ui/themes";
-import { descriptionBookings } from "@/utils/changeDateFormat";
+import { descriptionBookings, birthSetter, reservationDateSetter } from "@/utils/changeDateFormat";
 import Link from "next/link";
+
+import { Bar } from "react-chartjs-2";
+import { LinearScale, Title } from "react-chartjs-2";
+import Chart from "chart.js/auto";
+import { Line } from "react-chartjs-2";
 
 export default function BookingsPanle({ id }) {
   const [bookings, setBookings] = useState([]);
@@ -16,7 +21,6 @@ export default function BookingsPanle({ id }) {
   const [filterToDate, setFilterToDate] = useState("");
   const [bookingsByDate, setBookingsByDate] = useState([]);
 
-
   // Traer todas las reservas realizadas
   useEffect(() => {
     const fetchData = async () => {
@@ -25,6 +29,8 @@ export default function BookingsPanle({ id }) {
         const officeBookings = response.data.filter(
           (res) => res.table.officeId === parseInt(id)
         );
+
+        officeBookings.sort((a, b) => new Date(a.day) - new Date(b.day));
         setBookings(officeBookings);
         setBookingsByDate(officeBookings);
       } catch (error) {
@@ -78,15 +84,74 @@ export default function BookingsPanle({ id }) {
   const handleFilterByDate = () => {
     const filteredBookings = bookings.filter((booking) => {
       const bookingDate = new Date(booking.day);
-      console.log("bookingDate ---> ", bookingDate);
+      // console.log("bookingDate ---> ", bookingDate);
       return (
         bookingDate >= new Date(filterFromDate + " 01:00:00") &&
         bookingDate <= new Date(filterToDate + " 23:00:00")
       );
     });
+
+    filteredBookings.sort((a, b) => {
+      return new Date(a.day) - new Date(b.day);
+    });
     setBookingsByDate(filteredBookings);
   };
 
+
+  const generateOccupancyChart = () => {
+    if (office.tables) {
+      const uniqueDates = Array.from(
+        new Set(bookingsByDate.map((booking) => booking.day.slice(0,10)))
+      );
+
+      const occupancyData = uniqueDates.map((date) => {
+        const bookings = bookingsByDate.filter(
+          (booking) => booking.day.slice(0,10) === date
+        );
+        const totalOccupancy = bookings.length;
+
+
+        return totalOccupancy > 0 ? totalOccupancy : 0;
+      });
+
+      const data = {
+        labels: uniqueDates,
+        datasets: [
+          {
+            label: "Ocupación",
+            fill: false,
+            lineTension: 0.1,
+            backgroundColor: "rgba(75, 192, 192, 0.4)",
+            borderColor: "rgba(75, 192, 192, 1)",
+            data: occupancyData,
+          },
+        ],
+      };
+
+      const options = {
+        scales: {
+          y: {
+            beginAtZero: true, // Comienza en 0
+            stepSize: 1, // Tamaño del paso (en este caso, 1)
+            precision: 0, // Sin decimales en las etiquetas
+            responsive: true,
+            maintainAspectRatio: false,
+            ticks: {
+              min: 0,
+              max: 10,
+              stepSize: 1,
+            },
+          },
+        },
+      };
+
+      return <Line data={data} options={options} />;
+    } else {
+      return null;
+    }
+  };
+
+  
 
   return (
     <>
@@ -220,6 +285,7 @@ export default function BookingsPanle({ id }) {
             </Text>
           </button>
         </div>
+
         <Table.Root>
           <Table.Header>
             <Table.Row>
@@ -236,13 +302,16 @@ export default function BookingsPanle({ id }) {
               .map((booking) => (
                 <Table.Row key={booking.id}>
                   <Table.Cell>{findUserName(booking.userId)}</Table.Cell>
-                  <Table.Cell>{descriptionBookings(booking.day)}</Table.Cell>
+                  <Table.Cell>{reservationDateSetter(booking.day)}</Table.Cell>
                   <Table.Cell>{booking.shift}</Table.Cell>
                   <Table.Cell>{booking.table.name}</Table.Cell>
                 </Table.Row>
               ))}
           </Table.Body>
         </Table.Root>
+
+        <div style={{ margin: "20px 0" }}>{generateOccupancyChart()}</div>
+
         <div
           style={{
             margin: "10px 0",

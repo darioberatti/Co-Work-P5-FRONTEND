@@ -20,6 +20,9 @@ export default function Register() {
     fetchUser(dispatch);
   }, []);
 
+
+  let regex = /^[a-zA-ZÀ-ÿ\u00f1\u00d1]+(\s*[a-zA-ZÀ-ÿ\u00f1\u00d1]*)*[a-zA-ZÀ-ÿ\u00f1\u00d1]+$/g;
+
   const formik = useFormik({
     initialValues: {
       name: "",
@@ -31,10 +34,10 @@ export default function Register() {
     },
     validationSchema: Yup.object({
       name: Yup.string()
-        .matches(/^[aA-zZ\s]+$/)
+        .matches(regex)
         .required(),
       lastName: Yup.string()
-        .matches(/^[aA-zZ\s]+$/)
+        .matches(regex)
         .required(),
       email: Yup.string().email().required(),
       DNI: Yup.number()

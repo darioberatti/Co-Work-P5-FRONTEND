@@ -24,6 +24,7 @@ export default function NewBooking() {
   const [selectedTable, setSelectedTable] = useState(null);
   const [selectedDate, setSelectedDate] = useState("");
 
+
   //Validación para no permitir reservas a días anteriores
   const date = new Date();
   date.setDate(date.getDate() - 1)
@@ -132,7 +133,9 @@ export default function NewBooking() {
     try {
       const dateTime =
         selectedShift === "mañana"
-          ? selectedDate + " 09:00:00"
+
+          ? selectedDate + " " + selectedOffice.openingTime
+
           : selectedDate + " 14:00:00";
       const date = new Date(dateTime);
       const updatedTime = subtractTimeFromDate(date, 3);
@@ -150,8 +153,6 @@ export default function NewBooking() {
       toast.error(error.response.data, { className: "alerts" });
     }
   };
-
-  console.log("selectedOffice ---> ", selectedOffice);
 
   return (
     <Card>
@@ -200,6 +201,7 @@ export default function NewBooking() {
           </Select.Root>
 
           {/* Select de Turno */}
+
           <Select.Root
             value={selectedShift}
             onValueChange={handleShiftChange}
@@ -221,10 +223,13 @@ export default function NewBooking() {
                 <Select.Viewport className="SelectViewport">
                   <Select.Group>
                     <Select.Item className="SelectItem" value="mañana">
-                      Mañana: 9:00 a 13:00hs
+                      Mañana
+                      {selectedOffice && ": " + selectedOffice.openingTime.slice(0, 5) + " a 13:00hs"}
                     </Select.Item>
                     <Select.Item className="SelectItem" value="tarde">
-                      Tarde: 14:00 a 18:00hs
+                      Tarde
+                      {selectedOffice && ": 14:00 a " + selectedOffice.closingTime.slice(0, 5) + "hs"}
+                      
                     </Select.Item>
                   </Select.Group>
                 </Select.Viewport>

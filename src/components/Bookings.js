@@ -4,7 +4,7 @@ import React, { useState, useEffect } from "react";
 import { Card, Flex, Box, Text, Button, AlertDialog } from "@radix-ui/themes";
 import Link from "next/link";
 import { useSelector } from "react-redux";
-import { descriptionBookings } from "@/utils/changeDateFormat";
+import { descriptionBookings, reservationDateSetter } from "@/utils/changeDateFormat";
 import axiosInstance from "axiosConfig";
 import { fetchUser } from "@/utils/fetchUser";
 import { useDispatch } from "react-redux";
@@ -256,7 +256,6 @@ export default function Bookings() {
                             <AlertDialog.Description size="2">
                               ¿Estás seguro que deseas cancelar esta reserva?
                             </AlertDialog.Description>
-
                             <Flex gap="3" mt="4" justify="end">
                               <AlertDialog.Cancel>
                                 <Button variant="soft" color="gray">

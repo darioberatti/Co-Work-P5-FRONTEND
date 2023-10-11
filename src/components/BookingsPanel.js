@@ -16,8 +16,6 @@ export default function BookingsPanle({ id }) {
   const [filterToDate, setFilterToDate] = useState("");
   const [bookingsByDate, setBookingsByDate] = useState([]);
 
-  // console.log("desde --->", filterFromDate);
-  // console.log("hasta --->", filterToDate);
 
   // Traer todas las reservas realizadas
   useEffect(() => {
@@ -65,7 +63,7 @@ export default function BookingsPanle({ id }) {
   const findUserName = (userId) => {
     const user = users.find((user) => user.id === userId);
     return user ? `${user.name} ${user.lastName}` : "Usuario no encontrado";
-  }
+  };
 
   const handleStatusChange = (status) => {
     setSelectedStatus(status);
@@ -73,20 +71,22 @@ export default function BookingsPanle({ id }) {
 
   const handleResetFilter = () => {
     setBookingsByDate(bookings);
-    setFilterFromDate("")
-    setFilterToDate("")
-  }
+    setFilterFromDate("");
+    setFilterToDate("");
+  };
 
-  const handleFilterByDate =() => {
+  const handleFilterByDate = () => {
     const filteredBookings = bookings.filter((booking) => {
       const bookingDate = new Date(booking.day);
+      console.log("bookingDate ---> ", bookingDate);
       return (
-        bookingDate >= new Date(filterFromDate) &&
-        bookingDate <= new Date(filterToDate)
+        bookingDate >= new Date(filterFromDate + " 01:00:00") &&
+        bookingDate <= new Date(filterToDate + " 23:00:00")
       );
     });
     setBookingsByDate(filteredBookings);
-  }
+  };
+
 
   return (
     <>

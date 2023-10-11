@@ -52,10 +52,10 @@ export default function OfficeCard({ user, office }) {
             {office.country}
           </Text>
           <Text as="div" color="gray" mb="1" size="3">
-            Hora de apertura: {office.openingTime || "Consultalo con el Staff"}
+            Turno mañana: {office.openingTime && office.openingTime.slice(0, 5)} a 13:00hs
           </Text>
           <Text as="div" color="gray" mb="1" size="3">
-            Hora de cierre: {office.closingTime || "Consultalo con el Staff"}
+            Turno tarde: 14:00 a {office.closingTime && office.closingTime.slice(0, 5)}hs
           </Text>
           <Text as="div" color="gray" mb="1" size="3">
             Pisos disponibles: {office.floorsNumber}
@@ -90,7 +90,6 @@ export default function OfficeCard({ user, office }) {
               gap: "20px",
             }}
           >
-
             {office.status === "enabled" ? (
               <Link href={`/offices/${office.id}/new-booking`}>
                 <Button color="indigo" variant="soft">

@@ -49,7 +49,7 @@ export default function User({ id }) {
 
   return (
     <div>
-      <OfficeCard office={office} />
+      <OfficeCard user={user} office={office} />
       <TablesList id={id} status={office.status}/>
       {user.role === "admin" ? (
         office.status === "enabled" ? (

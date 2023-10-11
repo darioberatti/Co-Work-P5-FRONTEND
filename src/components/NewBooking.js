@@ -24,6 +24,16 @@ export default function NewBooking() {
   const [selectedTable, setSelectedTable] = useState(null);
   const [selectedDate, setSelectedDate] = useState("");
 
+
+  //Validación para no permitir reservas a días anteriores
+  const date = new Date();
+  date.setDate(date.getDate() - 1)
+  const selectedNewDate = new Date (selectedDate)
+  if (selectedNewDate && selectedNewDate<date){
+    toast.error("Ingrese una fecha válida para reservar", { className: "alerts" })
+    setSelectedDate("")
+  }
+
   const [occupation, setOccupation] = useState(null);
   const [viewOccupation, setViewOccupation] = useState(false);
   const [occupationByOffice, setOccupationByOffice] = useState(null);
@@ -123,7 +133,9 @@ export default function NewBooking() {
     try {
       const dateTime =
         selectedShift === "mañana"
+
           ? selectedDate + " " + selectedOffice.openingTime
+
           : selectedDate + " 14:00:00";
       const date = new Date(dateTime);
       const updatedTime = subtractTimeFromDate(date, 3);

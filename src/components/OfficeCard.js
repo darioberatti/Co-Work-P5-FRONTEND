@@ -7,7 +7,7 @@ import "react-responsive-carousel/lib/styles/carousel.min.css";
 import { Card, Flex, Text, Box, Button } from "@radix-ui/themes";
 import GoogleMap from "../commons/GoogleMap";
 
-export default function OfficeCard({ office }) {
+export default function OfficeCard({ user, office }) {
   return (
     <Card size="3" style={{ maxWidth: "400px", margin: "0 auto" }}>
       <Carousel>
@@ -103,6 +103,23 @@ export default function OfficeCard({ office }) {
                 Volver a Oficinas
               </Button>
             </Link>
+          </div>
+          <div
+            style={{
+              margin: "10px 0",
+              display: "flex",
+              justifyContent: "center",
+              gap: "20px",
+            }}
+          >
+
+            {user.role === "admin" || user.role === "staff" ? (
+              <Link href={`/staff/booking-panel/${office.id}`}>
+                <Button color="orange" variant="soft">
+                  Ver Reservas
+                </Button>
+              </Link>
+            ) : null}
           </div>
         </Box>
       </Flex>

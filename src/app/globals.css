@@ -496,3 +496,12 @@ button {
     transform: translate(-50%, -50%) scale(1);
   }
 }
+
+@media (min-width: 768px) {
+  .MenubarRoot {
+    width: 98vw;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+  }
+}

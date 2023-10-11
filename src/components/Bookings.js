@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import { Card, Flex, Box, Text, Button } from "@radix-ui/themes";
+import { Card, Flex, Box, Text, Button, AlertDialog } from "@radix-ui/themes";
 import Link from "next/link";
 import { useSelector } from "react-redux";
 import { descriptionBookings } from "@/utils/changeDateFormat";
@@ -35,6 +35,12 @@ export default function Bookings() {
     fetchData();
   }, [user.userId]);
 
+  useEffect(() => {
+    if (bookings.length > 0) {
+      bookings.forEach((booking) => fetchOfficeData(booking));
+    }
+  }, [bookings]);
+
   const fetchOfficeData = async (booking) => {
     try {
       const response = await axiosInstance.get(
@@ -49,22 +55,21 @@ export default function Bookings() {
     }
   };
 
-  useEffect(() => {
-    bookings.forEach((booking) => fetchOfficeData(booking));
-  }, [bookings]);
-
   const cancelBooking = async (bookingId) => {
     try {
-      if (confirm("¿Estás seguro que deseas cancelar esta reserva?")) {
-        const response = await axiosInstance.put(`/booking/${bookingId}`, {
-          status: "canceled",
+      const response = await axiosInstance.put(`/booking/${bookingId}`, {
+        status: "canceled",
+      });
+      setBookings((prevBookings) => {
+        const updatedBookings = prevBookings.map((booking) => {
+          if (booking.id === bookingId) {
+            return { ...booking, status: response.data.status };
+          }
+          return booking;
         });
-        setBookings((prevBookings) => ({
-          ...prevBookings,
-          status: response.data.status,
-        }));
-        toast.success("Reserva cancelada", { className: "alerts" });
-      }
+        return updatedBookings;
+      });
+      toast.success("Reserva cancelada", { className: "alerts" });
     } catch (error) {
       toast.error(error.response.data, { className: "alerts" });
     }
@@ -86,48 +91,6 @@ export default function Bookings() {
     setActiveBookings(false);
     setHistory(false);
     setCanceledBookings(true);
-  };
-
-  const renderBookingCards = (filteredBookings) => {
-    return (
-      <div>
-        {filteredBookings.map((booking) => (
-          <div key={booking.id} style={{ marginBottom: "20px" }}>
-            <Card size="3" style={{ maxWidth: 400 }}>
-              <Flex align="center" gap={4}>
-                <img
-                  src={officeData[booking.id]?.urlImg[0] || ""}
-                  alt="Icon"
-                  height="120px"
-                  width="120px"
-                />
-                <Box style={{ marginLeft: "10px" }}>
-                  <Text size="5">{`N° de Servicio #${booking.id}`}</Text>
-                  <Text as="div" color="gray" mb="1" size="2">
-                    {`Fecha: ${descriptionBookings(booking.day)}`}
-                  </Text>
-                  <Text as="div" color="gray" mb="1" size="2">
-                    {`Lugar: ${officeData[booking.id]?.name || ""}`}{" "}
-                  </Text>
-                  <Text as="div" color="gray" mb="1" size="2">
-                    {`Turno: ${booking.shift}`}
-                  </Text>
-                  {activeBookings && (
-                    <Button
-                      color="red"
-                      onClick={() => cancelBooking(booking.id)}
-                      style={{ marginTop: "10px" }}
-                    >
-                      Cancelar Reserva
-                    </Button>
-                  )}
-                </Box>
-              </Flex>
-            </Card>
-          </div>
-        ))}
-      </div>
-    );
   };
 
   return (
@@ -223,9 +186,172 @@ export default function Bookings() {
           </Text>
         </button>
       </div>
-      {activeBookings && renderBookingCards(bookings.filter((booking) => booking.status === "active"))}
-      {history && renderBookingCards(bookings.filter((booking) => booking.status === "completed"))}
-      {canceledBookings && renderBookingCards(bookings.filter((booking) => booking.status === "canceled"))}
+      {activeBookings &&
+        (bookings.filter((booking) => booking.status === "active").length ===
+        0 ? (
+          <div style={{ marginBottom: "20px" }}>
+            <p
+              style={{
+                display: "flex",
+                justifyContent: "center",
+                fontSize: "14px",
+              }}
+            >
+              No tienes reservas activas en este momento.
+            </p>
+          </div>
+        ) : (
+          bookings
+            .filter((booking) => booking.status === "active")
+            .map((booking) => (
+              <div key={booking.id} style={{ marginBottom: "20px" }}>
+                <Card size="3" style={{ maxWidth: 400 }}>
+                  <Flex align="center" gap={4}>
+                    <img
+                      src={officeData[booking.id]?.urlImg[0] || ""}
+                      alt="Icon"
+                      height="120px"
+                      width="120px"
+                    />
+                    <Box style={{ marginLeft: "10px" }}>
+                      <Text size="5">{`N° de Servicio #${booking.id}`}</Text>
+                      <Text as="div" color="gray" mb="1" size="2">
+                        {`Fecha: ${descriptionBookings(booking.day)}`}
+                      </Text>
+                      <Text as="div" color="gray" mb="1" size="2">
+                        {`Lugar: ${officeData[booking.id]?.name || ""}`}
+                      </Text>
+                      <Text as="div" color="gray" mb="1" size="2">
+                        {`Turno: ${booking.shift}`}
+                      </Text>
+
+                      <AlertDialog.Root>
+                        <AlertDialog.Trigger>
+                          <Button color="red" style={{ marginTop: "10px" }}>
+                            Eliminar Reserva
+                          </Button>
+                        </AlertDialog.Trigger>
+                        <AlertDialog.Content style={{ maxWidth: "80%" }}>
+                          <AlertDialog.Title>
+                            {" "}
+                            Eliminar Reserva
+                          </AlertDialog.Title>
+                          <AlertDialog.Description size="2">
+                            ¿Estás seguro que deseas cancelar esta reserva?
+                          </AlertDialog.Description>
+
+                          <Flex gap="3" mt="4" justify="end">
+                            <AlertDialog.Cancel>
+                              <Button variant="soft" color="gray">
+                                Cancelar
+                              </Button>
+                            </AlertDialog.Cancel>
+                            <AlertDialog.Action>
+                              <Button
+                                variant="solid"
+                                color="red"
+                                onClick={() => cancelBooking(booking.id)}
+                              >
+                                Eliminar
+                              </Button>
+                            </AlertDialog.Action>
+                          </Flex>
+                        </AlertDialog.Content>
+                      </AlertDialog.Root>
+                    </Box>
+                  </Flex>
+                </Card>
+              </div>
+            ))
+        ))}
+      {history &&
+        (bookings.filter((booking) => booking.status === "complete").length ===
+        0 ? (
+          <div style={{ marginBottom: "20px" }}>
+            <p
+              style={{
+                display: "flex",
+                justifyContent: "center",
+                fontSize: "14px",
+              }}
+            >
+              No tienes reservas completadas en este momento.
+            </p>
+          </div>
+        ) : (
+          bookings
+            .filter((booking) => booking.status === "complete")
+            .map((booking) => (
+              <div key={booking.id} style={{ marginBottom: "20px" }}>
+                <Card size="3" style={{ maxWidth: 400 }}>
+                  <Flex align="center" gap={4}>
+                    <img
+                      src={officeData[booking.id]?.urlImg[0] || ""}
+                      alt="Icon"
+                      height="120px"
+                      width="120px"
+                    />
+                    <Box style={{ marginLeft: "10px" }}>
+                      <Text size="5">{`N° de Servicio #${booking.id}`}</Text>
+                      <Text as="div" color="gray" mb="1" size="2">
+                        {`Fecha: ${descriptionBookings(booking.day)}`}
+                      </Text>
+                      <Text as="div" color="gray" mb="1" size="2">
+                        {`Lugar: ${officeData[booking.id]?.name || ""}`}{" "}
+                      </Text>
+                      <Text as="div" color="gray" mb="1" size="2">
+                        {`Turno: ${booking.shift}`}
+                      </Text>
+                    </Box>
+                  </Flex>
+                </Card>
+              </div>
+            ))
+        ))}
+      {canceledBookings &&
+        (bookings.filter((booking) => booking.status === "canceled").length ===
+        0 ? (
+          <div style={{ marginBottom: "20px" }}>
+            <p
+              style={{
+                display: "flex",
+                justifyContent: "center",
+                fontSize: "14px",
+              }}
+            >
+              No tienes reservas canceladas.
+            </p>
+          </div>
+        ) : (
+          bookings
+            .filter((booking) => booking.status === "canceled")
+            .map((booking) => (
+              <div key={booking.id} style={{ marginBottom: "20px" }}>
+                <Card size="3" style={{ maxWidth: 400 }}>
+                  <Flex align="center" gap={4}>
+                    <img
+                      src={officeData[booking.id]?.urlImg[0] || ""}
+                      alt="Icon"
+                      height="120px"
+                      width="120px"
+                    />
+                    <Box style={{ marginLeft: "10px" }}>
+                      <Text size="5">{`N° de Servicio #${booking.id}`}</Text>
+                      <Text as="div" color="gray" mb="1" size="2">
+                        {`Fecha: ${descriptionBookings(booking.day)}`}
+                      </Text>
+                      <Text as="div" color="gray" mb="1" size="2">
+                        {`Lugar: ${officeData[booking.id]?.name || ""}`}{" "}
+                      </Text>
+                      <Text as="div" color="gray" mb="1" size="2">
+                        {`Turno: ${booking.shift}`}
+                      </Text>
+                    </Box>
+                  </Flex>
+                </Card>
+              </div>
+            ))
+        ))}
     </div>
   );
 }

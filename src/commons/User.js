@@ -185,7 +185,7 @@ export default function User({ id }) {
                 {user.email}
               </Text>
               <Text size={"4"} className="userDataText">
-                ID usuario: {user.id}
+                ID de usuario: {user.id}
               </Text>
               <Text size={"4"} className="userDataText">
                 DNI: {user.DNI}
@@ -196,7 +196,11 @@ export default function User({ id }) {
               <Text size={"4"} className="userDataText">
                 Curso: {user.course}
               </Text>
-              <Flex justify={"between"} className="userDataText">
+              <Flex
+                justify={"between"}
+                direction={"column"}
+                className="userDataText"
+              >
                 {user.role ? (
                   <Text size={"4"} className="userDataText">
                     Rol: {role}
@@ -204,43 +208,7 @@ export default function User({ id }) {
                 ) : (
                   ""
                 )}
-                {user.role &&
-                user.status !== "disabled" &&
-                user.role.name !== "admin" &&
-                logedUser.userId !== user.id ? (
-                  <AlertDialog.Root>
-                    <AlertDialog.Trigger>
-                      <Button color="orange" variant="soft">
-                        Subir Rol
-                      </Button>
-                    </AlertDialog.Trigger>
-                    <AlertDialog.Content style={{ maxWidth: "80%" }}>
-                      <AlertDialog.Title>Subir Rol</AlertDialog.Title>
-                      <AlertDialog.Description size="2">
-                        ¿Estas seguro que desea cambiar el rol de este usuario?
-                      </AlertDialog.Description>
 
-                      <Flex gap="3" mt="4" justify="end">
-                        <AlertDialog.Cancel>
-                          <Button variant="soft" color="gray">
-                            Cancelar
-                          </Button>
-                        </AlertDialog.Cancel>
-                        <AlertDialog.Action>
-                          <Button
-                            color="orange"
-                            variant="soft"
-                            onClick={() => handleEditRole(1)}
-                          >
-                            Subir Rol
-                          </Button>
-                        </AlertDialog.Action>
-                      </Flex>
-                    </AlertDialog.Content>
-                  </AlertDialog.Root>
-                ) : (
-                  ""
-                )}
                 {user.role &&
                 user.status !== "disabled" &&
                 user.role.name !== "student" &&
@@ -249,11 +217,13 @@ export default function User({ id }) {
                   <AlertDialog.Root>
                     <AlertDialog.Trigger>
                       <Button color="orange" variant="soft">
-                        Bajar Rol
+                      {user.role.name && user.role.name === "staff"
+                              ? "Cambiar a Alumno"
+                              : "Cambiar a Staff"}
                       </Button>
                     </AlertDialog.Trigger>
                     <AlertDialog.Content style={{ maxWidth: "80%" }}>
-                      <AlertDialog.Title>Bajar Rol</AlertDialog.Title>
+                      <AlertDialog.Title>Cambiar Rol</AlertDialog.Title>
                       <AlertDialog.Description size="2">
                         ¿Estas seguro que desea cambiar el rol de este usuario?
                       </AlertDialog.Description>
@@ -270,7 +240,50 @@ export default function User({ id }) {
                             variant="soft"
                             onClick={() => handleEditRole(0)}
                           >
-                            Bajar Rol
+                            {user.role.name && user.role.name === "staff"
+                              ? "Cambiar a Alumno"
+                              : "Cambiar a Staff"}
+                          </Button>
+                        </AlertDialog.Action>
+                      </Flex>
+                    </AlertDialog.Content>
+                  </AlertDialog.Root>
+                ) : (
+                  ""
+                )}
+                {user.role &&
+                user.status !== "disabled" &&
+                user.role.name !== "admin" &&
+                logedUser.userId !== user.id ? (
+                  <AlertDialog.Root>
+                    <AlertDialog.Trigger style={{ marginTop: "5%" }}>
+                      <Button color="orange" variant="soft">
+                        {user.role.name && user.role.name === "staff"
+                          ? "Cambiar a Admin"
+                          : "Cambiar a Staff"}
+                      </Button>
+                    </AlertDialog.Trigger>
+                    <AlertDialog.Content style={{ maxWidth: "80%" }}>
+                      <AlertDialog.Title>Cambiar Rol</AlertDialog.Title>
+                      <AlertDialog.Description size="2">
+                        ¿Estas seguro que desea cambiar el rol de este usuario?
+                      </AlertDialog.Description>
+
+                      <Flex gap="3" mt="4" justify="end">
+                        <AlertDialog.Cancel>
+                          <Button variant="soft" color="gray">
+                            Cancelar
+                          </Button>
+                        </AlertDialog.Cancel>
+                        <AlertDialog.Action>
+                          <Button
+                            color="orange"
+                            variant="soft"
+                            onClick={() => handleEditRole(1)}
+                          >
+                            {user.role.name && user.role.name === "staff"
+                              ? "Cambiar a Admin"
+                              : "Cambiar a Staff"}
                           </Button>
                         </AlertDialog.Action>
                       </Flex>

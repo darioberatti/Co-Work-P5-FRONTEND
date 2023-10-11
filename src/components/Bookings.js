@@ -4,7 +4,7 @@ import React, { useState, useEffect } from "react";
 import { Card, Flex, Box, Text, Button, AlertDialog } from "@radix-ui/themes";
 import Link from "next/link";
 import { useSelector } from "react-redux";
-import { descriptionBookings } from "@/utils/changeDateFormat";
+import { descriptionBookings, reservationDateSetter } from "@/utils/changeDateFormat";
 import axiosInstance from "axiosConfig";
 import { fetchUser } from "@/utils/fetchUser";
 import { useDispatch } from "react-redux";
@@ -216,7 +216,7 @@ export default function Bookings() {
                     <Box style={{ marginLeft: "10px" }}>
                       <Text size="5">{`N° de Servicio #${booking.id}`}</Text>
                       <Text as="div" color="gray" mb="1" size="2">
-                        {`Fecha: ${descriptionBookings(booking.day)}`}
+                        {`Fecha: ${reservationDateSetter(booking.day)}`}
                       </Text>
                       <Text as="div" color="gray" mb="1" size="2">
                         {`Lugar: ${officeData[booking.id]?.name || ""}`}
@@ -294,7 +294,7 @@ export default function Bookings() {
                     <Box style={{ marginLeft: "10px" }}>
                       <Text size="5">{`N° de Servicio #${booking.id}`}</Text>
                       <Text as="div" color="gray" mb="1" size="2">
-                        {`Fecha: ${descriptionBookings(booking.day)}`}
+                        {`Fecha: ${reservationDateSetter(booking.day)}`}
                       </Text>
                       <Text as="div" color="gray" mb="1" size="2">
                         {`Lugar: ${officeData[booking.id]?.name || ""}`}{" "}
@@ -338,7 +338,7 @@ export default function Bookings() {
                     <Box style={{ marginLeft: "10px" }}>
                       <Text size="5">{`N° de Servicio #${booking.id}`}</Text>
                       <Text as="div" color="gray" mb="1" size="2">
-                        {`Fecha: ${descriptionBookings(booking.day)}`}
+                        {`Fecha: ${reservationDateSetter(booking.day)}`}
                       </Text>
                       <Text as="div" color="gray" mb="1" size="2">
                         {`Lugar: ${officeData[booking.id]?.name || ""}`}{" "}

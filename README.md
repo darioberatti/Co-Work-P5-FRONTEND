@@ -17,6 +17,7 @@ La aplicación ofrece un servicio al staff de P5 y a los alumnos de BC, la cual 
 
 - Primero forkeamos (en el caso de ser necesario) y/o clonamos este repositorio.
 - Abrimos una nueva terminal, nos paramos sobre la carpeta del repositorio y ejecutamos el comando `code .` para abrirlo en **Visual Studio Code** o tu editor de texto de preferencia.
+- Una vez abierto en nuestro editor de texto, en la raiz del proyecto vamos a crear un archivo nuevo que se llame ".env.local", para poder crear nuestras variables de entorno. Para guiarnos sobre que valores debe tener este nuevo archivo, revisaremos el que posee el nombre ".env.example" el cual tiene las indicaciones de que deben poseer las variables de entorno de nuestro archivo ".env.local"
 - Una vez hecho esto, volvemos a la terminal (siempre parados sobre la carpeta del repositorio) y ejecutamos los siguientes comandos:
 
 ```bash
@@ -41,7 +42,6 @@ Para levantar el front-end de nuestra aplicacion.
   - `git push`
   - Realizar el merge de la rama teniendo como base la develop.
 
-## Deploy
 
 
 ## Autores

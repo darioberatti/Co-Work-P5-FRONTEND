@@ -24,8 +24,6 @@ export default function NewBooking() {
   const [selectedTable, setSelectedTable] = useState(null);
   const [selectedDate, setSelectedDate] = useState("");
 
-
-
   const [occupation, setOccupation] = useState(null);
   const [viewOccupation, setViewOccupation] = useState(false);
   const [occupationByOffice, setOccupationByOffice] = useState(null);
@@ -117,16 +115,18 @@ export default function NewBooking() {
     setIsDisabled(false);
   };
 
-
   const handleCloseAlertDialog = () => {
     setIsAlertDialogOpen(false);
   };
 
   const handleSubmit = async () => {
     try {
-      const dateTime = selectedShift === "mañana" ? selectedDate + " 09:00:00" :selectedDate + " 14:00:00"
-      const date = new Date(dateTime)
-      const updatedTime = subtractTimeFromDate(date, 3)
+      const dateTime =
+        selectedShift === "mañana"
+          ? selectedDate + " " + selectedOffice.openingTime
+          : selectedDate + " 14:00:00";
+      const date = new Date(dateTime);
+      const updatedTime = subtractTimeFromDate(date, 3);
       const formData = {
         day: updatedTime,
         shift: selectedShift,
@@ -141,8 +141,6 @@ export default function NewBooking() {
       toast.error(error.response.data, { className: "alerts" });
     }
   };
-
-  console.log("selectedOffice ---> ", selectedOffice)
 
   return (
     <Card>
@@ -191,6 +189,7 @@ export default function NewBooking() {
           </Select.Root>
 
           {/* Select de Turno */}
+
           <Select.Root
             value={selectedShift}
             onValueChange={handleShiftChange}
@@ -212,10 +211,13 @@ export default function NewBooking() {
                 <Select.Viewport className="SelectViewport">
                   <Select.Group>
                     <Select.Item className="SelectItem" value="mañana">
-                      Mañana: 9:00 a 13:00hs
+                      Mañana
+                      {selectedOffice && ": " + selectedOffice.openingTime.slice(0, 5) + " a 13:00hs"}
                     </Select.Item>
                     <Select.Item className="SelectItem" value="tarde">
-                      Tarde: 14:00 a 18:00hs
+                      Tarde
+                      {selectedOffice && ": 14:00 a " + selectedOffice.closingTime.slice(0, 5) + "hs"}
+                      
                     </Select.Item>
                   </Select.Group>
                 </Select.Viewport>
@@ -309,9 +311,7 @@ export default function NewBooking() {
           {selectedTable ? (
             <AlertDialog.Root onOpenChange={setIsAlertDialogOpen}>
               <AlertDialog.Trigger asChild>
-                <Button
-                disabled={occupationByTable?.actualCapacity < 1}
-                >
+                <Button disabled={occupationByTable?.actualCapacity < 1}>
                   Reservar Turno
                 </Button>
               </AlertDialog.Trigger>
@@ -343,7 +343,9 @@ export default function NewBooking() {
                   }}
                 >
                   <AlertDialog.Cancel asChild>
-                    <Button color="crimson" onClick={handleCloseAlertDialog}>Cancelar</Button>
+                    <Button color="crimson" onClick={handleCloseAlertDialog}>
+                      Cancelar
+                    </Button>
                   </AlertDialog.Cancel>
                   <AlertDialog.Action asChild>
                     <Button onClick={handleSubmit}>Confirmar Reserva</Button>

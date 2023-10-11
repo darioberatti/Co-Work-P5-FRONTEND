@@ -88,8 +88,6 @@ export default function User({ id }) {
     }
   }
 
-  console.log(bookings);
-
   return (
     <div>
       <OfficeCard office={office} />

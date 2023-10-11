@@ -14,10 +14,12 @@ export default function BookingsPanle({ id }) {
 
   const [filterFromDate, setFilterFromDate] = useState("");
   const [filterToDate, setFilterToDate] = useState("");
+  const [bookingsByDate, setBookingsByDate] = useState([]);
 
-  console.log("desde --->", filterFromDate);
-  console.log("hasta --->", filterToDate);
+  // console.log("desde --->", filterFromDate);
+  // console.log("hasta --->", filterToDate);
 
+  // Traer todas las reservas realizadas
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -26,6 +28,7 @@ export default function BookingsPanle({ id }) {
           (res) => res.table.officeId === parseInt(id)
         );
         setBookings(officeBookings);
+        setBookingsByDate(officeBookings);
       } catch (error) {
         console.error(error);
       }
@@ -33,6 +36,7 @@ export default function BookingsPanle({ id }) {
     fetchData();
   }, []);
 
+  // Traer la oficina segun id del params
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -45,6 +49,7 @@ export default function BookingsPanle({ id }) {
     fetchData();
   }, [id]);
 
+  // Traer todos los usuarios
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -57,7 +62,7 @@ export default function BookingsPanle({ id }) {
     fetchData();
   }, []);
 
-  function findUserName(userId) {
+  const findUserName = (userId) => {
     const user = users.find((user) => user.id === userId);
     return user ? `${user.name} ${user.lastName}` : "Usuario no encontrado";
   }
@@ -65,6 +70,23 @@ export default function BookingsPanle({ id }) {
   const handleStatusChange = (status) => {
     setSelectedStatus(status);
   };
+
+  const handleResetFilter = () => {
+    setBookingsByDate(bookings);
+    setFilterFromDate("")
+    setFilterToDate("")
+  }
+
+  const handleFilterByDate =() => {
+    const filteredBookings = bookings.filter((booking) => {
+      const bookingDate = new Date(booking.day);
+      return (
+        bookingDate >= new Date(filterFromDate) &&
+        bookingDate <= new Date(filterToDate)
+      );
+    });
+    setBookingsByDate(filteredBookings);
+  }
 
   return (
     <>
@@ -106,10 +128,18 @@ export default function BookingsPanle({ id }) {
               />
             </TextField.Root>
             <Button
+              color="indigo"
               style={{ margin: "10px" }}
               onClick={() => handleFilterByDate()}
             >
               Filtrar
+            </Button>
+            <Button
+              color="crimson"
+              style={{ margin: "10px" }}
+              onClick={() => handleResetFilter()}
+            >
+              Mostrar Todo
             </Button>
           </div>
         </div>
@@ -201,7 +231,7 @@ export default function BookingsPanle({ id }) {
           </Table.Header>
 
           <Table.Body>
-            {bookings
+            {bookingsByDate
               .filter((booking) => booking.status === selectedStatus)
               .map((booking) => (
                 <Table.Row key={booking.id}>

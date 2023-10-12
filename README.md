@@ -4,7 +4,7 @@ Este es un proyecto realizado con [Next.js](https://nextjs.org/) inicializado co
 
 ## Antes de empezar..
 
-##### Te sugerimos ir a seguir los pasos del archivo "README.md" del repositorio que pertenece al back-end de este proyecto: <a href="https://github.com/darioberatti/co-work-backend">Co-Work-P5-FRONTEND</a>
+##### Te sugerimos ir a seguir los pasos del archivo "README.md" del repositorio que pertenece al back-end de este proyecto: <a href="https://github.com/darioberatti/co-work-backend">Co-Work-P5-BackEnd</a>
 
 ## Descripcion
 

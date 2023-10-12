@@ -217,9 +217,9 @@ export default function User({ id }) {
                   <AlertDialog.Root>
                     <AlertDialog.Trigger>
                       <Button color="orange" variant="soft">
-                      {user.role.name && user.role.name === "staff"
-                              ? "Cambiar a Alumno"
-                              : "Cambiar a Staff"}
+                        {user.role.name && user.role.name === "staff"
+                          ? "Cambiar a Alumno"
+                          : "Cambiar a Staff"}
                       </Button>
                     </AlertDialog.Trigger>
                     <AlertDialog.Content style={{ maxWidth: "80%" }}>
@@ -397,13 +397,17 @@ export default function User({ id }) {
                   >
                     Total de reservas realizadas: {totalBookings}
                   </div>
-                  <Doughnut
-                    data={doughnutData}
-                    options={{
-                      responsive: true,
-                      maintainAspectRatio: false,
-                    }}
-                  />
+                  {totalBookings === 0 ? (
+                    <h3>El usuario aún no tiene reservas</h3>
+                  ) : (
+                    <Doughnut
+                      data={doughnutData}
+                      options={{
+                        responsive: true,
+                        maintainAspectRatio: false,
+                      }}
+                    />
+                  )}
                 </div>
               ) : null}
               <div

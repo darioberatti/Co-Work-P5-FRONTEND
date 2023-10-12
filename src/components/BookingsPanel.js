@@ -97,6 +97,7 @@ export default function BookingsPanle({ id }) {
     setBookingsByDate(filteredBookings);
   };
 
+console.log("bookingsByDate ---> ", bookingsByDate)
 
   const generateOccupancyChart = () => {
     if (office.tables) {
@@ -106,7 +107,8 @@ export default function BookingsPanle({ id }) {
 
       const occupancyData = uniqueDates.map((date) => {
         const bookings = bookingsByDate.filter(
-          (booking) => booking.day.slice(0,10) === date
+          (booking) => {
+            return booking.day.slice(0,10) === date && booking.status !== "canceled"}
         );
         const totalOccupancy = bookings.length;
 
